@@ -1,15 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// Using the tutorial... https://reactnative.dev/docs/navigation
+
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Always install dependency using expo install!
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+const HomeScreen = ({ navigation }) => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Notifications" component={Renderer} />
-      <Stack.Screen name="Settings" component={Settings} />
-    </Stack.Navigator>
+    <Button
+      title="Go to Jane's profile"
+      onPress={() =>
+        navigation.navigate('Profile', { name: 'Jane' })
+      }
+    />
   );
-}
+};
+const ProfileScreen = ({ navigation, route }) => {
+  return <Text>This is {route.params.name}'s profile</Text>;
+};
+
+const MyStack = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Welcome' }}
+        />
+        <Stack.Screen name="Renderer" component={ProfileScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
