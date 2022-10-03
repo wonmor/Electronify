@@ -1,3 +1,19 @@
+import { GLView } from "expo-gl";
+import { Renderer, TextureLoader } from "expo-three";
+import { useEffect } from "react";
+import {
+  AmbientLight,
+  BoxBufferGeometry,
+  Fog,
+  GridHelper,
+  Mesh,
+  MeshStandardMaterial,
+  PerspectiveCamera,
+  PointLight,
+  Scene,
+  SpotLight,
+} from "three";
+
 export const Renderer = () => {
     let timeout;
 
