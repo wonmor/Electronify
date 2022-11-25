@@ -14,7 +14,7 @@ import {
   SpotLight,
 } from "three";
 
-export const Renderer = () => {
+const Featurer = ({ navigation }) => {
     let timeout;
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const Renderer = () => {
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = 0x6ad6f0;
+    const sceneColor = '#394d6d';
 
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
@@ -36,7 +36,7 @@ export const Renderer = () => {
 
     const scene = new Scene();
     scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10));
+    scene.add(new GridHelper(10, 10, "#1c2e4a", "#1c2e4a"));
 
     const ambientLight = new AmbientLight(0x101010);
     scene.add(ambientLight);
@@ -74,12 +74,14 @@ export const Renderer = () => {
 };
 
 class IconMesh extends Mesh {
-    constructor() {
-      super(
-        new BoxBufferGeometry(1.0, 1.0, 1.0),
-        new MeshStandardMaterial({
-          map: new TextureLoader().load(require("./icon.jpg")),
-        })
-      );
-    }
+  constructor() {
+    super(
+      new BoxBufferGeometry(1.0, 1.0, 1.0),
+      new MeshStandardMaterial({
+        map: new TextureLoader().load(require("../icon.jpg")),
+      })
+    );
   }
+}
+
+export default Featurer;
