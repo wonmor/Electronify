@@ -1,6 +1,8 @@
 import { GLView } from "expo-gl";
 import { Renderer, TextureLoader } from "expo-three";
+
 import { useEffect } from "react";
+
 import {
   AmbientLight,
   BoxBufferGeometry,
@@ -36,7 +38,7 @@ const Featurer = ({ navigation }) => {
 
     const scene = new Scene();
     scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10, "#1c2e4a", "#1c2e4a"));
+    scene.add(new GridHelper(10, 10, "#fff", "#fff"));
 
     const ambientLight = new AmbientLight(0x101010);
     scene.add(ambientLight);

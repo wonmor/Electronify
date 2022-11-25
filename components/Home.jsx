@@ -1,9 +1,14 @@
 import React from 'react';
+
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import { useFonts, Outfit_400Regular, Outfit_600SemiBold } from '@expo-google-fonts/outfit';
 
+/*
+Run npx expo start --tunnel to start the app on public Wi-Fi...
+*/
+
 export default function Home ({ navigation }) {
-    let [fontsLoaded] = useFonts({
+    const [fontsLoaded] = useFonts({
         Outfit_400Regular,
         Outfit_600SemiBold,
     });
@@ -16,7 +21,7 @@ export default function Home ({ navigation }) {
         <>
           <View style={styles.container}>
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-              Welcome to Electronify.
+              Welcome to <Text style={{ color: '#fecaca' }}>Electronify</Text>.
             </Text>
 
             <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 20 }, styles.appGenericText]}>
