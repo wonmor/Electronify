@@ -1,30 +1,22 @@
-export const addToBookmark = (item) => {
+export const addToRecord = (item) => {
     return (dispatch) => {
       dispatch({
-        type: 'ADD_BOOKMARK',
+        type: 'ADD_ITEM',
         payload: item,
       });
     };
   };
    
-  export const removeFromBookmark = (item) => {
+  export const removeFromRecord = (item) => {
     return (dispatch) => {
       dispatch({
-        type: 'REMOVE_BOOKMARK',
+        type: 'REMOVE_ITEM',
         payload: item,
       });
     };
   };
    
-  export const sortBookMarkList = () => {
-    return (dispatch) => {
-      dispatch({
-        type: 'SORT_BOOKMARK_LIST',
-      });
-    };
-  };
-   
-  export const getElement = (elementName) => {
+  export const getElementData = (elementName) => {
     return (dispatch) => {
       fetch(`https://electronvisual.org/api/load/${elementName}`, {
         method: 'GET',
@@ -32,7 +24,7 @@ export const addToBookmark = (item) => {
         .then((response) => response.json())
         .then((responseJson) => {
           dispatch({
-            type: 'CURRENT_ELEMENT_DATA',
+            type: 'ADD_ITEM',
             payload: responseJson,
           });
         })
