@@ -80,7 +80,7 @@ class IconMesh extends Mesh {
     super(
       new BoxBufferGeometry(1.0, 1.0, 1.0),
       new MeshStandardMaterial({
-        map: new TextureLoader().load(require("../icon.jpg")),
+        map: new TextureLoader().load(require("../assets/icon.jpg")),
       })
     );
   }

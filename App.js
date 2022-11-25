@@ -48,7 +48,7 @@ const AppNavigator = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 };
 
 export default function App() {
