@@ -13,9 +13,7 @@ import rootReducer from './src/utils/reducers';
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
-
 --------------------------------------------------------------------
-
 Business Model:
 Let the user use the app for free for a limited time, and then charge them a subscription fee.
 */
