@@ -1,5 +1,7 @@
 const initialState = {
+    // For molecular orbitals...
     no_of_atoms: 0,
+    atomic_colors: [],
 
     atoms_x: [],
     atoms_y: [],
@@ -10,7 +12,18 @@ const initialState = {
     zdim: 0,
 
     bond_lengths: [],
+
     density_data: {},
+    density_data2: {},
+
+    // For atomic orbitals...
+    x_coords: [],
+    y_coords: [],
+    z_coords: [],
+
+    n_value: 0,
+    l_value: 0,
+    m_value: 0
 };
 
 const reducers = (state = initialState, action) => {

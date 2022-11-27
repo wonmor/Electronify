@@ -1,33 +1,33 @@
 import { GLView } from "expo-gl";
-import { Renderer, TextureLoader } from "expo-three";
+import { Renderer } from "expo-three";
 
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import OrbitControlsView from 'expo-three-orbit-controls';
+import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
+  Vector3,
   AmbientLight,
-  BoxGeometry,
   Fog,
   GridHelper,
   Mesh,
-  MeshStandardMaterial,
+  MeshBasicMaterial,
   PerspectiveCamera,
   PointLight,
-  Camera,
   Scene,
   SpotLight,
+  SphereGeometry,
+  TubeGeometry,
 } from "three";
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
+  const [coords, setCoords] = useState(null);
 
   let timeout;
 
   useEffect(() => {
-    console.log(props.density_data);
-
     // Clear the animation loop when the component unmounts
     return () => clearTimeout(timeout);
   }, []);
@@ -62,15 +62,24 @@ function Featurer(props) {
     spotLight.lookAt(scene.position);
     scene.add(spotLight);
 
-    const cube = new IconMesh();
-    scene.add(cube);
+    const ball = new BallMesh();
 
-    camera.lookAt(cube.position);
+    if (props.atoms_x !== null) {
+      props.atoms_x.forEach((x_coord, index) => {
+        // setCoords(coords.concat(new Vector3(x_coord, props.atoms_y[index], props.atoms_z[index])));
 
-    function update() {
-      cube.rotation.y += 0.05;
-      cube.rotation.x += 0.025;
+        const atom = ball.clone();
+
+        atom.position.set(x_coord, props.atoms_y[index], props.atoms_z[index]);
+        scene.add(atom);
+      });
+
+      // const bond = new BondMesh(coords);
+
+      // scene.add(bond);
     }
+
+    function update() {}
 
     // Setup an animation loop
     const render = () => {
@@ -97,13 +106,20 @@ const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
 
-class IconMesh extends Mesh {
+class BallMesh extends Mesh {
   constructor() {
     super(
-      new BoxGeometry(1.0, 1.0, 1.0),
-      new MeshStandardMaterial({
-        map: new TextureLoader().load(require("../assets/icon.jpg")),
-      })
+      new SphereGeometry(0.5, 32, 32),
+      new MeshBasicMaterial( { color: "#fff" } )
+    );
+  }
+}
+
+class StickMesh extends Mesh {
+  constructor(coords) {
+    super(
+      new TubeGeometry(coords, 0.1, 0.1, 8, false),
+      new MeshBasicMaterial( { color: "#fff" } )
     );
   }
 }
