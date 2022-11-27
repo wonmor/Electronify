@@ -86,8 +86,6 @@ const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Featurer);
-
 class IconMesh extends Mesh {
   constructor() {
     super(
@@ -98,3 +96,5 @@ class IconMesh extends Mesh {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Featurer);
