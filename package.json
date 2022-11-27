@@ -11,6 +11,8 @@
     "expo-gl": "~11.4.0",
     "expo-modules-core": "~0.11.9",
     "expo-three": "^6.1.0",
+    "expo-three-orbit-controls": "^2.0.0",
+    "prop-types": "^15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
@@ -20,7 +22,7 @@
     "react-redux": "^8.0.5",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
-    "three": "^0.143.0"
+    "three": "^0.146.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6"

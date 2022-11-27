@@ -20,7 +20,8 @@ const reducers = (state = initialState, action) => {
 
             // Compare two objects and return the difference...
             Object.keys(state).forEach((key1) => {
-                Object.keys(action.payload).forEach((key2) => {
+                // Action.payload has to be an array not a dictionary in this case...
+                action.payload.forEach((key2) => {
                     if (key1 !== key2) {
                         filtered[key1] = state[key1];
                     }

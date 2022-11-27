@@ -10,7 +10,7 @@ import { getElementData } from './utils/actions';
 Run npx expo start --tunnel to start the app on public Wi-Fi...
 */
 
-function Home (props) {
+function Home(props) {
     const [fontsLoaded] = useFonts({
         Outfit_400Regular,
         Outfit_600SemiBold,
@@ -19,6 +19,11 @@ function Home (props) {
     if (!fontsLoaded) {
       return null;
     }
+
+    const fetchElementData = async (item, type) => {
+        await props.getElementData(item, type);
+        // Async function will ensure that it returns a promise...
+    };
     
     return (
         <>
@@ -38,8 +43,7 @@ function Home (props) {
             </Text>
 
             <TouchableOpacity onPress={() => {
-                  props.getElementData('H2', 'molecule');
-                  props.navigation.navigate('Featurer');
+                  fetchElementData('H2', 'molecule').then(() => props.navigation.navigate('Featurer'));
                 }
               } style={styles.appButtonContainer}>
               <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Hydrogen Gas</Text>
@@ -60,8 +64,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   container: {
@@ -109,3 +111,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   }
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

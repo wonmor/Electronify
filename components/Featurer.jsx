@@ -1,23 +1,28 @@
 import { GLView } from "expo-gl";
 import { Renderer, TextureLoader } from "expo-three";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
+
+import OrbitControlsView from 'expo-three-orbit-controls';
 
 import {
   AmbientLight,
-  BoxBufferGeometry,
+  BoxGeometry,
   Fog,
   GridHelper,
   Mesh,
   MeshStandardMaterial,
   PerspectiveCamera,
   PointLight,
+  Camera,
   Scene,
   SpotLight,
 } from "three";
 
-const Featurer = (props) => {
+function Featurer(props) {
+  const [camera, setCamera] = useState(null);
+
   let timeout;
 
   useEffect(() => {
@@ -38,6 +43,8 @@ const Featurer = (props) => {
 
     const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
     camera.position.set(2, 5, 5);
+
+    setCamera(camera);
 
     const scene = new Scene();
     scene.fog = new Fog(sceneColor, 1, 10000);
@@ -75,8 +82,12 @@ const Featurer = (props) => {
     render();
   };
 
-  return <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />;
-};
+  return (
+    <OrbitControlsView style={{ flex: 1 }} camera={camera}>
+      <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
+    </OrbitControlsView>
+  );
+}
 
 const mapStateToProps = (state) => {
   return state;
@@ -89,7 +100,7 @@ const mapDispatchToProps = (dispatch) => ({
 class IconMesh extends Mesh {
   constructor() {
     super(
-      new BoxBufferGeometry(1.0, 1.0, 1.0),
+      new BoxGeometry(1.0, 1.0, 1.0),
       new MeshStandardMaterial({
         map: new TextureLoader().load(require("../assets/icon.jpg")),
       })
