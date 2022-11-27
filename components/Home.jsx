@@ -2,24 +2,30 @@ import React from 'react';
 
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
+
 import { useFonts, Outfit_400Regular, Outfit_600SemiBold } from '@expo-google-fonts/outfit';
 
 import { getElementData } from './utils/actions';
 
 /*
+ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
+Developed and Designed by John Seong
+--------------------------------------------------------------------
 Run npx expo start --tunnel to start the app on public Wi-Fi...
+
+TO-DO:
+- Add an internet connection check
+- Add a loading screen
+- Add a "no internet connection" screen
+- Add a time limit for the free trial
+- Add a subscription screen
+- Add a subscription payment screen
+- Add a subscription confirmation screen
+- Add a subscription cancellation screen
+- Add a time detection ting for the "good afternoon" greeting
 */
 
 function Home(props) {
-    const [fontsLoaded] = useFonts({
-        Outfit_400Regular,
-        Outfit_600SemiBold,
-    });
-
-    if (!fontsLoaded) {
-      return null;
-    }
-
     const fetchElementData = async (item, type) => {
         await props.getElementData(item, type);
         // Async function will ensure that it returns a promise...

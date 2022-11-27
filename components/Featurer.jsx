@@ -3,6 +3,7 @@ import { Renderer } from "expo-three";
 
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { View, Text, StyleSheet } from "react-native";
 
 import OrbitControlsView from "./controls/OrbitControlsView";
 
@@ -20,6 +21,13 @@ import {
   SphereGeometry,
   TubeGeometry,
 } from "three";
+
+/*
+ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
+Developed and Designed by John Seong
+--------------------------------------------------------------------
+BELOW IS THE MAIN RENDERER FOR THE THREE.JS SCENE
+*/
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
@@ -92,9 +100,20 @@ function Featurer(props) {
   };
 
   return (
-    <OrbitControlsView style={{ flex: 1 }} camera={camera}>
-      <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
-    </OrbitControlsView>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>Hydrogen Gas.</Text>
+        <Text style={styles.description}>Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.</Text>
+      </View>
+
+      <OrbitControlsView style={{ flex: 1 }} camera={camera}>
+        <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
+      </OrbitControlsView>
+
+      <View style={styles.secondaryContainer}>
+        <Text style={styles.description}>Drag or zoom using your finger...</Text>
+      </View>
+    </>
   );
 }
 
@@ -123,5 +142,39 @@ class StickMesh extends Mesh {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#394d6d",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "top",
+    padding: 20,
+  },
+
+  secondaryContainer: {
+    backgroundColor: "#1c2e4a",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "top",
+    padding: 10,
+    paddingBottom: 30,
+  },
+  
+  title: {
+    fontSize: 30,
+    fontFamily: "Outfit_600SemiBold",
+    color: "#bae6fd",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+
+  description: {
+    fontSize: 20,
+    fontFamily: "Outfit_400Regular",
+    color: "#fff",
+    textAlign: "center",
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Featurer);
