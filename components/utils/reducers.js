@@ -1,29 +1,43 @@
 const initialState = {
-    counter: 0,
-    items: [],
-  };
-   
-  const reducers = (state = initialState, action) => {
+    no_of_atoms: 0,
+
+    atoms_x: [],
+    atoms_y: [],
+    atoms_z: [],
+
+    xdim: 0,
+    ydim: 0,
+    zdim: 0,
+
+    bond_lengths: [],
+    density_data: {},
+};
+
+const reducers = (state = initialState, action) => {
     switch (action.type) {
-      case 'REMOVE_ITEM':
-        let newItem =
-          state.items.filter((item) => {
-          return action.payload.id != item.id;
-        });
-        return Object.assign({}, state, {
-          counter: state.counter - 1,
-          items: newItem,
-        });
+        case 'REMOVE_ITEM':
+            let filtered = {};
 
-      case 'ADD_ITEM':
-        return Object.assign({}, state, {
-          counter: state.counter + 1,
-          items: [...state.items, action.payload],
-        });
+            // Compare two objects and return the difference...
+            Object.keys(state).forEach((key1) => {
+                Object.keys(action.payload).forEach((key2) => {
+                    if (key1 !== key2) {
+                        filtered[key1] = state[key1];
+                    }
+                });
+            });
 
-      default:
-        return state;
+            return filtered;
+
+        case 'WRITE_ITEM':
+            return action.payload;
+
+        case 'APPEND_ITEM':
+            return Object.assign({}, state, action.payload);
+
+        default:
+            return state;
     }
-  };
+};
    
-  export default reducers;
+export default reducers;

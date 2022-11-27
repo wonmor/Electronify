@@ -2,6 +2,7 @@ import { GLView } from "expo-gl";
 import { Renderer, TextureLoader } from "expo-three";
 
 import { useEffect } from "react";
+import { connect } from "react-redux";
 
 import {
   AmbientLight,
@@ -16,10 +17,12 @@ import {
   SpotLight,
 } from "three";
 
-const Featurer = ({ navigation }) => {
-    let timeout;
+const Featurer = (props) => {
+  let timeout;
 
   useEffect(() => {
+    console.log(props.density_data);
+
     // Clear the animation loop when the component unmounts
     return () => clearTimeout(timeout);
   }, []);
@@ -75,6 +78,16 @@ const Featurer = ({ navigation }) => {
   return <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />;
 };
 
+const mapStateToProps = (state) => {
+  return state;
+};
+ 
+const mapDispatchToProps = (dispatch) => ({
+  getElementData: (item, type) => dispatch(getElementData(item, type)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Featurer);
+
 class IconMesh extends Mesh {
   constructor() {
     super(
@@ -85,5 +98,3 @@ class IconMesh extends Mesh {
     );
   }
 }
-
-export default Featurer;

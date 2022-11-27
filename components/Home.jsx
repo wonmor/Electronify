@@ -1,13 +1,16 @@
 import React from 'react';
 
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 import { useFonts, Outfit_400Regular, Outfit_600SemiBold } from '@expo-google-fonts/outfit';
+
+import { getElementData } from './utils/actions';
 
 /*
 Run npx expo start --tunnel to start the app on public Wi-Fi...
 */
 
-export default function Home ({ navigation }) {
+function Home (props) {
     const [fontsLoaded] = useFonts({
         Outfit_400Regular,
         Outfit_600SemiBold,
@@ -34,8 +37,10 @@ export default function Home ({ navigation }) {
               Molecules.
             </Text>
 
-            <TouchableOpacity onPress={() =>
-                navigation.navigate('Featurer')
+            <TouchableOpacity onPress={() => {
+                  props.getElementData('H2', 'molecule');
+                  props.navigation.navigate('Featurer');
+                }
               } style={styles.appButtonContainer}>
               <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Hydrogen Gas</Text>
             </TouchableOpacity>
@@ -47,6 +52,16 @@ export default function Home ({ navigation }) {
         </>
     );
 }
+
+const mapStateToProps = (state) => {
+  return state;
+};
+ 
+const mapDispatchToProps = (dispatch) => ({
+  getElementData: (item, type) => dispatch(getElementData(item, type)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   container: {

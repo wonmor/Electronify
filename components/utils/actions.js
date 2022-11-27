@@ -1,7 +1,7 @@
-export const addToRecord = (item) => {
+export const appendToRecord = (item) => {
     return (dispatch) => {
       dispatch({
-        type: 'ADD_ITEM',
+        type: 'APPEND_ITEM',
         payload: item,
       });
     };
@@ -16,15 +16,17 @@ export const addToRecord = (item) => {
     };
   };
    
-  export const getElementData = (elementName) => {
+  export const getElementData = (elementName, type) => {
+    let urlToFetch = type == 'atom' ? 'loadSPH' : 'load';
+            
     return (dispatch) => {
-      fetch(`https://electronvisual.org/api/load/${elementName}`, {
+      fetch(`https://electronvisual.org/api/${urlToFetch}/${elementName}`, {
         method: 'GET',
       })
         .then((response) => response.json())
         .then((responseJson) => {
           dispatch({
-            type: 'ADD_ITEM',
+            type: 'WRITE_ITEM',
             payload: responseJson,
           });
         })

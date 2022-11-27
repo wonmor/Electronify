@@ -7,9 +7,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import thunk from 'redux-thunk';
 
 import { Provider } from 'react-redux';
-import { configureStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 
-import rootReducer from './src/utils/reducers';
+import rootReducer from './components/utils/reducers';
+
+import { useFonts, Outfit_400Regular, Outfit_600SemiBold } from '@expo-google-fonts/outfit';
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -53,6 +55,15 @@ const AppNavigator = () => {
 };
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Outfit_400Regular,
+    Outfit_600SemiBold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <Provider store={store}>
       <AppNavigator />
