@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 
+import { Line2, LineGeometry, LineMaterial } from 'three-fatline';
+
 import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
@@ -31,7 +33,7 @@ BELOW IS THE MAIN RENDERER FOR THE THREE.JS SCENE
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
-  const [coords, setCoords] = useState(null);
+  const [coords, setCoords] = useState([]);
 
   let timeout;
 
@@ -39,10 +41,6 @@ function Featurer(props) {
     // Clear the animation loop when the component unmounts
     return () => clearTimeout(timeout);
   }, []);
-
-  useEffect(() => {
-    console.log(props);
-  }, [props]);
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
@@ -77,7 +75,7 @@ function Featurer(props) {
     const ball = new BallMesh();
 
     props.atoms_x.forEach((x_coord, index) => {
-      // setCoords(coords.concat(new Vector3(x_coord, props.atoms_y[index], props.atoms_z[index])));
+      setCoords(coords.push(x_coord, props.atoms_y[index], props.atoms_z[index]));
 
       const atom = ball.clone();
 
@@ -85,9 +83,23 @@ function Featurer(props) {
       scene.add(atom);
     });
 
-    // const bond = new BondMesh(coords);
+    const geometry = new LineGeometry();
+    geometry.setPositions(coords); // [ x1, y1, z1,  x2, y2, z2, ... ] format
 
-    // scene.add(bond);
+    const material = new LineMaterial({
+      color: 'pink',
+      transparent: true,
+      opacity: 0.5,
+      linewidth: 10, // px
+      resolution: new THREE.Vector2(640, 480) // resolution of the viewport
+      // dashed, dashScale, dashSize, gapSize
+    });
+
+    const myLine = new Line2(geometry, material);
+
+    myLine.computeLineDistances();
+
+    scene.add(myLine);
 
     function update() {}
 
@@ -133,15 +145,6 @@ class BallMesh extends Mesh {
     super(
       new SphereGeometry(0.5, 32, 32),
       new MeshBasicMaterial( { color: "#fff", transparent: true, opacity: 0.5 } )
-    );
-  }
-}
-
-class StickMesh extends Mesh {
-  constructor(coords) {
-    super(
-      new TubeGeometry(coords, 0.1, 0.1, 8, false),
-      new MeshBasicMaterial( { color: "#fff" } )
     );
   }
 }
