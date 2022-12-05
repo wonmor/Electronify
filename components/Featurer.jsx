@@ -40,6 +40,10 @@ function Featurer(props) {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    console.log(props);
+  }, [props]);
+
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
     const sceneColor = '#394d6d';
@@ -128,7 +132,7 @@ class BallMesh extends Mesh {
   constructor() {
     super(
       new SphereGeometry(0.5, 32, 32),
-      new MeshBasicMaterial( { color: "#fff" } )
+      new MeshBasicMaterial( { color: "#fff", transparent: true, opacity: 0.5 } )
     );
   }
 }

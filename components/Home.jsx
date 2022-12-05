@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-
-import { useFonts, Outfit_400Regular, Outfit_600SemiBold } from '@expo-google-fonts/outfit';
 
 import { getElementData } from './utils/actions';
 
@@ -26,11 +24,13 @@ TO-DO:
 */
 
 function Home(props) {
+    const [isLoading, setIsLoading] = useState(false);
+
     const fetchElementData = async (item, type) => {
         await props.getElementData(item, type);
         // Async function will ensure that it returns a promise...
     };
-    
+
     return (
         <>
           <View style={styles.container}>
@@ -43,18 +43,35 @@ function Home(props) {
             </Text>
           </View>
 
-          <View style={styles.borderlessContainer}>
-            <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-              Molecules.
-            </Text>
+          {!isLoading ? (
+            <View style={styles.borderlessContainer}>
+              <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
+                Molecules.
+              </Text>
 
-            <TouchableOpacity onPress={() => {
-                  fetchElementData('H2', 'molecule').then(() => props.navigation.navigate('Featurer'));
+              <TouchableOpacity  
+                onPressIn={() => {
+                  fetchElementData('H2', 'molecule');
+                }}
+                onPressOut={() => {
+                    setIsLoading(true);
+                    
+                    // Wait for the Redux state update...
+                    setTimeout(() => {
+                      props.navigation.navigate('Featurer');
+                      setIsLoading(false);
+                    }, 500);
+                  }
                 }
-              } style={styles.appButtonContainer}>
-              <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Hydrogen Gas</Text>
-            </TouchableOpacity>
-          </View>
+                style={styles.appButtonContainer}>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Hydrogen Gas</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.borderlessContainer}>
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
 
           <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 15 }, styles.appGenericText]}>
             Designed and Developed by John Seong.
