@@ -72,20 +72,18 @@ function Featurer(props) {
 
     const ball = new BallMesh();
 
-    if (props.atoms_x !== null) {
-      props.atoms_x.forEach((x_coord, index) => {
-        // setCoords(coords.concat(new Vector3(x_coord, props.atoms_y[index], props.atoms_z[index])));
+    props.atoms_x.forEach((x_coord, index) => {
+      // setCoords(coords.concat(new Vector3(x_coord, props.atoms_y[index], props.atoms_z[index])));
 
-        const atom = ball.clone();
+      const atom = ball.clone();
 
-        atom.position.set(x_coord, props.atoms_y[index], props.atoms_z[index]);
-        scene.add(atom);
-      });
+      atom.position.set(x_coord, props.atoms_y[index], props.atoms_z[index]);
+      scene.add(atom);
+    });
 
-      // const bond = new BondMesh(coords);
+    // const bond = new BondMesh(coords);
 
-      // scene.add(bond);
-    }
+    // scene.add(bond);
 
     function update() {}
 
@@ -96,6 +94,7 @@ function Featurer(props) {
       renderer.render(scene, camera);
       gl.endFrameEXP();
     };
+
     render();
   };
 
