@@ -59,7 +59,7 @@ function Home(props) {
                       setIsLoading(true);
                       fetchElementData('H2', 'molecule');
                       
-                      // Wait for the Redux state update...
+                      // Wait for the Redux state update... (TEMP. FIX)
                       setTimeout(() => {
                         props.navigation.navigate('Featurer');
                         setIsLoading(false);

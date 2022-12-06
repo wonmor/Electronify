@@ -95,11 +95,11 @@ function Featurer(props) {
       // dashed, dashScale, dashSize, gapSize
     });
 
-    const myLine = new Line2(geometry, material);
+    const stick = new Line2(geometry, material);
 
-    myLine.computeLineDistances();
+    stick.computeLineDistances();
 
-    scene.add(myLine);
+    scene.add(stick);
 
     function update() {}
 
