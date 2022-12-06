@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
+import { useNetInfo } from "@react-native-community/netinfo";
+
 import { getElementData } from './utils/actions';
 
 /*
@@ -25,6 +27,8 @@ TO-DO:
 
 function Home(props) {
     const [isLoading, setIsLoading] = useState(false);
+    
+    const netInfo = useNetInfo();
 
     const fetchElementData = async (item, type) => {
         await props.getElementData(item, type);
@@ -50,17 +54,19 @@ function Home(props) {
               </Text>
 
               <TouchableOpacity  
-                onPressIn={() => {
-                  fetchElementData('H2', 'molecule');
-                }}
-                onPressOut={() => {
-                    setIsLoading(true);
-                    
-                    // Wait for the Redux state update...
-                    setTimeout(() => {
-                      props.navigation.navigate('Featurer');
-                      setIsLoading(false);
-                    }, 500);
+                onPress={() => {
+                    if (netInfo.isConnected) {
+                      setIsLoading(true);
+                      fetchElementData('H2', 'molecule');
+                      
+                      // Wait for the Redux state update...
+                      setTimeout(() => {
+                        props.navigation.navigate('Featurer');
+                        setIsLoading(false);
+                      }, 500);
+                    } else {
+                      alert("Please connect to the internet to use this feature.");
+                    }
                   }
                 }
                 style={styles.appButtonContainer}>
