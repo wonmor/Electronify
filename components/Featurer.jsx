@@ -72,7 +72,7 @@ function Featurer(props) {
     spotLight.lookAt(scene.position);
     scene.add(spotLight);
 
-    const ball = new BallMesh();
+    const ball = new BallMesh(0.5);
 
     props.atoms_x.forEach((x_coord, index) => {
       setCoords(coords.push(x_coord, props.atoms_y[index], props.atoms_z[index]));
@@ -141,9 +141,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class BallMesh extends Mesh {
-  constructor() {
+  constructor(radius = 0.5) {
     super(
-      new SphereGeometry(0.5, 32, 32),
+      new SphereGeometry(radius, 32, 32),
       new MeshBasicMaterial( { color: "#fff", transparent: true, opacity: 0.5 } )
     );
   }
