@@ -11,6 +11,7 @@ import { getElementData } from './utils/actions';
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
 --------------------------------------------------------------------
+To download the dependencies, run npm install --force...
 Run npx expo start --tunnel to start the app on public Wi-Fi...
 
 TO-DO:
