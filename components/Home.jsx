@@ -14,9 +14,10 @@ Developed and Designed by John Seong
 Run npx expo start --tunnel to start the app on public Wi-Fi...
 
 TO-DO:
-- Add an internet connection check
-- Add a loading screen
-- Add a "no internet connection" screen
+- Add an internet connection check [DONE]
+- Add a loading screen [DONE]
+- Add a "no internet connection" screen [DONE]
+- Add Instances Support on ThreeJS (WebGL)
 - Add a time limit for the free trial
 - Add a subscription screen
 - Add a subscription payment screen
