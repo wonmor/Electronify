@@ -11,6 +11,9 @@ const initialState = {
     ydim: 0,
     zdim: 0,
 
+    vmax: 0,
+    vmin: 0,
+
     bond_lengths: [],
 
     density_data: {},

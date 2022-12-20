@@ -24,12 +24,35 @@ import {
   TubeGeometry,
 } from "three";
 
+import { addParticles } from "./Instances";
+
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
 --------------------------------------------------------------------
 BELOW IS THE MAIN RENDERER FOR THE THREE.JS SCENE
 */
+
+const setUpScene = (sceneColor) => {
+  const scene = new Scene();
+
+  scene.fog = new Fog(sceneColor, 1, 10000);
+  scene.add(new GridHelper(10, 10, "#fff", "#fff"));
+
+  const ambientLight = new AmbientLight(0x101010);
+  scene.add(ambientLight);
+
+  const pointLight = new PointLight(0xffffff, 2, 1000, 1);
+  pointLight.position.set(0, 200, 200);
+  scene.add(pointLight);
+
+  const spotLight = new SpotLight(0xffffff, 0.5);
+  spotLight.position.set(0, 500, 100);
+  spotLight.lookAt(scene.position);
+  scene.add(spotLight);
+
+  return scene;
+};
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
@@ -42,36 +65,7 @@ function Featurer(props) {
     return () => clearTimeout(timeout);
   }, []);
 
-  const onContextCreate = async (gl) => {
-    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = '#394d6d';
-
-    // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
-    renderer.setSize(width, height);
-    renderer.setClearColor(sceneColor);
-
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    camera.position.set(2, 5, 5);
-
-    setCamera(camera);
-
-    const scene = new Scene();
-    scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10, "#fff", "#fff"));
-
-    const ambientLight = new AmbientLight(0x101010);
-    scene.add(ambientLight);
-
-    const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    pointLight.position.set(0, 200, 200);
-    scene.add(pointLight);
-
-    const spotLight = new SpotLight(0xffffff, 0.5);
-    spotLight.position.set(0, 500, 100);
-    spotLight.lookAt(scene.position);
-    scene.add(spotLight);
-
+  const addBallAndStick = (scene) => {
     const ball = new BallMesh(0.5);
 
     props.atoms_x.forEach((x_coord, index) => {
@@ -84,6 +78,7 @@ function Featurer(props) {
     });
 
     const geometry = new LineGeometry();
+    
     geometry.setPositions(coords); // [ x1, y1, z1,  x2, y2, z2, ... ] format
 
     const material = new LineMaterial({
@@ -100,6 +95,28 @@ function Featurer(props) {
     stick.computeLineDistances();
 
     scene.add(stick);
+    
+    return scene;
+  };
+
+  const onContextCreate = async (gl) => {
+    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
+    const sceneColor = '#394d6d';
+
+    // Create a WebGLRenderer without a DOM element
+    const renderer = new Renderer({ gl });
+    renderer.setSize(width, height);
+    renderer.setClearColor(sceneColor);
+
+    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
+    camera.position.set(2, 5, 5);
+
+    setCamera(camera);
+
+    let scene = setUpScene(sceneColor);
+
+    scene = addBallAndStick(scene);
+    scene = addParticles(scene, props.density_data, props.density_data2, props.vmax, props.vmin);
 
     function update() {}
 
