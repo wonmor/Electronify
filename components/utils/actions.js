@@ -29,6 +29,10 @@ export const appendToRecord = (item) => {
             type: 'WRITE_ITEM',
             payload: responseJson,
           });
+          dispatch({
+            type: 'APPEND_ITEM',
+            payload: { element: elementName }
+          });
         })
         .catch((error) => {
           console.error(error);

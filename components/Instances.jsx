@@ -5,16 +5,16 @@ https://medium.com/@pailhead011/instancing-with-three-js-36b4b62bc127
 
 import * as THREE from 'three';
 
-import { getMoleculeColour, normalizeData } from './Globals';
+import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
 
-export const addParticles = (scene, density_data, density_data2, vmax, vmin) => {
+export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdim, ydim, zdim) => {
     // Create the instanced geometry
     const geometry = new THREE.BufferGeometry(0.2, 0.2, 0.2);
 
-    const count = 100;
+    const instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(xdim, ydim, zdim));
+    const instanceColors = new THREE.InstancedBufferAttribute(new Float32Array(xdim, ydim, zdim));
 
-    const instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(count * 16), 16, 1);
-    const instanceColors = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3, 1);
+    let count = 0;
     
     for (const [key, value] of Object.entries(
         density_data
@@ -29,20 +29,28 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin) => 
         );
         
         // Phase shift and scale the coordinates to match the existing molecule shape that is already generated....
-        const x = coords[0] / 5 - 10.7;
-        const y = coords[1] / 5 - 10.7;
-        const z = coords[2] / 5 - 10.7;
+        const x = coords[0] / 10 - 10.7;
+        const y = coords[1] / 10 - 10.7;
+        const z = coords[2] / 10 - 10.7;
 
         const color = getMoleculeColour(volume);
+        const rgbValue = hslToRgb(color[0], color[1], color[2]);
         
-        instanceColors.setXYZ(i, color.r, color.g, color.b);
-        instanceMatrix.setXYZ(i, x, y, z);
+        instanceColors.setXYZ(count, rgbValue[0], rgbValue[1], rgbValue[2]);
+        instanceMatrix.setXYZ(count, x, y, z);
+
+        count++;
     }
+
+    instanceMatrix.needsUpdate = true;
+    instanceColors.needsUpdate = true;
 
     geometry.setAttribute('instanceMatrix', instanceMatrix);
     geometry.setAttribute('instanceColor', instanceColors);
 
     const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+
+    material.needsUpdate = true;
 
     // Create the instanced mesh and add it to the scene
     const mesh = new THREE.Mesh(geometry, material);

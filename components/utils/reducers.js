@@ -26,7 +26,9 @@ const initialState = {
 
     n_value: 0,
     l_value: 0,
-    m_value: 0
+    m_value: 0,
+
+    element: ''
 };
 
 const reducers = (state = initialState, action) => {
