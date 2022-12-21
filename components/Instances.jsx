@@ -7,9 +7,9 @@ import * as THREE from 'three';
 
 import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
 
-export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdim, ydim, zdim, no_of_atoms) => {
+export const addParticles = (scene, element, density_data, density_data2, vmax, vmin, xdim, ydim, zdim, no_of_atoms) => {
     // create geometry for the ball
-    const geometry = new THREE.SphereGeometry(0.05, 32, 32);
+    const geometry = new THREE.SphereGeometry(0.025, 32, 32);
 
     // create material for the ball
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -19,6 +19,8 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdi
 
     // create an array to store the ball meshes
     const ballMeshes = [];
+    
+    const colors = [];
 
     // create a loop to iterate over the desired number of balls
     for (const [key, value] of Object.entries(
@@ -41,14 +43,11 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdi
         const y = coords[1] / 5 - 10.7;
         const z = coords[2] / 5 - 10.7;
 
-        const color = getMoleculeColour(volume);
-        const rgbValue = hslToRgb(color[0], color[1], color[2]);
+        // get the color of the ball based on the volume
+        colors.push(getMoleculeColour(element, volume));
 
         // set the position of the ball to a random x, y, and z value within a certain range
         ballMesh.position.set(x, y, z);
-
-        // set the color of the ball to a random value
-        ballMesh.material.color.setRGB(rgbValue[0], rgbValue[1], rgbValue[2])
 
         // add the ball to the array of ball meshes
         ballMeshes.push(ballMesh);
@@ -61,9 +60,11 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdi
         ballMeshes[i].updateMatrix();
 
         instancedMesh.setMatrixAt(i, ballMeshes[i].matrix);
+        instancedMesh.setColorAt(i, new THREE.Color(colors[i]));
     }
 
     instancedMesh.instanceMatrix.needsUpdate = true;
+    instancedMesh.instanceColor.needsUpdate = true;
 
     // add the instanced mesh to the scene
     scene.add(instancedMesh);
