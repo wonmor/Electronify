@@ -5,7 +5,7 @@ https://medium.com/@pailhead011/instancing-with-three-js-36b4b62bc127
 
 import * as THREE from 'three';
 
-import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
+import { getMoleculeColour, normalizeData } from './Globals';
 
 export const addParticles = (scene, element, density_data, density_data2, vmax, vmin) => {
     // create geometry for the ball
@@ -20,6 +20,7 @@ export const addParticles = (scene, element, density_data, density_data2, vmax, 
     // create an array to store the ball meshes
     const ballMeshes = [];
     
+    // create an array to store the colors of the balls
     const colors = [];
 
     // create a loop to iterate over the desired number of balls
@@ -57,12 +58,14 @@ export const addParticles = (scene, element, density_data, density_data2, vmax, 
     const instancedMesh = new THREE.InstancedMesh(ball.geometry, ball.material, ballMeshes.length);
 
     for (let i = 0; i < ballMeshes.length; i++) {
+        // update the matrix of the ball mesh
         ballMeshes[i].updateMatrix();
 
         instancedMesh.setMatrixAt(i, ballMeshes[i].matrix);
         instancedMesh.setColorAt(i, new THREE.Color(colors[i]));
     }
 
+    // update the instance matrix and color
     instancedMesh.instanceMatrix.needsUpdate = true;
     instancedMesh.instanceColor.needsUpdate = true;
 
