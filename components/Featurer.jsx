@@ -116,7 +116,7 @@ function Featurer(props) {
     let scene = setUpScene(sceneColor);
 
     scene = addBallAndStick(scene);
-    scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin, props.xdim, props.ydim, props.zdim, props.no_of_atoms);
+    scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
 
     function update() {}
 

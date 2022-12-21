@@ -7,7 +7,7 @@ import * as THREE from 'three';
 
 import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
 
-export const addParticles = (scene, element, density_data, density_data2, vmax, vmin, xdim, ydim, zdim, no_of_atoms) => {
+export const addParticles = (scene, element, density_data, density_data2, vmax, vmin) => {
     // create geometry for the ball
     const geometry = new THREE.SphereGeometry(0.025, 32, 32);
 
