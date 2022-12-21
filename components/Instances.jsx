@@ -7,18 +7,26 @@ import * as THREE from 'three';
 
 import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
 
-export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdim, ydim, zdim) => {
-    // Create the instanced geometry
-    const geometry = new THREE.BufferGeometry(0.2, 0.2, 0.2);
+export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdim, ydim, zdim, no_of_atoms) => {
+    // create geometry for the ball
+    const geometry = new THREE.SphereGeometry(0.1, 32, 32);
 
-    const instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(xdim, ydim, zdim));
-    const instanceColors = new THREE.InstancedBufferAttribute(new Float32Array(xdim, ydim, zdim));
+    // create material for the ball
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    let count = 0;
-    
+    // create a mesh for the ball
+    const ball = new THREE.Mesh(geometry, material);
+
+    // create an array to store the ball meshes
+    const ballMeshes = [];
+
+    // create a loop to iterate over the desired number of balls
     for (const [key, value] of Object.entries(
         density_data
       )) {
+        // create a new ball mesh
+        const ballMesh = ball.clone();
+
         const coords = key.split(", ");
 
         // Normalize the density data in range from 0 to 1...
@@ -27,35 +35,36 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdi
             vmax,
             vmin
         );
-        
+
         // Phase shift and scale the coordinates to match the existing molecule shape that is already generated....
-        const x = coords[0] / 10 - 10.7;
-        const y = coords[1] / 10 - 10.7;
-        const z = coords[2] / 10 - 10.7;
+        const x = coords[0] / 5 - 10.7;
+        const y = coords[1] / 5 - 10.7;
+        const z = coords[2] / 5 - 10.7;
 
         const color = getMoleculeColour(volume);
         const rgbValue = hslToRgb(color[0], color[1], color[2]);
-        
-        instanceColors.setXYZ(count, rgbValue[0], rgbValue[1], rgbValue[2]);
-        instanceMatrix.setXYZ(count, x, y, z);
 
-        count++;
+        // set the position of the ball to a random x, y, and z value within a certain range
+        ballMesh.position.set(x, y, z);
+
+        // set the color of the ball to a random value
+        ballMesh.material.color.setRGB(rgbValue[0], rgbValue[1], rgbValue[2])
+
+        // add the ball to the array of ball meshes
+        ballMeshes.push(ballMesh);
     }
 
-    instanceMatrix.needsUpdate = true;
-    instanceColors.needsUpdate = true;
+    // create an instanced mesh using the ball mesh as the base geometry
+    const instancedMesh = new THREE.InstancedMesh(ball.geometry, ball.material, ballMeshes.length);
 
-    geometry.setAttribute('instanceMatrix', instanceMatrix);
-    geometry.setAttribute('instanceColor', instanceColors);
+    for (let i = 0; i < ballMeshes.length; i++) {
+        instancedMesh.setMatrixAt(i, ballMeshes[i].matrix);
+    }
 
-    const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+    instancedMesh.instanceMatrix.needsUpdate = true;
 
-    material.needsUpdate = true;
-
-    // Create the instanced mesh and add it to the scene
-    const mesh = new THREE.Mesh(geometry, material);
-    
-    scene.add(mesh);
+    // add the instanced mesh to the scene
+    scene.add(instancedMesh);
 
     return scene;
 }
