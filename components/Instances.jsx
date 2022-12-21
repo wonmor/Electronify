@@ -9,7 +9,7 @@ import { getMoleculeColour, normalizeData, hslToRgb } from './Globals';
 
 export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdim, ydim, zdim, no_of_atoms) => {
     // create geometry for the ball
-    const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+    const geometry = new THREE.SphereGeometry(0.05, 32, 32);
 
     // create material for the ball
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -58,6 +58,8 @@ export const addParticles = (scene, density_data, density_data2, vmax, vmin, xdi
     const instancedMesh = new THREE.InstancedMesh(ball.geometry, ball.material, ballMeshes.length);
 
     for (let i = 0; i < ballMeshes.length; i++) {
+        ballMeshes[i].updateMatrix();
+
         instancedMesh.setMatrixAt(i, ballMeshes[i].matrix);
     }
 
