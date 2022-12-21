@@ -25,6 +25,7 @@ import {
 } from "three";
 
 import { addParticles } from "./Instances";
+import { moleculeDict, bondShapeDict } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -56,7 +57,6 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
-  const [coords, setCoords] = useState([]);
 
   let timeout;
 
@@ -69,32 +69,35 @@ function Featurer(props) {
     const ball = new BallMesh(0.5);
 
     props.atoms_x.forEach((x_coord, index) => {
-      setCoords(coords.push(x_coord, props.atoms_y[index], props.atoms_z[index]));
-
       const atom = ball.clone();
 
       atom.position.set(x_coord, props.atoms_y[index], props.atoms_z[index]);
       scene.add(atom);
     });
 
-    const geometry = new LineGeometry();
-    
-    geometry.setPositions(coords); // [ x1, y1, z1,  x2, y2, z2, ... ] format
-
-    const material = new LineMaterial({
-      color: 'pink',
-      transparent: true,
-      opacity: 0.5,
-      linewidth: 10, // px
-      resolution: new THREE.Vector2(640, 480) // resolution of the viewport
-      // dashed, dashScale, dashSize, gapSize
-    });
-
-    const stick = new Line2(geometry, material);
-
-    stick.computeLineDistances();
-
-    scene.add(stick);
+    {Object.values(
+      bondShapeDict[props.element]
+    ).map((value) => {
+      const geometry = new LineGeometry();
+      
+      geometry.setPositions([props.atoms_x[value[0]], props.atoms_y[value[0]], props.atoms_z[value[0]], props.atoms_x[value[1]], props.atoms_y[value[1]], props.atoms_z[value[1]]]);
+      
+      const material = new LineMaterial({
+        color: 'pink',
+        transparent: true,
+        opacity: 0.5,
+        linewidth: 10, // px
+        resolution: new THREE.Vector2(640, 480) // resolution of the viewport
+        // dashed, dashScale, dashSize, gapSize
+      });
+  
+      const stick = new Line2(geometry, material);
+  
+      stick.computeLineDistances();
+  
+      scene.add(stick);
+  
+    })}
     
     return scene;
   };
@@ -134,15 +137,15 @@ function Featurer(props) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>Hydrogen Gas.</Text>
-        <Text style={styles.description}>Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.</Text>
+        <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>
+        <Text style={styles.description}>{moleculeDict[props.element][1]}</Text>
       </View>
 
       <OrbitControlsView style={{ flex: 1 }} camera={camera}>
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
       </OrbitControlsView>
 
-      <View style={styles.secondaryContainerBlack}>
+      <View style={styles.secondaryContainerAlternative}>
         <Text style={styles.description}>Formula: {props.element}</Text>
       </View>
 
@@ -188,12 +191,12 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 
-  secondaryContainerBlack: {
-    backgroundColor: "#000000",
-    width: "100%",
+  secondaryContainerAlternative: {
+    backgroundColor: '#4f617d',
     alignItems: "center",
     justifyContent: "top",
-    padding: 10
+    width: "100%",
+    padding: 10,
   },
 
   title: {
