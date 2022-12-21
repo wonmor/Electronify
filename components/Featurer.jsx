@@ -142,6 +142,10 @@ function Featurer(props) {
         <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
       </OrbitControlsView>
 
+      <View style={styles.secondaryContainerBlack}>
+        <Text style={styles.description}>Formula: {props.element}</Text>
+      </View>
+
       <View style={styles.secondaryContainer}>
         <Text style={styles.description}>Drag or zoom using your finger...</Text>
       </View>
@@ -183,7 +187,15 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: 30,
   },
-  
+
+  secondaryContainerBlack: {
+    backgroundColor: "#000000",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "top",
+    padding: 10
+  },
+
   title: {
     fontSize: 30,
     fontFamily: "Outfit_600SemiBold",
