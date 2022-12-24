@@ -57,6 +57,7 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
+  const [startRendering, setStartRendering] = useState(false);
 
   let timeout;
 
@@ -65,8 +66,16 @@ function Featurer(props) {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    if (props.element !== "") {
+      setStartRendering(true);
+    } else {
+      setStartRendering(false);
+    }
+  }, [props]);
+
   const addBallAndStick = (scene) => {
-    const ball = new BallMesh(0.5);
+    const ball = new BallMesh(0.25);
 
     props.atoms_x.forEach((x_coord, index) => {
       const atom = ball.clone();
@@ -136,22 +145,26 @@ function Featurer(props) {
 
   return (
     <>
-      <View style={styles.container}>
-        <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>
-        <Text style={styles.description}>{moleculeDict[props.element][1]}</Text>
-      </View>
+      {startRendering && (
+        <>
+          <View style={styles.container}>
+            <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>
+            <Text style={styles.description}>{moleculeDict[props.element][1]}</Text>
+          </View>
 
-      <OrbitControlsView style={{ flex: 1 }} camera={camera}>
-        <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
-      </OrbitControlsView>
+          <OrbitControlsView style={{ flex: 1 }} camera={camera}>
+            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
+          </OrbitControlsView>
 
-      <View style={styles.secondaryContainerAlternative}>
-        <Text style={styles.description}>Formula: {props.element}</Text>
-      </View>
+          <View style={styles.secondaryContainerAlternative}>
+            <Text style={styles.description}>Formula: {props.element}</Text>
+          </View>
 
-      <View style={styles.secondaryContainer}>
-        <Text style={styles.description}>Drag or zoom using your finger...</Text>
-      </View>
+          <View style={styles.secondaryContainer}>
+            <Text style={styles.description}>Drag or zoom using your finger...</Text>
+          </View>
+        </>
+      )}
     </>
   );
 }

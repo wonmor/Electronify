@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
-import { TouchableOpacity, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, ActivityIndicator, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { useNetInfo } from "@react-native-community/netinfo";
 
 import { getElementData } from './utils/actions';
+
+import Table from './Table';
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -18,7 +20,7 @@ TO-DO:
 - Add an internet connection check [DONE]
 - Add a loading screen [DONE]
 - Add a "no internet connection" screen [DONE]
-- Add Instances Support on ThreeJS (WebGL)
+- Add Instances Support on ThreeJS (WebGL) [DONE]
 - Add a time limit for the free trial
 - Add a subscription screen
 - Add a subscription payment screen
@@ -37,8 +39,55 @@ function Home(props) {
         // Async function will ensure that it returns a promise...
     };
 
+    const ElementButton = (nestedProps) => {
+      return (
+        <TouchableOpacity  
+          onPress={() => {
+              if (netInfo.isConnected) {
+                setIsLoading(true);
+                fetchElementData(nestedProps.formula, nestedProps.type)
+                .then(() => {
+                  // Wait for the Redux state update...
+                  props.navigation.navigate('Featurer');
+                  setIsLoading(false);
+                });
+              } else {
+                alert("Please connect to the internet to use this feature.");
+              }
+            }
+          }
+          style={styles.appButtonContainer}>
+          <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>{nestedProps.elementName}</Text>
+        </TouchableOpacity>
+      );
+    };
+
+    const MoleculeSection = () => {
+      return (
+        <View style={styles.borderlessContainer}>
+          <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
+            Molecules.
+          </Text>
+
+          <ElementButton elementName={"Hydrogen Gas"} formula={"H2"} type={"molecule"} />
+        </View>
+      );
+    }
+
+    const AtomSection = () => {
+      return (
+        <View style={styles.borderlessContainerAlternative}>
+          <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
+            Atoms.
+          </Text>
+
+          <Table />
+        </View>
+      );
+    }
+
     return (
-        <>
+        <ScrollView style={styles.parentContainer}>
           <View style={styles.container}>
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
               Welcome to <Text style={{ color: '#fecaca' }}>Electronify</Text>.
@@ -50,31 +99,10 @@ function Home(props) {
           </View>
 
           {!isLoading ? (
-            <View style={styles.borderlessContainer}>
-              <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-                Molecules.
-              </Text>
-
-              <TouchableOpacity  
-                onPress={() => {
-                    if (netInfo.isConnected) {
-                      setIsLoading(true);
-                      fetchElementData('H2', 'molecule');
-                      
-                      // Wait for the Redux state update... (TEMP. FIX)
-                      setTimeout(() => {
-                        props.navigation.navigate('Featurer');
-                        setIsLoading(false);
-                      }, 500);
-                    } else {
-                      alert("Please connect to the internet to use this feature.");
-                    }
-                  }
-                }
-                style={styles.appButtonContainer}>
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Hydrogen Gas</Text>
-              </TouchableOpacity>
-            </View>
+            <>
+              <MoleculeSection />
+              <AtomSection />
+            </>
           ) : (
             <View style={styles.borderlessContainer}>
               <ActivityIndicator size="large" color="#fff" />
@@ -84,7 +112,7 @@ function Home(props) {
           <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 15 }, styles.appGenericText]}>
             Designed and Developed by John Seong.
           </Text>
-        </>
+        </ScrollView>
     );
 }
 
@@ -97,6 +125,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const styles = StyleSheet.create({
+  parentContainer: {
+    marginBottom: 30,
+  },
+
   container: {
     margin: 20,
     padding: 15,
@@ -117,6 +149,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 5,
     borderColor: '#1c2e4a',
+  },
+
+  borderlessContainerAlternative: {
+    margin: 20,
+    padding: 15,
+    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: '#1c2e4a',
+    backgroundColor: '#1c2e4a'
   },
   
   appGenericText: {
