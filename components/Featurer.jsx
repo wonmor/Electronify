@@ -57,7 +57,6 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
-  const [startRendering, setStartRendering] = useState(false);
 
   let timeout;
 
@@ -65,14 +64,6 @@ function Featurer(props) {
     // Clear the animation loop when the component unmounts
     return () => clearTimeout(timeout);
   }, []);
-
-  useEffect(() => {
-    if (props.element !== "") {
-      setStartRendering(true);
-    } else {
-      setStartRendering(false);
-    }
-  }, [props]);
 
   const addBallAndStick = (scene) => {
     const ball = new BallMesh(0.25);
@@ -145,7 +136,7 @@ function Featurer(props) {
 
   return (
     <>
-      {startRendering && (
+      {props.element !== undefined && (
         <>
           <View style={styles.container}>
             <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>

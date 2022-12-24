@@ -31,6 +31,10 @@ TO-DO:
 
 function Home(props) {
     const [isLoading, setIsLoading] = useState(false);
+    const [molecules, setMolecules] = useState([
+        { name: "Hydrogen Gas", formula: "H2", type: "molecule" },
+        { name: "Water", formula: "H2O", type: "molecule" },
+    ]);
     
     const netInfo = useNetInfo();
 
@@ -48,8 +52,10 @@ function Home(props) {
                 fetchElementData(nestedProps.formula, nestedProps.type)
                 .then(() => {
                   // Wait for the Redux state update...
-                  props.navigation.navigate('Featurer');
-                  setIsLoading(false);
+                  setTimeout(() => {
+                    props.navigation.navigate('Featurer');
+                    setIsLoading(false);
+                  }, 500);
                 });
               } else {
                 alert("Please connect to the internet to use this feature.");
@@ -57,6 +63,7 @@ function Home(props) {
             }
           }
           style={styles.appButtonContainer}>
+          <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader]}>{nestedProps.formula}</Text>
           <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>{nestedProps.elementName}</Text>
         </TouchableOpacity>
       );
@@ -69,7 +76,9 @@ function Home(props) {
             Molecules.
           </Text>
 
-          <ElementButton elementName={"Hydrogen Gas"} formula={"H2"} type={"molecule"} />
+          {molecules.map(molecule => (
+            <ElementButton elementName={molecule.name} formula={molecule.formula} type={molecule.type} key={molecule.name} />
+          ))}
         </View>
       );
     }
@@ -171,7 +180,7 @@ const styles = StyleSheet.create({
   },
 
   appButtonContainer: {
-    margin: 10,
+    marginTop: 10,
     elevation: 8,
     backgroundColor: "#1c2e4a",
     borderWidth: 1,
@@ -184,6 +193,12 @@ const styles = StyleSheet.create({
   appButtonText: {
     fontSize: 18,
     color: "#fff",
+    alignSelf: "center",
+  },
+
+  appButtonTextHeader: {
+    fontSize: 30,
+    color: "#bae6fd",
     alignSelf: "center",
   }
 });
