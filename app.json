@@ -11,6 +11,9 @@
     ],
     "android": {
       "package": "com.johnseong.electronify"
+    },
+    "ios": {
+      "bundleIdentifier": "com.johnseong.electronify"
     }
   }
 }
