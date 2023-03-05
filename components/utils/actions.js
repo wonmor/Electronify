@@ -18,20 +18,16 @@ export const appendToRecord = (item) => {
    
   export const getElementData = (elementName, type) => {
     let urlToFetch = type == 'atom' ? 'loadSPH' : 'load';
-            
-    return (dispatch) => {
-      fetch(`https://electronvisual.org/api/${urlToFetch}/${elementName}`, {
+  
+    return async (dispatch) => {
+      await fetch(`https://www.electronvisual.org/api/${urlToFetch}/${elementName}`, {
         method: 'GET',
       })
         .then((response) => response.json())
         .then((responseJson) => {
           dispatch({
             type: 'WRITE_ITEM',
-            payload: responseJson,
-          });
-          dispatch({
-            type: 'APPEND_ITEM',
-            payload: { element: elementName }
+            payload: { ...responseJson, element: elementName },
           });
         })
         .catch((error) => {
@@ -39,4 +35,5 @@ export const appendToRecord = (item) => {
         });
     };
   };
+  
   

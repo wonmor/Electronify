@@ -14,58 +14,44 @@ export const addParticles = (scene, element, density_data, density_data2, vmax, 
     // create material for the ball
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    // create a mesh for the ball
-    const ball = new THREE.Mesh(geometry, material);
-
-    // create an array to store the ball meshes
-    const ballMeshes = [];
-    
     // create an array to store the colors of the balls
     const colors = [];
 
-    // create a loop to iterate over the desired number of balls
-    for (const [key, value] of Object.entries(
-        density_data
-      )) {
-        // create a new ball mesh
-        const ballMesh = ball.clone();
+    // create an array to store the matrix data for the balls
+    const matrices = [];
 
+    // create a loop to iterate over the desired number of balls
+    for (const [key, value] of Object.entries(density_data)) {
         const coords = key.split(", ");
 
         // Normalize the density data in range from 0 to 1...
-        const volume = normalizeData(
-            value,
-            vmax,
-            vmin
-        );
+        const volume = normalizeData(value, vmax, vmin);
+
+        // get the color of the ball based on the volume
+        colors.push(getMoleculeColour(element, volume));
 
         // Phase shift and scale the coordinates to match the existing molecule shape that is already generated....
         const x = coords[0] / 5 - 10.7;
         const y = coords[1] / 5 - 10.7;
         const z = coords[2] / 5 - 10.7;
 
-        // get the color of the ball based on the volume
-        colors.push(getMoleculeColour(element, volume));
+        // create a new matrix to hold the position of the ball
+        const matrix = new THREE.Matrix4().makeTranslation(x, y, z);
 
-        // set the position of the ball to a random x, y, and z value within a certain range
-        ballMesh.position.set(x, y, z);
-
-        // add the ball to the array of ball meshes
-        ballMeshes.push(ballMesh);
+        // add the matrix to the array of matrices
+        matrices.push(matrix);
     }
 
-    // create an instanced mesh using the ball mesh as the base geometry
-    const instancedMesh = new THREE.InstancedMesh(ball.geometry, ball.material, ballMeshes.length);
+    // create an instanced mesh using the ball geometry and material
+    const instancedMesh = new THREE.InstancedMesh(geometry, material, matrices.length);
 
-    for (let i = 0; i < ballMeshes.length; i++) {
-        // update the matrix of the ball mesh
-        ballMeshes[i].updateMatrix();
-
-        instancedMesh.setMatrixAt(i, ballMeshes[i].matrix);
+    // set the matrices and colors for each instance in the instanced mesh
+    for (let i = 0; i < matrices.length; i++) {
+        instancedMesh.setMatrixAt(i, matrices[i]);
         instancedMesh.setColorAt(i, new THREE.Color(colors[i]));
     }
 
-    // update the instance matrix and color
+    // update the instance matrices and colors
     instancedMesh.instanceMatrix.needsUpdate = true;
     instancedMesh.instanceColor.needsUpdate = true;
 

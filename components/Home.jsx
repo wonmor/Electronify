@@ -38,36 +38,37 @@ function Home(props) {
     
     const netInfo = useNetInfo();
 
-    const fetchElementData = async (item, type) => {
-        await props.getElementData(item, type);
-        // Async function will ensure that it returns a promise...
-    };
-
     const ElementButton = (nestedProps) => {
+      const fetchElementData = async (item, type) => {
+        setIsLoading(true);
+        await props.getElementData(item, type);
+
+        // Wait until data is not undefined
+        while (props.atoms_x == undefined || props.element == undefined) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        props.navigation.navigate('Featurer');
+        setIsLoading(false);
+      };
+      
+    
       return (
         <TouchableOpacity  
           onPress={() => {
-              if (netInfo.isConnected) {
-                setIsLoading(true);
-                fetchElementData(nestedProps.formula, nestedProps.type)
-                .then(() => {
-                  // Wait for the Redux state update...
-                  setTimeout(() => {
-                    props.navigation.navigate('Featurer');
-                    setIsLoading(false);
-                  }, 500);
-                });
-              } else {
-                alert("Please connect to the internet to use this feature.");
-              }
+            if (netInfo.isConnected) {
+              fetchElementData(nestedProps.formula, nestedProps.type);
+            } else {
+              alert("Please connect to the internet to use this feature.");
             }
-          }
-          style={styles.appButtonContainer}>
+          }}
+          style={styles.appButtonContainer}
+        >
           <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader]}>{nestedProps.formula}</Text>
           <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>{nestedProps.elementName}</Text>
         </TouchableOpacity>
       );
     };
+    
 
     const MoleculeSection = () => {
       return (
