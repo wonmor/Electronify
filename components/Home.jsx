@@ -91,7 +91,7 @@ function Home(props) {
             Atoms.
           </Text>
 
-          <Table />
+          <Table navigation={props.navigation} />
         </View>
       );
     }

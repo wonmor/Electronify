@@ -20,6 +20,55 @@ export const normalizeData = (val, max, min) => {
     return (val - min) / (max - min);
 };
 
+export const getAtomColour = (
+  element
+) => {
+  /*
+    Getting the atom colour based upon the element name
+    and the colour it emits while combusting
+  
+    Parameters
+    ----------
+    element: String
+        Name of the element
+    volume: Float
+        Volume that correspond with each coordinate of the Canvas
+  
+    Returns
+    -------
+    String
+        Contains the HEX information of the generated colour
+    */
+  switch (element) {
+    case "H":
+      return '#3fc6f2';
+
+    case "Be":
+      return "#FFFFFF";
+
+    case "B":
+      return "#00FF00";
+
+    case "Li":
+      return '#FFC0CB';
+
+    case "Na":
+      return "#FFFF00";
+
+    case "K":
+      return "#C8A2C8";
+
+    case "O":
+      return "#FFA500";
+
+    case "Cu":
+      return '#00CC99';
+
+    default:
+      return "#FFFF00";
+  }
+};
+
 export const getMoleculeColour = (
     element,
     volume,

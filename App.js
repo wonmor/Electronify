@@ -1,4 +1,6 @@
 import Featurer from './components/Featurer';
+import Featurer2 from './components/Featurer2';
+
 import Home from './components/Home';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -47,6 +49,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Featurer"
           component={Featurer}
+          options={{ title: 'Spotlight.' }}
+        />
+        <Stack.Screen
+          name="Featurer2"
+          component={Featurer2}
           options={{ title: 'Spotlight.' }}
         />
       </Stack.Navigator>
