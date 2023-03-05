@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#394d6d",
     width: "100%",
     alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "center",
     padding: 20,
   },
 
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1c2e4a",
     width: "100%",
     alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "center",
     padding: 10,
     paddingBottom: 30,
   },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   secondaryContainerAlternative: {
     backgroundColor: '#4f617d',
     alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "center",
     width: "100%",
     padding: 10,
   },
