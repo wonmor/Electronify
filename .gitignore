@@ -63,3 +63,4 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+keys/

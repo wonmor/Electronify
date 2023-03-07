@@ -3,17 +3,34 @@
     "name": "electronify",
     "slug": "electronify",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/ios/iTunesArtwork@3x.png",
     "sdkVersion": "46.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
+    ],
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
     ],
     "android": {
-      "package": "com.johnseong.electronify"
+      "package": "com.johnseong.electronify",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/ios/iTunesArtwork@3x.png",
+        "backgroundColor": "#FFFFFF"
+      }
     },
     "ios": {
-      "bundleIdentifier": "com.johnseong.electronify"
+      "bundleIdentifier": "com.johnseong.electronify",
+      "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "de3e487b-0791-41fc-a502-dc737806542c"
+      }
     }
   }
 }
