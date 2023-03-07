@@ -51,9 +51,27 @@ const setUpScene = (sceneColor) => {
 
 function Featurer2(props) {
   const [camera, setCamera] = useState(null);
+  const [electronConfig, setElectronConfig] = useState([]);
+  const [shortenedElementName, setShortenedElementName] = useState("");
+
   const dispatch = useDispatch();
 
   let timeout;
+
+  // For the electron configuration
+  useEffect(() => {
+    if (props.element !== undefined) {
+      const electronConfig = atomDict[props.element][4];
+      const electronConfigArray = electronConfig.split(" ");
+
+      if (electronConfigArray[0].split("")[0] === "[") {
+        setShortenedElementName(electronConfigArray[0]);
+        electronConfigArray.shift();
+      }
+
+      setElectronConfig(electronConfigArray);
+    }
+  }, [props.element])
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
@@ -108,7 +126,16 @@ function Featurer2(props) {
           </OrbitControlsView>
 
           <View style={styles.secondaryContainerAlternative}>
-            <Text style={[styles.description, { color: 'black', fontSize: 32 }]}>{atomDict[props.element][4]}</Text>
+            <Text style={[styles.description, { color: 'black', fontSize: 32 }]}>
+              {shortenedElementName + " "}
+              {electronConfig.map((word, index) =>
+                index !== electronConfig.length - 1 ?
+                <Text key={index}>{word} </Text> :
+                <View key={index} style={[styles.electronConfigItem, { fontSize: 32 }]}>
+                  <Text style={[styles.electronConfigText, { fontSize: 32 }]}>{word}</Text>
+                </View>
+              )}
+            </Text>
           </View>
 
           <View style={styles.secondaryContainer}>
@@ -167,6 +194,18 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit_400Regular",
     color: "#fff",
     textAlign: "center",
+  },
+
+  electronConfigItem: {
+    backgroundColor: 'black',
+    fontFamily: "Outfit_400Regular",
+    borderRadius: 4,
+    padding: 4,
+  },
+  
+  electronConfigText: {
+    color: 'white',
+    fontFamily: "Outfit_400Regular"
   }
 });
 

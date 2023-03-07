@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-
-import { TouchableOpacity, StyleSheet, Text, View, ActivityIndicator, ScrollView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { TouchableOpacity, StyleSheet, Text, Image, View, ActivityIndicator, ScrollView, Animated } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-
 import { useNetInfo } from "@react-native-community/netinfo";
 
 import { getElementData } from './utils/actions';
@@ -34,7 +33,12 @@ function Home(props) {
     const [molecules, setMolecules] = useState([
         { name: "Hydrogen Gas", formula: "H2", type: "molecule" },
         { name: "Water", formula: "H2O", type: "molecule" },
+        { name: "Hydrochloric Acid", formula: "HCl", type: "molecule" },
     ]);
+
+    useEffect(() => {
+      startArrowAnimation();
+    }, [])
     
     const netInfo = useNetInfo();
 
@@ -96,16 +100,43 @@ function Home(props) {
       );
     }
 
+    const arrowAnim = useRef(new Animated.Value(0)).current;
+
+    const startArrowAnimation = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(arrowAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(arrowAnim, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: true,
+          })
+        ])
+      ).start();
+    };
+
     return (
         <ScrollView style={styles.parentContainer}>
           <View style={styles.container}>
+            <Image source={require('../assets/icon.png')} style={styles.icon} />
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-              Welcome to <Text style={{ color: '#fecaca' }}>Electronify</Text>.
+              <Text style={{ color: '#fecaca' }}>Electronify</Text>.
             </Text>
 
             <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 20 }, styles.appGenericText]}>
               Visualizing Quantum Mechanics. Reimagined.
             </Text>
+
+            <Animated.View style={[styles.arrowContainer, { transform: [{ translateY: arrowAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 5],
+            }) }]}]}>
+              <Ionicons name="chevron-down" size={28} color="#fff" />
+            </Animated.View>
           </View>
 
           {!isLoading ? (
@@ -114,7 +145,12 @@ function Home(props) {
 
               <TouchableOpacity  
                 onPress={() => {
-                  props.navigation.navigate('ExplainMolecule');
+                  if (netInfo.isConnected) {
+                    props.navigation.navigate('ExplainMolecule');
+
+                  } else {
+                    alert("Please connect to the internet to use this feature.");
+                  }
                 }}
                 style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
               >
@@ -126,7 +162,12 @@ function Home(props) {
 
               <TouchableOpacity  
                 onPress={() => {
-                  props.navigation.navigate('ExplainAtom');
+                  if (netInfo.isConnected) {
+                    props.navigation.navigate('ExplainAtom');
+                    
+                  } else {
+                    alert("Please connect to the internet to use this feature.");
+                  }
                 }}
                 style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20 }]}
               >
@@ -170,6 +211,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
+  icon: {
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
+
   borderlessContainer: {
     margin: 20,
     padding: 15,
@@ -193,6 +240,17 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: '#1c2e4a',
     backgroundColor: '#1c2e4a'
+  },
+
+  arrowContainer: {
+    margin: 10,
+    bottom: 0,
+    alignSelf: 'center',
+  },
+
+  scrollTextContainer: {
+    bottom: 0,
+    alignSelf: 'center',
   },
   
   appGenericText: {
