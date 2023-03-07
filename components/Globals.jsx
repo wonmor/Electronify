@@ -151,14 +151,14 @@ export const atomDict = {
     "H",
     "Hydrogen Atom",
     "Atom",
-    "Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2. It is colorless, odorless, tasteless, non-toxic, and highly combustible. Hydrogen is the most abundant chemical substance in the universe, constituting roughly 75% of all normal matter.",
+    "Hydrogen is the lightest element. It is colorless, odorless, tasteless, non-toxic, and highly combustible.",
     "1s^1"
   ],
   Be: [
     "Be",
     "Beryllium Atom",
     "Atom",
-    "Beryllium is a chemical element with the symbol Be and atomic number 4. It is a steel-gray, strong, lightweight and brittle alkaline earth metal. It is a divalent element that occurs naturally only in combination with other elements to form minerals. Notable gemstones high in beryllium include beryl and chrysoberyl.",
+    "Beryllium is a chemical element with the symbol Be and atomic number 4. It is a steel-gray, strong, lightweight and brittle alkaline earth metal.",
     "[He] 2s^2"
   ],
   B: [
@@ -193,7 +193,7 @@ export const atomDict = {
     "Na",
     "Sodium Atom",
     "Atom",
-    "Sodium is a very soft silvery-white metal. Sodium is the most common alkali metal and the sixth most abundant element on Earth, comprising 2.8 percent of Earth’s crust. It occurs abundantly in nature in compounds, especially common salt—sodium chloride (NaCl)—which forms the mineral halite and constitutes about 80 percent of the dissolved constituents of seawater.",
+    "Sodium is a very soft silvery-white metal. Sodium is the most common alkali metal and the sixth most abundant element on Earth, comprising 2.8 percent of Earth’s crust.",
     "[Ne] 3s^1"
   ],
   K: [

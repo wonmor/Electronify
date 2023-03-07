@@ -2,15 +2,15 @@ import { GLView } from "expo-gl";
 import { Renderer } from "expo-three";
 
 import { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 
 import { Line2, LineGeometry, LineMaterial } from 'three-fatline';
+import { resetState } from "./utils/actions";
 
 import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
-  Vector3,
   AmbientLight,
   Fog,
   GridHelper,
@@ -21,7 +21,6 @@ import {
   Scene,
   SpotLight,
   SphereGeometry,
-  TubeGeometry,
 } from "three";
 
 import { addParticles } from "./Instances";
@@ -57,12 +56,16 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
+  const dispatch = useDispatch();
 
   let timeout;
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
-    return () => clearTimeout(timeout);
+    return () => {
+      dispatch(resetState());
+      clearTimeout(timeout);
+    };
   }, []);
 
   const addBallAndStick = (scene) => {

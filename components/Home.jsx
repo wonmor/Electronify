@@ -111,7 +111,28 @@ function Home(props) {
           {!isLoading ? (
             <>
               <MoleculeSection />
+
+              <TouchableOpacity  
+                onPress={() => {
+                  props.navigation.navigate('ExplainMolecule');
+                }}
+                style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
+              >
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>What is DFT?</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
+              </TouchableOpacity>
+
               <AtomSection />
+
+              <TouchableOpacity  
+                onPress={() => {
+                  props.navigation.navigate('ExplainAtom');
+                }}
+                style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20 }]}
+              >
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader, { fontSize: 24 }]}>Schrödinger equation?</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
+              </TouchableOpacity>
             </>
           ) : (
             <View style={styles.borderlessContainer}>
@@ -119,7 +140,7 @@ function Home(props) {
             </View>
           )}
 
-          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 15 }, styles.appGenericText]}>
+          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 15, marginTop: 20 }, styles.appGenericText]}>
             Designed and Developed by John Seong.
           </Text>
         </ScrollView>

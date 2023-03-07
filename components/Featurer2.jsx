@@ -2,30 +2,24 @@ import { GLView } from "expo-gl";
 import { Renderer } from "expo-three";
 
 import { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
-
-import { Line2, LineGeometry, LineMaterial } from 'three-fatline';
 
 import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
-  Vector3,
   AmbientLight,
   Fog,
   GridHelper,
-  Mesh,
-  MeshBasicMaterial,
   PerspectiveCamera,
   PointLight,
   Scene,
   SpotLight,
-  SphereGeometry,
-  TubeGeometry,
 } from "three";
 
 import { addAtomParticles } from "./Instances";
 import { atomDict } from "./Globals";
+import { resetState } from "./utils/actions";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -57,12 +51,16 @@ const setUpScene = (sceneColor) => {
 
 function Featurer2(props) {
   const [camera, setCamera] = useState(null);
+  const dispatch = useDispatch();
 
   let timeout;
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
-    return () => clearTimeout(timeout);
+    return () => {
+      dispatch(resetState());
+      clearTimeout(timeout);
+    };
   }, []);
 
   const onContextCreate = async (gl) => {
@@ -102,7 +100,7 @@ function Featurer2(props) {
         <>
           <View style={styles.container}>
             <Text style={styles.title}>{atomDict[props.element][1] + "."}</Text>
-            <Text style={styles.description}>Description goes here.</Text>
+            <Text style={styles.description}>{atomDict[props.element][3]}</Text>
           </View>
 
           <OrbitControlsView style={{ flex: 1 }} camera={camera}>
@@ -110,7 +108,7 @@ function Featurer2(props) {
           </OrbitControlsView>
 
           <View style={styles.secondaryContainerAlternative}>
-            <Text style={styles.description}>Formula: {props.element}</Text>
+            <Text style={[styles.description, { color: 'black', fontSize: 32 }]}>{atomDict[props.element][4]}</Text>
           </View>
 
           <View style={styles.secondaryContainer}>
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainerAlternative: {
-    backgroundColor: '#4f617d',
+    backgroundColor: 'white',
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -159,7 +157,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontFamily: "Outfit_600SemiBold",
-    color: "#bae6fd",
+    color: "#fecaca",
     textAlign: "center",
     marginBottom: 10,
   },

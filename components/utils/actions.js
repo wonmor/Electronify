@@ -15,6 +15,12 @@ export const appendToRecord = (item) => {
       });
     };
   };
+
+  export const resetState = () => {
+    return {
+      type: 'RESET_STATE',
+    };
+  };
    
   export const getElementData = (elementName, type) => {
     let urlToFetch = type == 'atom' ? 'loadSPH' : 'load';

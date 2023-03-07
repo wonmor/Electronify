@@ -54,6 +54,10 @@ const reducers = (state = initialState, action) => {
         case 'APPEND_ITEM':
             return Object.assign({}, state, action.payload);
 
+        case 'RESET_STATE':
+            // return the initial state
+            return initialState;
+
         default:
             return state;
     }
