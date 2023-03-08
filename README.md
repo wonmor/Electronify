@@ -4,9 +4,13 @@ This is a version of [**ElectronVisualized**](https://github.com/wonmor/Electron
 
 <table><tr>
 
-<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/208797665-a75e3a2c-1f95-41b7-ae83-c3779d177212.PNG"></td>
+<td valign="center"><img width="300" alt="Screenshot-1" src="https://user-images.githubusercontent.com/35755386/223326209-4d9c4325-83e0-4919-a795-ee10e4dbc25c.jpg"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/204160612-a1c90e26-92b6-4118-b4c6-2790a3b9cb65.jpeg"></td>
+<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/223326234-01ef8e17-463c-49c4-a68b-58a7be858816.jpg"></td>
+
+<td valign="center"><img width="300" alt="Screenshot-3" src="https://user-images.githubusercontent.com/35755386/223326218-7fa02fac-e5d1-4500-92c7-dfc31f0f6c84.jpg"></td>
+
+<td valign="center"><img width="300" alt="Screenshot-4" src="https://user-images.githubusercontent.com/35755386/223326243-f1ef9bce-f305-461d-8a00-0d666b8236da.jpg"></td>
 
 </tr></table>
 
