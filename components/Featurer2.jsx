@@ -1,7 +1,7 @@
 import { GLView } from "expo-gl";
 import { Renderer } from "expo-three";
 
-import { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 
@@ -71,7 +71,21 @@ function Featurer2(props) {
 
       setElectronConfig(electronConfigArray);
     }
-  }, [props.element])
+  }, [props.element]);
+
+  // Memoize the scene setup
+  const scene = useMemo(() => setUpScene("#394d6d"), []);
+  const particles = useMemo(
+    () =>
+      addAtomParticles(
+        scene,
+        props.element,
+        props.x_coords,
+        props.y_coords,
+        props.z_coords
+      ),
+    [props.element, props.x_coords, props.y_coords, props.z_coords, scene]
+  );
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
@@ -83,8 +97,7 @@ function Featurer2(props) {
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = '#394d6d';
-
+    const sceneColor = "#394d6d";
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
@@ -94,10 +107,6 @@ function Featurer2(props) {
     camera.position.set(2, 5, 5);
 
     setCamera(camera);
-
-    let scene = setUpScene(sceneColor);
-
-    scene = addAtomParticles(scene, props.element, props.x_coords, props.y_coords, props.z_coords);
 
     function update() {}
 
@@ -112,45 +121,64 @@ function Featurer2(props) {
     render();
   };
 
-  return (
-    <>
-      {props.element !== undefined && (
-        <>
-          <View style={styles.container}>
-            <Text style={styles.title}>{atomDict[props.element][1] + "."}</Text>
-            <Text style={styles.description}>{atomDict[props.element][3]}</Text>
-          </View>
+  return useMemo(
+    () => (
+      <>
+        {props.element !== undefined && (
+          <>
+            <View style={styles.container}>
+              <Text style={styles.title}>
+                {atomDict[props.element][1] + "."}
+              </Text>
+              <Text style={styles.description}>
+                {atomDict[props.element][3]}
+              </Text>
+            </View>
+            <OrbitControlsView style={{ flex: 1 }} camera={camera}>
+              <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
+            </OrbitControlsView>
 
-          <OrbitControlsView style={{ flex: 1 }} camera={camera}>
-            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
-          </OrbitControlsView>
+            <View style={styles.secondaryContainerAlternative}>
+              <Text
+                style={[styles.description, { color: "black", fontSize: 32 }]}
+              >
+                {shortenedElementName + " "}
+                {electronConfig.map((word, index) =>
+                  index !== electronConfig.length - 1 ? (
+                    <Text key={index}>{word} </Text>
+                  ) : (
+                    <View
+                      key={index}
+                      style={[styles.electronConfigItem, { fontSize: 32 }]}
+                    >
+                      <Text
+                        style={[styles.electronConfigText, { fontSize: 32 }]}
+                      >
+                        {word}
+                      </Text>
+                    </View>
+                  )
+                )}
+              </Text>
+            </View>
 
-          <View style={styles.secondaryContainerAlternative}>
-            <Text style={[styles.description, { color: 'black', fontSize: 32 }]}>
-              {shortenedElementName + " "}
-              {electronConfig.map((word, index) =>
-                index !== electronConfig.length - 1 ?
-                <Text key={index}>{word} </Text> :
-                <View key={index} style={[styles.electronConfigItem, { fontSize: 32 }]}>
-                  <Text style={[styles.electronConfigText, { fontSize: 32 }]}>{word}</Text>
-                </View>
-              )}
-            </Text>
-          </View>
-
-          <View style={styles.secondaryContainer}>
-            <Text style={styles.description}>Drag or zoom using your finger...</Text>
-          </View>
-        </>
-      )}
-    </>
+            <View style={styles.secondaryContainer}>
+              <Text style={styles.description}>
+                Drag or zoom using your finger...
+              </Text>
+            </View>
+          </>
+        )}
+      </>
+    ),
+    [props.element, camera, electronConfig, shortenedElementName]
   );
 }
 
 const mapStateToProps = (state) => {
   return state;
 };
- 
+
 const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
@@ -174,7 +202,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainerAlternative: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -197,16 +225,19 @@ const styles = StyleSheet.create({
   },
 
   electronConfigItem: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     fontFamily: "Outfit_400Regular",
     borderRadius: 4,
     padding: 4,
   },
-  
+
   electronConfigText: {
-    color: 'white',
-    fontFamily: "Outfit_400Regular"
-  }
+    color: "white",
+    fontFamily: "Outfit_400Regular",
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Featurer2);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(Featurer2));
