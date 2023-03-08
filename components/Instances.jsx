@@ -5,6 +5,12 @@ import { getMoleculeColour, getAtomColour, normalizeData } from './Globals';
 const sphereGeometry = new THREE.SphereGeometry(0.025, 32, 32);
 const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
+const convertHSLStringToArray = (hslString) => {
+    const color = new THREE.Color(hslString);
+    return [normalizeData(color.r, 1, 0), normalizeData(color.g, 1, 0), normalizeData(color.b, 1, 0)];
+};
+  
+
 const addParticles = (scene, element, density_data, density_data2, vmax, vmin) => {
     const matrices = [];
     const colors = [];
@@ -14,7 +20,7 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
 
         const volume = normalizeData(value, vmax, vmin);
 
-        colors.push(getMoleculeColour(element, volume));
+        colors.push(convertHSLStringToArray(getMoleculeColour(element, volume)));
 
         const x = coords[0] / 5 - 10.7;
         const y = coords[1] / 5 - 10.7;
@@ -30,8 +36,9 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        vertexColors: THREE.VertexColors,
-        size: 0.2,
+        vertexColors: true,
+        size: 5.0,
+        sizeAttenuation: false,
     });
 
     const pointCloud = new THREE.Points(geometry, material);
@@ -40,7 +47,6 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
 
     return scene;
 }
-
 
 const addAtomParticles = (scene, element, x_coords, y_coords, z_coords) => {
     const matrices = [];
