@@ -141,23 +141,6 @@ function Home(props) {
 
           {!isLoading ? (
             <>
-              <MoleculeSection />
-
-              <TouchableOpacity  
-                onPress={() => {
-                  if (netInfo.isConnected) {
-                    props.navigation.navigate('ExplainMolecule');
-
-                  } else {
-                    alert("Please connect to the internet to use this feature.");
-                  }
-                }}
-                style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
-              >
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>What is DFT?</Text>
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
-              </TouchableOpacity>
-
               <AtomSection />
 
               <TouchableOpacity  
@@ -171,7 +154,24 @@ function Home(props) {
                 }}
                 style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20 }]}
               >
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader, { fontSize: 24 }]}>Schrödinger equation?</Text>
+                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { fontSize: 24 }]}>Schrödinger equation?</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
+              </TouchableOpacity>
+
+              <MoleculeSection />
+
+              <TouchableOpacity  
+                onPress={() => {
+                  if (netInfo.isConnected) {
+                    props.navigation.navigate('ExplainMolecule');
+
+                  } else {
+                    alert("Please connect to the internet to use this feature.");
+                  }
+                }}
+                style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
+              >
+                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>What is DFT?</Text>
                 <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
               </TouchableOpacity>
             </>
@@ -181,7 +181,11 @@ function Home(props) {
             </View>
           )}
 
-          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 15, marginTop: 20 }, styles.appGenericText]}>
+          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 32, margin: 10, marginTop: 20 }, styles.appGenericText]}>
+            For students,{"\n"}by a student.
+          </Text>
+
+          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, marginLeft: 10, marginRight: 10 }, styles.appGenericText]}>
             Designed and Developed by John Seong.
           </Text>
         </ScrollView>
