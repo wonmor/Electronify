@@ -28,6 +28,10 @@ TO-DO:
 - Add a time detection ting for the "good afternoon" greeting
 */
 
+const Circle = ({ x, y, size }) => (
+  <View style={[styles.circle, { left: x, top: y, width: size, height: size }]} />
+);
+
 function Home(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [molecules, setMolecules] = useState([
@@ -119,9 +123,20 @@ function Home(props) {
       ).start();
     };
 
+    const circles = Array.from({ length: 40 }).map(() => ({
+      x: Math.floor(Math.random() * 300),
+      y: Math.floor(Math.random() * 500),
+      size: Math.floor(Math.random() * 50) + 25,
+    }));
+
     return (
         <ScrollView style={styles.parentContainer}>
           <View style={styles.container}>
+          <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -10 }}>
+            {circles.map((circle, index) => (
+              <Circle key={index} {...circle} />
+            ))}
+          </View>
             <Image source={require('../assets/icon.png')} style={styles.icon} />
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
               <Text style={{ color: '#fecaca' }}>Electronify</Text>.
@@ -203,12 +218,13 @@ const mapDispatchToProps = (dispatch) => ({
 const styles = StyleSheet.create({
   parentContainer: {
     marginBottom: 30,
+    zIndex: -1,
   },
 
   container: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#4f617d',
+    backgroundColor: 'rgba(79, 97, 125, 0.4)',
     alignItems: 'center',
     justifyContent: 'center', 
     textAlign: 'center',
@@ -221,10 +237,16 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 
+  circle: {
+    position: 'absolute',
+    backgroundColor: 'rgba(28, 46, 74, 0.5)',
+    borderRadius: 50,
+  },
+
   borderlessContainer: {
     margin: 20,
     padding: 15,
-    backgroundColor: "transparent",
+    backgroundColor: 'rgba(28, 46, 74, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
@@ -236,14 +258,13 @@ const styles = StyleSheet.create({
   borderlessContainerAlternative: {
     margin: 20,
     padding: 15,
-    backgroundColor: "transparent",
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
     borderRadius: 10,
     borderWidth: 5,
     borderColor: '#1c2e4a',
-    backgroundColor: '#1c2e4a'
+    backgroundColor: 'rgba(28, 46, 74, 0.4)'
   },
 
   arrowContainer: {
