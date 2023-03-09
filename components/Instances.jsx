@@ -2,14 +2,10 @@ import * as THREE from 'three';
 
 import { getMoleculeColour, getAtomColour, normalizeData } from './Globals';
 
-const sphereGeometry = new THREE.SphereGeometry(0.025, 32, 32);
-const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-
 const convertHSLStringToArray = (hslString) => {
     const color = new THREE.Color(hslString);
     return [normalizeData(color.r, 1, 0), normalizeData(color.g, 1, 0), normalizeData(color.b, 1, 0)];
 };
-  
 
 const addParticles = (scene, element, density_data, density_data2, vmax, vmin) => {
     const matrices = [];
@@ -46,41 +42,39 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
     scene.add(pointCloud);
 
     return scene;
-}
+};
 
 const addAtomParticles = (scene, element, x_coords, y_coords, z_coords) => {
     const matrices = [];
     const colors = [];
 
     for (let i = 0; i < x_coords.length; i++) {
-        colors.push(getAtomColour(element));
+        colors.push(...convertHSLStringToArray(getAtomColour(element)));
 
         const x = x_coords[i] / 10 - 8;
         const y = y_coords[i] / 10 - 8;
         const z = z_coords[i] / 10 - 8;
 
-        const matrix = new THREE.Matrix4().makeTranslation(x, y, z);
+        const matrix = new THREE.Vector3(x, y, z);
 
         matrices.push(matrix);
     }
 
-    const bufferGeometry = new THREE.BufferGeometry().fromGeometry(sphereGeometry);
-    const position = bufferGeometry.getAttribute('position');
-    bufferGeometry.addAttribute('instanceMatrix', new THREE.InstancedBufferAttribute(new Float32Array(matrices.length * 16), 16));
-    bufferGeometry.addAttribute('color', new THREE.InstancedBufferAttribute(new Float32Array(colors), 3));
+    const geometry = new THREE.BufferGeometry().setFromPoints(matrices);
 
-    const instancedMesh = new THREE.Mesh(bufferGeometry, sphereMaterial);
-    instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    instancedMesh.instanceColor.setUsage(THREE.DynamicDrawUsage);
-    instancedMesh.geometry.maxInstancedCount = matrices.length;
-    
-    for (let i = 0; i < matrices.length; i++) {
-        instancedMesh.setMatrixAt(i, matrices[i]);
-    }
-    
-    scene.add(instancedMesh);
-    
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({
+        vertexColors: true,
+        size: 5.0,
+        sizeAttenuation: false,
+    });
+
+    const pointCloud = new THREE.Points(geometry, material);
+
+    scene.add(pointCloud);
+
     return scene;
-}
+};
 
 export { addParticles, addAtomParticles };

@@ -21,6 +21,8 @@ import { addAtomParticles } from "./Instances";
 import { atomDict } from "./Globals";
 import { resetState } from "./utils/actions";
 
+import quantumNums from '../assets/quantum_num.json';
+
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
@@ -159,6 +161,12 @@ function Featurer2(props) {
                     </View>
                   )
                 )}
+              </Text>
+
+              <Text
+                style={[styles.electronConfigText, { fontSize: 24, color: "black" }]}
+              >
+                N = {quantumNums[props.element]["n"]}{"   "}L = {quantumNums[props.element]["l"]}{"   "}M<Text style={{fontSize: 18}}>L</Text> = {quantumNums[props.element]["m"]}
               </Text>
             </View>
 

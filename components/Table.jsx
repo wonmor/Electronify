@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 const Table = (props) => {
   const [elements, setElements] = useState([
     { symbol: 'H', name: 'Hydrogen' },
+    { symbol: 'Na', name: 'Sodium' },
     { symbol: 'O', name: 'Oxygen' },
     { symbol: 'Cu', name: 'Copper' },
     // Add more elements here
