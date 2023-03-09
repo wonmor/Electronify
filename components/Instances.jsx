@@ -20,7 +20,7 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
 
         const volume = normalizeData(value, vmax, vmin);
 
-        colors.push(convertHSLStringToArray(getMoleculeColour(element, volume)));
+        colors.push(...convertHSLStringToArray(getMoleculeColour(element, volume)));
 
         const x = coords[0] / 5 - 10.7;
         const y = coords[1] / 5 - 10.7;
