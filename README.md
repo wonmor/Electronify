@@ -4,13 +4,13 @@ This is a version of [**ElectronVisualized**](https://github.com/wonmor/Electron
 
 <table><tr>
 
-<td valign="center"><img width="300" alt="Screenshot-1" src="https://user-images.githubusercontent.com/35755386/223326209-4d9c4325-83e0-4919-a795-ee10e4dbc25c.jpg"></td>
+<td valign="center"><img width="300" alt="Screenshot-1" src="https://user-images.githubusercontent.com/35755386/223909452-34f1aa75-0b25-4173-b922-1c1b854a443f.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/223326234-01ef8e17-463c-49c4-a68b-58a7be858816.jpg"></td>
+<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/223909456-0dc68850-8004-4d7e-bd95-7f68b1fb1f1d.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-3" src="https://user-images.githubusercontent.com/35755386/223326218-7fa02fac-e5d1-4500-92c7-dfc31f0f6c84.jpg"></td>
+<td valign="center"><img width="300" alt="Screenshot-3" src="https://user-images.githubusercontent.com/35755386/223909459-5628f467-ad46-468d-9291-4e2d58cc7bb2.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-4" src="https://user-images.githubusercontent.com/35755386/223326243-f1ef9bce-f305-461d-8a00-0d666b8236da.jpg"></td>
+<td valign="center"><img width="300" alt="Screenshot-4" src="https://user-images.githubusercontent.com/35755386/223909472-bf38770d-3949-4ce2-bb5c-22f4a4b8669f.png"></td>
 
 </tr></table>
 
