@@ -1,4 +1,4 @@
-<img width="250" alt="icon" src="https://user-images.githubusercontent.com/35755386/224520433-0d9d00f7-88d6-416e-a455-09d26341393a.png">
+<img width="100" alt="icon" src="https://user-images.githubusercontent.com/35755386/224520433-0d9d00f7-88d6-416e-a455-09d26341393a.png">
 
 # Electronify
 
