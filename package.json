@@ -9,6 +9,7 @@
     "@reduxjs/toolkit": "^1.9.0",
     "expo": "~46.0.19",
     "expo-asset": "~8.6.3",
+    "expo-blur": "~11.2.0",
     "expo-device": "~4.3.0",
     "expo-file-system": "~14.1.0",
     "expo-font": "~10.2.0",

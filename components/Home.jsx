@@ -133,9 +133,9 @@ function Home(props) {
         <ScrollView style={styles.parentContainer}>
           <View style={styles.container}>
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -10 }}>
-            {circles.map((circle, index) => (
-              <Circle key={index} {...circle} />
-            ))}
+              {circles.map((circle, index) => (
+                <Circle key={index} {...circle} />
+              ))}
           </View>
             <Image source={require('../assets/icon.png')} style={styles.icon} />
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
