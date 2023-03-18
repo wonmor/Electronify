@@ -51,8 +51,8 @@ const addAtomParticles = (scene, element, x_coords, y_coords, z_coords) => {
     for (let i = 0; i < x_coords.length; i++) {
         colors.push(...convertHSLStringToArray(getAtomColour(element)));
 
-        const y = x_coords[i] / 7;
-        const x = y_coords[i] / 7;
+        const x = x_coords[i] / 7;
+        const y = y_coords[i] / 7;
         const z = z_coords[i] / 7;
 
         const matrix = new THREE.Vector3(x, y, z);
