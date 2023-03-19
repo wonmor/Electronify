@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/ios/iTunesArtwork@3x.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "versionCode": 3
     },
     "ios": {
       "bundleIdentifier": "com.johnseong.electronify",
