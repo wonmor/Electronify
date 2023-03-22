@@ -38,6 +38,7 @@ function MoleculeSection(props) {
       width: 10,
       height: 60,
       borderRadius: 5,
+      marginLeft: 5,
       position: "absolute",
       top: 0,
       left: 20,
@@ -50,6 +51,7 @@ function MoleculeSection(props) {
       height: 50,
       borderRadius: 25,
       position: "absolute",
+      marginLeft: 10,
       top: 10,
       left: 0,
       justifyContent: "center",
@@ -69,7 +71,7 @@ function MoleculeSection(props) {
       >
         <View style={stickStyle} />
         <View style={ballStyle}>
-          <Text style={{ fontSize: 25 }}>{nestedProps.formula.charAt(0)}</Text>
+          <Text style={{ fontSize: 25, fontFamily: "Outfit_400Regular" }}>{nestedProps.formula.charAt(0)}</Text>
         </View>
         <Text
           style={[
@@ -84,7 +86,7 @@ function MoleculeSection(props) {
         >
           {nestedProps.elementName}
         </Text>
-        <Text style={styles.structureText}>{nestedProps.structure}</Text>
+        <Text style={[styles.structureText, { fontFamily: "Outfit_400Regular" }]}>{nestedProps.structure}</Text>
       </TouchableOpacity>
     );
   };
