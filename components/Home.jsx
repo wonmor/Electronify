@@ -3,10 +3,9 @@ import { TouchableOpacity, StyleSheet, Text, Image, View, ActivityIndicator, Scr
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
-
 import { getElementData } from './utils/actions';
 
-import Table from './Table';
+import PeriodicTable from './PeriodicTable';
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -99,7 +98,7 @@ function Home(props) {
             Atoms.
           </Text>
 
-          <Table navigation={props.navigation} />
+          <PeriodicTable navigation={props.navigation} />
         </View>
       );
     }
@@ -132,10 +131,10 @@ function Home(props) {
     return (
         <ScrollView style={styles.parentContainer}>
           <View style={styles.container}>
-          <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -10 }}>
-              {circles.map((circle, index) => (
-                <Circle key={index} {...circle} />
-              ))}
+          <View style={{ position: 'absolute', top: 0, left: '50%', transform: [{ translateX: -150 }], zIndex: -10 }}>
+            {circles.map((circle, index) => (
+              <Circle key={index} {...circle} />
+            ))}
           </View>
             <Image source={require('../assets/icon.png')} style={styles.icon} />
             <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
@@ -196,11 +195,15 @@ function Home(props) {
             </View>
           )}
 
+        <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, margin: 10, marginTop: 30 }, styles.appGenericText]}>
+            Thank you,{"\n"}Dr. Geoffrey Hutchison,{"\n"}for your insipiration.
+          </Text>
+
           <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 32, margin: 10, marginTop: 20 }, styles.appGenericText]}>
             For students,{"\n"}by a student.
           </Text>
 
-          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, marginLeft: 10, marginRight: 10 }, styles.appGenericText]}>
+          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, margin: 10, marginTop: 20 }, styles.appGenericText]}>
             Designed and Developed by John Seong.
           </Text>
         </ScrollView>
