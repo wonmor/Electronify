@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
 import { connect } from "react-redux";
 
-import Hypher from 'hypher';
-import english from 'hyphenation.en-us';
+import Hypher from "hypher";
+import english from "hyphenation.en-us";
 
 const h = new Hypher(english);
 
@@ -100,21 +106,30 @@ const styles = StyleSheet.create({
 const LegendItem = ({ label, style, orbitalShape }) => (
   <View style={styles.legendItem}>
     <View style={[styles.legendBox, style]}>
-      <Text style={[styles.legendBoxLabel, { fontFamily: 'Outfit_400Regular', }]}>{orbitalShape}</Text>
+      <Text
+        style={[styles.legendBoxLabel, { fontFamily: "Outfit_400Regular" }]}
+      >
+        {orbitalShape}
+      </Text>
     </View>
     <View>
-      <Text style={[styles.legendLabel, { fontFamily: 'Outfit_400Regular' }]}>{label}</Text>
+      <Text style={[styles.legendLabel, { fontFamily: "Outfit_400Regular" }]}>
+        {label}
+      </Text>
     </View>
   </View>
 );
-
 
 const Legend = () => (
   <View style={styles.legend}>
     <LegendItem label="Alkali" style={styles.alkali} orbitalShape="s" />
     <LegendItem label="Alkaline" style={styles.alkaline} orbitalShape="s" />
     <LegendItem label="Transition" style={styles.transition} orbitalShape="d" />
-    <LegendItem label="Post-Transition" style={styles.postTransition} orbitalShape="p" />
+    <LegendItem
+      label="Post-Transition"
+      style={styles.postTransition}
+      orbitalShape="p"
+    />
     <LegendItem label="Metalloid" style={styles.metalloid} orbitalShape="p" />
     <LegendItem label="Nonmetal" style={styles.nonmetal} orbitalShape="p" />
     <LegendItem label="Halogen" style={styles.halogen} orbitalShape="p" />
@@ -329,60 +344,88 @@ const ELEMENTS = [
   { symbol: "Og", name: "Oganesson", group: 18, period: 7, type: "nobleGas" },
 ];
 
-const allowedSymbols = ['H', 'Be', 'B', 'Li', 'Na', 'K', 'O', 'F', 'Ne', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Pd', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd'];
+const allowedSymbols = [
+  "H",
+  "Be",
+  "B",
+  "Li",
+  "Na",
+  "K",
+  "O",
+  "F",
+  "Ne",
+  "Fe",
+  "Co",
+  "Ni",
+  "Cu",
+  "Zn",
+  "Pd",
+  "Ce",
+  "Pr",
+  "Nd",
+  "Pm",
+  "Sm",
+  "Eu",
+  "Gd",
+];
 
 function PeriodicTable(props) {
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const netInfo = useNetInfo();
+  const netInfo = useNetInfo();
 
-    const fetchElementData = async (item, type) => {
-        setIsLoading(true);
-        await props.getElementData(item, type);
+  const fetchElementData = async (item, type) => {
+    setIsLoading(true);
+    await props.getElementData(item, type);
 
-        // Wait until data is not undefined
-        while (props.x_coords == undefined || props.element == undefined) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        props.navigation.navigate('Featurer2');
-        setIsLoading(false);
-    };
-    
-    const renderCell = (element) => {
-      const { symbol, name, type } = element;
-      return (
-        <TouchableOpacity
-            key={element.symbol}
-            style={[styles.cell, styles[element.type]]}
-            onPress={() => {
-                if (netInfo.isConnected) {
-                  fetchElementData(element.symbol, 'atom');
-                } else {
-                  alert("Please connect to the internet to use this feature.");
-                }
-              }}
-        >
-            <Text style={[styles.symbol, { fontFamily: 'Outfit_600SemiBold' }]}>{element.symbol}</Text>
-            <Text style={[styles.name, { fontFamily: 'Outfit_400Regular' }]}>{h.hyphenateText(element.name)}</Text>
-        </TouchableOpacity>
-      );
-    };
-  
-    const renderRow = (start, end) => {
-        const row = [];
-        for (let i = start; i <= end; i++) {
-          const element = ELEMENTS[i];
-          if (allowedSymbols.includes(element.symbol)) {
-            row.push(renderCell(element));
+    // Wait until data is not undefined
+    while (props.x_coords == undefined || props.element == undefined) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    props.navigation.navigate("Featurer2");
+    setIsLoading(false);
+  };
+
+  const renderCell = (element) => {
+    const { symbol, name, type } = element;
+    return (
+      <TouchableOpacity
+        key={element.symbol}
+        style={[styles.cell, styles[element.type]]}
+        onPress={() => {
+          if (netInfo.isConnected) {
+            fetchElementData(element.symbol, "atom");
+          } else {
+            alert("Please connect to the internet to use this feature.");
           }
-        }
-        return row;
-      };
-    
-      return (
+        }}
+      >
+        <Text style={[styles.symbol, { fontFamily: "Outfit_600SemiBold" }]}>
+          {element.symbol}
+        </Text>
+        <Text style={[styles.name, { fontFamily: "Outfit_400Regular" }]}>
+          {h.hyphenateText(element.name)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRow = (start, end) => {
+    const row = [];
+    for (let i = start; i <= end; i++) {
+      const element = ELEMENTS[i];
+      if (allowedSymbols.includes(element.symbol)) {
+        row.push(renderCell(element));
+      }
+    }
+    return row;
+  };
+
+  return (
+    <>
+      {!isLoading ? (
         <>
-        {!isLoading ? (
-        <>
+          <Legend />
           <View style={styles.container}>
             <View>{renderRow(0, 1)}</View>
             <View>{renderRow(2, 9)}</View>
@@ -394,22 +437,20 @@ function PeriodicTable(props) {
             <View>{renderRow(90, 103)}</View>
             <View>{renderRow(104, 117)}</View>
           </View>
-    
-          <Legend />
         </>
-        ) : (
-            <ActivityIndicator style={{ margin: 10 }} size="large" color="#fff" />
-          )}
-          </>
-    );
-  }
+      ) : (
+        <ActivityIndicator style={{ margin: 10 }} size="large" color="#fff" />
+      )}
+    </>
+  );
+}
 
-  const mapStateToProps = (state) => {
-    return state;
-  };
-  
-  const mapDispatchToProps = (dispatch) => ({
-    getElementData: (item, type) => dispatch(getElementData(item, type)),
-  });
+const mapStateToProps = (state) => {
+  return state;
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps)(PeriodicTable);
+const mapDispatchToProps = (dispatch) => ({
+  getElementData: (item, type) => dispatch(getElementData(item, type)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PeriodicTable);

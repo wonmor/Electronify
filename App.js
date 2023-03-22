@@ -8,8 +8,9 @@ import rootReducer from './components/utils/reducers';
 import Home from './components/Home';
 import Featurer from './components/Featurer';
 import Featurer2 from './components/Featurer2';
-import ExplainAtom from './components/ExplainAtom';
-import ExplainMolecule from './components/ExplainMolecule';
+import AtomSection from './components/AtomSection';
+import MoleculeSection from './components/MoleculeSection';
+
 import {
   useFonts,
   Outfit_400Regular,
@@ -54,6 +55,16 @@ const App = () => {
             }}
           />
           <Stack.Screen
+            name="AtomSection"
+            component={AtomSection}
+            options={{ title: 'Atoms.' }}
+          />
+          <Stack.Screen
+            name="MoleculeSection"
+            component={MoleculeSection}
+            options={{ title: 'Molecules.' }}
+          />
+          <Stack.Screen
             name="Featurer"
             component={Featurer}
             options={{ title: 'Spotlight.' }}
@@ -62,16 +73,6 @@ const App = () => {
             name="Featurer2"
             component={Featurer2}
             options={{ title: 'Spotlight.' }}
-          />
-          <Stack.Screen
-            name="ExplainAtom"
-            component={ExplainAtom}
-            options={{ title: 'Schrödinger?' }}
-          />
-          <Stack.Screen
-            name="ExplainMolecule"
-            component={ExplainMolecule}
-            options={{ title: 'DFT?' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from './utils/actions';
 
-import PeriodicTable from './PeriodicTable';
-
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
@@ -33,75 +31,12 @@ const Circle = ({ x, y, size }) => (
 
 function Home(props) {
     const [isLoading, setIsLoading] = useState(false);
-    const [molecules, setMolecules] = useState([
-        { name: "Hydrogen Gas", formula: "H2", type: "molecule" },
-        { name: "Water", formula: "H2O", type: "molecule" },
-        { name: "Hydrochloric Acid", formula: "HCl", type: "molecule" },
-    ]);
 
     useEffect(() => {
       startArrowAnimation();
     }, [])
     
     const netInfo = useNetInfo();
-
-    const ElementButton = (nestedProps) => {
-      const fetchElementData = async (item, type) => {
-        setIsLoading(true);
-        await props.getElementData(item, type);
-
-        // Wait until data is not undefined
-        while (props.atoms_x == undefined || props.element == undefined) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        props.navigation.navigate('Featurer');
-        setIsLoading(false);
-      };
-      
-    
-      return (
-        <TouchableOpacity  
-          onPress={() => {
-            if (netInfo.isConnected) {
-              fetchElementData(nestedProps.formula, nestedProps.type);
-            } else {
-              alert("Please connect to the internet to use this feature.");
-            }
-          }}
-          style={styles.appButtonContainer}
-        >
-          <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonTextHeader]}>{nestedProps.formula}</Text>
-          <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>{nestedProps.elementName}</Text>
-        </TouchableOpacity>
-      );
-    };
-    
-
-    const MoleculeSection = () => {
-      return (
-        <View style={styles.borderlessContainer}>
-          <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-            Molecules.
-          </Text>
-
-          {molecules.map(molecule => (
-            <ElementButton elementName={molecule.name} formula={molecule.formula} type={molecule.type} key={molecule.name} />
-          ))}
-        </View>
-      );
-    }
-
-    const AtomSection = () => {
-      return (
-        <View style={styles.borderlessContainerAlternative}>
-          <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-            Atoms.
-          </Text>
-
-          <PeriodicTable navigation={props.navigation} />
-        </View>
-      );
-    }
 
     const arrowAnim = useRef(new Animated.Value(0)).current;
 
@@ -155,12 +90,10 @@ function Home(props) {
 
           {!isLoading ? (
             <>
-              <AtomSection />
-
               <TouchableOpacity  
                 onPress={() => {
                   if (netInfo.isConnected) {
-                    props.navigation.navigate('ExplainAtom');
+                    props.navigation.navigate('AtomSection');
                     
                   } else {
                     alert("Please connect to the internet to use this feature.");
@@ -168,16 +101,14 @@ function Home(props) {
                 }}
                 style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20 }]}
               >
-                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { fontSize: 24 }]}>Schrödinger equation?</Text>
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
+                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>Atomic</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Orbitals.</Text>
               </TouchableOpacity>
-
-              <MoleculeSection />
 
               <TouchableOpacity  
                 onPress={() => {
                   if (netInfo.isConnected) {
-                    props.navigation.navigate('ExplainMolecule');
+                    props.navigation.navigate('MoleculeSection');
 
                   } else {
                     alert("Please connect to the internet to use this feature.");
@@ -185,8 +116,8 @@ function Home(props) {
                 }}
                 style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
               >
-                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>What is DFT?</Text>
-                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Tap to learn more</Text>
+                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader]}>Molecular</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Orbitals.</Text>
               </TouchableOpacity>
             </>
           ) : (
@@ -194,10 +125,6 @@ function Home(props) {
               <ActivityIndicator size="large" color="#fff" />
             </View>
           )}
-
-        <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, margin: 10, marginTop: 30 }, styles.appGenericText]}>
-            Thank you,{"\n"}Dr. Geoffrey Hutchison,{"\n"}for your insipiration.
-          </Text>
 
           <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 32, margin: 10, marginTop: 20 }, styles.appGenericText]}>
             For students,{"\n"}by a student.
@@ -288,6 +215,8 @@ const styles = StyleSheet.create({
   },
 
   appButtonContainer: {
+    width: 200,
+    alignSelf: "center",
     marginTop: 10,
     elevation: 8,
     backgroundColor: "#1c2e4a",
