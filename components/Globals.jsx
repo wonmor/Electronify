@@ -126,20 +126,29 @@ export const moleculeDict = {
   H2O: [
     "Water",
     "Water is an inorganic, transparent, tasteless, odourless, and nearly colourless chemical substance.",
+    "Bent",
+    "Polar"
   ],
   H2: [
     "Hydrogen Gas",
     "Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.",
+    "Linear",
+    "Nonpolar"
   ],
   Cl2: [
     "Chlorine Gas",
     "Chlorine is a yellow-green gas at room temperature. Chlorine has a pungent, irritating odor similar to bleach that is detectable at low concentrations.",
+    "Linear",
+    "Nonpolar"
   ],
   HCl: [
     "Hydrochloric Acid",
     "Hydrochloric acid is the water-based, or aqueous, solution of hydrogen chloride gas.",
+    "Linear",
+    "Polar"
   ],
 };
+
 
 export const bondShapeDict = {
   H2O: [
@@ -150,6 +159,14 @@ export const bondShapeDict = {
   Cl2: [[0, 1]],
   HCl: [[0, 1]],
 };
+
+export const dipoleMomentDict = {
+  H2O: { moment: 1.84, direction: [0, 0, -1] },
+  H2: { moment: 0, direction: null },
+  Cl2: { moment: 0, direction: null },
+  HCl: { moment: 1.08, direction: [0, 0, -1] },
+};
+
 
 export const atomDict = {
   H: [

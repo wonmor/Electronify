@@ -24,7 +24,7 @@ import {
 } from "three";
 
 import { addParticles } from "./Instances";
-import { moleculeDict, bondShapeDict } from "./Globals";
+import { moleculeDict, bondShapeDict, dipoleMomentDict } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -151,7 +151,7 @@ function Featurer(props) {
           </OrbitControlsView>
 
           <View style={styles.secondaryContainerAlternative}>
-            <Text style={styles.description}>Formula: {props.element}</Text>
+            <Text style={styles.description}>{props.element + " | " + moleculeDict[props.element][2] + " | " + moleculeDict[props.element][3]}</Text>
           </View>
 
           <View style={styles.secondaryContainer}>
