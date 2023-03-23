@@ -88,8 +88,7 @@ function Home(props) {
             </Animated.View>
           </View>
 
-          {!isLoading ? (
-            <>
+          <>
               <TouchableOpacity  
                 onPress={() => {
                   if (netInfo.isConnected) {
@@ -119,12 +118,22 @@ function Home(props) {
                 <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader]}>Molecular</Text>
                 <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Orbitals.</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity  
+                onPress={() => {
+                  if (netInfo.isConnected) {
+                    props.navigation.navigate('HydrogenWaveFunction');
+
+                  } else {
+                    alert("Please connect to the internet to use this feature.");
+                  }
+                }}
+                style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
+              >
+                <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: 'white' }]}>Hydrogen</Text>
+                <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Wavefunction.</Text>
+              </TouchableOpacity>
             </>
-          ) : (
-            <View style={styles.borderlessContainer}>
-              <ActivityIndicator size="large" color="#fff" />
-            </View>
-          )}
 
           <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 32, margin: 10, marginTop: 20 }, styles.appGenericText]}>
             For students,{"\n"}by a student.

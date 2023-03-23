@@ -10,6 +10,7 @@ import Featurer from './components/Featurer';
 import Featurer2 from './components/Featurer2';
 import AtomSection from './components/AtomSection';
 import MoleculeSection from './components/MoleculeSection';
+import HydrogenWaveFunction from './components/Equation';
 
 import {
   useFonts,
@@ -73,6 +74,11 @@ const App = () => {
             name="Featurer2"
             component={Featurer2}
             options={{ title: 'Spotlight.' }}
+          />
+          <Stack.Screen
+            name="HydrogenWaveFunction"
+            component={HydrogenWaveFunction}
+            options={{ title: 'Solver.' }}
           />
         </Stack.Navigator>
       </NavigationContainer>
