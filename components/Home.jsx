@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
   Text,
   Image,
   View,
-  ActivityIndicator,
   ScrollView,
   Animated,
 } from "react-native";
@@ -34,60 +33,65 @@ TO-DO:
 - Add a time detection ting for the "good afternoon" greeting
 */
 
-const Circle = ({ x, y, size, opacity, key }) => {
-  const circleSizeAnim = useRef(new Animated.Value(0)).current;
-  const [circleSize, setCircleSize] = useState(0);
+const Circle = forwardRef(({ x, y, size, opacity }, ref) => {
+  const circleRef = useRef(null);
 
-  useEffect(() => {
-    Animated.timing(circleSizeAnim, {
-      toValue: 1,
-      duration: 3000,
-      useNativeDriver: true,
-    }).start(() => {
-      Animated.timing(circleSizeAnim, {
-        toValue: 0,
-        duration: 3000,
-        useNativeDriver: true,
-      }).start(() => setCircleSize(0));
-    });
-  }, []);
-
-  useEffect(() => {
-    setCircleSize(
-      circleSizeAnim.interpolate({
-        inputRange: [0, 0.5, 1],
-        outputRange: [size * 0.5, size, size * 1.5],
-      })
-    );
-  }, [size]);
+  useImperativeHandle(ref, () => ({
+    getNode: () => circleRef.current,
+  }));
 
   return (
     <Animated.View
-      key={key}
+      ref={circleRef}
       style={[
         styles.circle,
-        { left: x, top: y, width: circleSize, height: circleSize, opacity },
+        { left: x, top: y, width: size, height: size, opacity },
       ]}
     />
   );
-};
+});
 
 function Home(props) {
-  const [circles, setCircles] = useState(
-    Array.from({ length: 40 }).map(() => ({
-      x: Math.floor(Math.random() * 300),
-      y: Math.floor(Math.random() * 500),
-      size: Math.floor(Math.random() * 50) + 25,
-      opacity: circleAnim,
-    }))
-  );
-
   useEffect(() => {
     startArrowAnimation();
     startCircleAnimation();
   }, []);
 
   const netInfo = useNetInfo();
+  const circlesRef = useRef([]);
+
+  const [electronifyAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    startElectronifyAnimation();
+  }, []);
+
+  const startElectronifyAnimation = () => {
+    Animated.timing(electronifyAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const electronifyStyle = [
+    { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
+    styles.appGenericText,
+    {
+      opacity: electronifyAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+      }),
+      transform: [
+        {
+          translateY: electronifyAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [-30, 0],
+          }),
+        },
+      ],
+    },
+  ];
 
   const arrowAnim = useRef(new Animated.Value(0)).current;
   const circleAnim = useRef(new Animated.Value(0)).current;
@@ -97,42 +101,53 @@ function Home(props) {
       Animated.sequence([
         Animated.timing(arrowAnim, {
           toValue: 1,
-          duration: 500,
+          duration: 2000,
           useNativeDriver: true,
         }),
         Animated.timing(arrowAnim, {
           toValue: 0,
-          duration: 500,
+          duration: 2000,
           useNativeDriver: true,
         }),
       ])
     ).start();
   };
+  
   const startCircleAnimation = () => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(circleAnim, {
           toValue: 1,
-          duration: 3000,
+          duration: 2000,
           useNativeDriver: true,
         }),
         Animated.timing(circleAnim, {
           toValue: 0,
-          duration: 3000,
+          duration: 2000,
           useNativeDriver: true,
         }),
       ])
     ).start(() => {
-      const newCircles = circles.map((circle) => ({
-        x: Math.floor(Math.random() * 300),
-        y: Math.floor(Math.random() * 500),
-        size: Math.floor(Math.random() * 50) + 25,
-        opacity: circleAnim,
-        key: Math.random(), // add a new key prop to force re-render of Circle component
-      }));
-      setCircles(newCircles);
+      circlesRef.current.forEach((circle) => {
+        circle.viewRef.setNativeProps({
+          style: {
+            left: Math.floor(Math.random() * 300),
+            top: Math.floor(Math.random() * 500),
+            width: Math.floor(Math.random() * 50) + 25,
+            height: Math.floor(Math.random() * 50) + 25,
+            opacity: circleAnim,
+          },
+        });
+      });
     });
   };
+  
+  const circles = Array.from({ length: 40 }).map(() => ({
+    x: Math.floor(Math.random() * 300),
+    y: Math.floor(Math.random() * 500),
+    size: Math.floor(Math.random() * 50) + 25,
+    opacity: circleAnim,
+  }));
 
   return (
     <ScrollView style={styles.parentContainer}>
@@ -147,18 +162,26 @@ function Home(props) {
           }}
         >
           {circles.map((circle, index) => (
-            <Circle key={index} {...circle} />
+            <Circle
+              key={index}
+              {...circle}
+              ref={(viewRef) => {
+                circlesRef.current[index] = { ...circle, viewRef };
+              }}
+            />
           ))}
         </View>
         <Image source={require("../assets/icon.png")} style={styles.icon} />
-        <Text
-          style={[
-            { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
-            styles.appGenericText,
-          ]}
-        >
-          <Text style={{ color: "#fecaca" }}>Electronify</Text>.
-        </Text>
+        <Animated.Text style={electronifyStyle}>
+          <Text
+            style={[
+              { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
+              styles.appGenericText,
+            ]}
+          >
+            <Text style={{ color: "#fecaca" }}>Electronify</Text>.
+          </Text>
+        </Animated.Text>
 
         <Text
           style={[
@@ -187,6 +210,7 @@ function Home(props) {
           <Ionicons name="chevron-down" size={28} color="#fff" />
         </Animated.View>
       </View>
+
       <>
         <TouchableOpacity
           onPress={() => {
@@ -244,7 +268,8 @@ function Home(props) {
             Orbitals.
           </Text>
         </TouchableOpacity>
-      </>{" "}
+      </>
+
       <Text
         style={[
           {
@@ -258,6 +283,7 @@ function Home(props) {
       >
         For students,{"\n"}by a student.
       </Text>
+
       <Text
         style={[
           {
@@ -292,7 +318,7 @@ const styles = StyleSheet.create({
   container: {
     margin: 20,
     padding: 15,
-    backgroundColor: `rgba(79, 97, 125, 0.4)`,
+    backgroundColor: "rgba(79, 97, 125, 0.4)",
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
