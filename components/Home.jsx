@@ -1,9 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, Text, Image, View, ActivityIndicator, ScrollView, Animated } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { connect } from 'react-redux';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  ActivityIndicator,
+  ScrollView,
+  Animated,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { getElementData } from './utils/actions';
+import { getElementData } from "./utils/actions";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -64,42 +73,45 @@ const Circle = ({ x, y, size, opacity, key }) => {
 };
 
 function Home(props) {
-  const [circles, setCircles] = useState(Array.from({ length: 40 }).map(() => ({
-    x: Math.floor(Math.random() * 300),
-    y: Math.floor(Math.random() * 500),
-    size: Math.floor(Math.random() * 50) + 25,
-    opacity: circleAnim,
-  })));
+  const [circles, setCircles] = useState(
+    Array.from({ length: 40 }).map(() => ({
+      x: Math.floor(Math.random() * 300),
+      y: Math.floor(Math.random() * 500),
+      size: Math.floor(Math.random() * 50) + 25,
+      opacity: circleAnim,
+    }))
+  );
 
-    useEffect(() => {
-      startArrowAnimation();
-      startCircleAnimation();
-    }, [])
-    
-    const netInfo = useNetInfo();
+  useEffect(() => {
+    startArrowAnimation();
+    startCircleAnimation();
+  }, []);
 
-    const arrowAnim = useRef(new Animated.Value(0)).current;
-    const circleAnim = useRef(new Animated.Value(0)).current;
+  const netInfo = useNetInfo();
 
-    const startArrowAnimation = () => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(arrowAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(arrowAnim, {
-            toValue: 0,
-            duration: 500,
-            useNativeDriver: true,
-          })
-        ])
-      ).start();
-    };
-    const startCircleAnimation = () => {
-      Animated.loop(
-        Animated.sequence([      Animated.timing(circleAnim, {
+  const arrowAnim = useRef(new Animated.Value(0)).current;
+  const circleAnim = useRef(new Animated.Value(0)).current;
+
+  const startArrowAnimation = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(arrowAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(arrowAnim, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+  const startCircleAnimation = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(circleAnim, {
           toValue: 1,
           duration: 3000,
           useNativeDriver: true,
@@ -109,7 +121,7 @@ function Home(props) {
           duration: 3000,
           useNativeDriver: true,
         }),
-      ]),
+      ])
     ).start(() => {
       const newCircles = circles.map((circle) => ({
         x: Math.floor(Math.random() * 300),
@@ -121,189 +133,249 @@ function Home(props) {
       setCircles(newCircles);
     });
   };
-  
-  
+
   return (
-      <ScrollView style={styles.parentContainer}>
-        <View style={styles.container}>
-        <View style={{ position: 'absolute', top: 0, left: '50%', transform: [{ translateX: -150 }], zIndex: -10 }}>
+    <ScrollView style={styles.parentContainer}>
+      <View style={styles.container}>
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: [{ translateX: -150 }],
+            zIndex: -10,
+          }}
+        >
           {circles.map((circle, index) => (
             <Circle key={index} {...circle} />
           ))}
         </View>
-          <Image source={require('../assets/icon.png')} style={styles.icon} />
-          <Text style={[{ fontFamily: 'Outfit_600SemiBold', fontSize: 40 }, styles.appGenericText]}>
-            <Text style={{ color: '#fecaca' }}>Electronify</Text>.
+        <Image source={require("../assets/icon.png")} style={styles.icon} />
+        <Text
+          style={[
+            { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
+            styles.appGenericText,
+          ]}
+        >
+          <Text style={{ color: "#fecaca" }}>Electronify</Text>.
+        </Text>
+
+        <Text
+          style={[
+            { fontFamily: "Outfit_400Regular", fontSize: 20 },
+            styles.appGenericText,
+          ]}
+        >
+          Visualizing Quantum Mechanics. Reimagined.
+        </Text>
+
+        <Animated.View
+          style={[
+            styles.arrowContainer,
+            {
+              transform: [
+                {
+                  translateY: arrowAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 5],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <Ionicons name="chevron-down" size={28} color="#fff" />
+        </Animated.View>
+      </View>
+      <>
+        <TouchableOpacity
+          onPress={() => {
+            if (netInfo.isConnected) {
+              props.navigation.navigate("AtomSection");
+            } else {
+              alert("Please connect to the internet to use this feature.");
+            }
+          }}
+          style={[
+            styles.appButtonContainer,
+            { marginLeft: 20, marginRight: 20 },
+          ]}
+        >
+          <Text
+            style={[
+              { fontFamily: "Outfit_600SemiBold" },
+              styles.appButtonTextHeader,
+              { color: "#fecaca" },
+            ]}
+          >
+            Atomic
           </Text>
-  
-          <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 20 }, styles.appGenericText]}>
-            Visualizing Quantum Mechanics. Reimagined.
+          <Text
+            style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}
+          >
+            Orbitals.
           </Text>
-  
-          <Animated.View style={[styles.arrowContainer, { transform: [{ translateY: arrowAnim.interpolate({          inputRange: [0, 1],
-            outputRange: [0, 5],
-          }) }]}]}>
-            <Ionicons name="chevron-down" size={28} color="#fff" />
-          </Animated.View>
-        </View>
-  
-        <>
-            <TouchableOpacity  
-              onPress={() => {
-                if (netInfo.isConnected) {
-                  props.navigation.navigate('AtomSection');
-                  
-                } else {
-                  alert("Please connect to the internet to use this feature.");
-                }
-              }}
-              style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20 }]}
-            >
-              <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: '#fecaca' }]}>Atomic</Text>
-              <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Orbitals.</Text>
-            </TouchableOpacity>
-  
-            <TouchableOpacity  
-              onPress={() => {
-                if (netInfo.isConnected) {
-                  props.navigation.navigate('MoleculeSection');
-  
-                } else {
-                  alert("Please connect to the internet to use this feature.");
-                }
-              }}
-              style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
-            >
-              <Text style={[{ fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader]}>Molecular</Text>
-              <Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Orbitals.</Text>
-            </TouchableOpacity>
-  
-            <TouchableOpacity  
-              onPress={() => {
-                if (netInfo.isConnected) {
-                  props.navigation.navigate('HydrogenWaveFunction');
-  
-                } else {
-                  alert("Please connect to the internet to use this feature.");
-                }
-              }}
-              style={[styles.appButtonContainer, { marginLeft: 20, marginRight: 20}]}
-            >
-              <Text style={[{fontFamily: "Outfit_600SemiBold" }, styles.appButtonTextHeader, { color: 'white' }]}>Hydrogen</Text>
-<Text style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}>Wavefunction.</Text>
-</TouchableOpacity>
-</>      <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 32, margin: 10, marginTop: 20 }, styles.appGenericText]}>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            if (netInfo.isConnected) {
+              props.navigation.navigate("MoleculeSection");
+            } else {
+              alert("Please connect to the internet to use this feature.");
+            }
+          }}
+          style={[
+            styles.appButtonContainer,
+            { marginLeft: 20, marginRight: 20 },
+          ]}
+        >
+          <Text
+            style={[
+              { fontFamily: "Outfit_600SemiBold" },
+              styles.appButtonTextHeader,
+            ]}
+          >
+            Molecular
+          </Text>
+          <Text
+            style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}
+          >
+            Orbitals.
+          </Text>
+        </TouchableOpacity>
+      </>{" "}
+      <Text
+        style={[
+          {
+            fontFamily: "Outfit_400Regular",
+            fontSize: 32,
+            margin: 10,
+            marginTop: 20,
+          },
+          styles.appGenericText,
+        ]}
+      >
         For students,{"\n"}by a student.
       </Text>
-
-      <Text style={[{ fontFamily: 'Outfit_400Regular', fontSize: 14, margin: 10, marginTop: 20 }, styles.appGenericText]}>
+      <Text
+        style={[
+          {
+            fontFamily: "Outfit_400Regular",
+            fontSize: 14,
+            margin: 10,
+            marginTop: 20,
+          },
+          styles.appGenericText,
+        ]}
+      >
         Designed and Developed by John Seong.
       </Text>
     </ScrollView>
-);
+  );
 }
 
 const mapStateToProps = (state) => {
-return state;
+  return state;
 };
 
 const mapDispatchToProps = (dispatch) => ({
-getElementData: (item, type) => dispatch(getElementData(item, type)),
+  getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
 
 const styles = StyleSheet.create({
-parentContainer: {
-marginBottom: 30,
-zIndex: -1,
-},
+  parentContainer: {
+    marginBottom: 30,
+    zIndex: -1,
+  },
 
-container: {
-margin: 20,
-padding: 15,
-backgroundColor: `rgba(79, 97, 125, 0.4)`,
-alignItems: 'center',
-justifyContent: 'center',
-textAlign: 'center',
-borderRadius: 10,
-},
+  container: {
+    margin: 20,
+    padding: 15,
+    backgroundColor: `rgba(79, 97, 125, 0.4)`,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    borderRadius: 10,
+  },
 
-icon: {
-width: 100,
-height: 100,
-margin: 5,
-},
+  icon: {
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
 
-circle: {
-position: 'absolute',
-backgroundColor: 'rgba(28, 46, 74, 0.5)',
-borderRadius: 50,
-},
+  circle: {
+    position: "absolute",
+    backgroundColor: "rgba(28, 46, 74, 0.5)",
+    borderRadius: 50,
+  },
 
-borderlessContainer: {
-margin: 20,
-padding: 15,
-backgroundColor: 'rgba(28, 46, 74, 0.4)',
-alignItems: 'center',
-justifyContent: 'center',
-textAlign: 'center',
-borderRadius: 10,
-borderWidth: 5,
-borderColor: '#1c2e4a',
-},
+  borderlessContainer: {
+    margin: 20,
+    padding: 15,
+    backgroundColor: "rgba(28, 46, 74, 0.4)",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: "#1c2e4a",
+  },
 
-borderlessContainerAlternative: {
-margin: 20,
-padding: 15,
-alignItems: 'center',
-justifyContent: 'center',
-textAlign: 'center',
-borderRadius: 10,
-borderWidth: 5,
-borderColor: '#1c2e4a',
-backgroundColor: 'rgba(28, 46, 74, 0.4)'
-},
+  borderlessContainerAlternative: {
+    margin: 20,
+    padding: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: "#1c2e4a",
+    backgroundColor: "rgba(28, 46, 74, 0.4)",
+  },
 
-arrowContainer: {
-margin: 10,
-bottom: 0,
-alignSelf: 'center',
-},
+  arrowContainer: {
+    margin: 10,
+    bottom: 0,
+    alignSelf: "center",
+  },
 
-scrollTextContainer: {
-bottom: 0,
-alignSelf: 'center',
-},
+  scrollTextContainer: {
+    bottom: 0,
+    alignSelf: "center",
+  },
 
-appGenericText: {
-textAlign: "center",
-color: "white",
-margin: 5,
-},
+  appGenericText: {
+    textAlign: "center",
+    color: "white",
+    margin: 5,
+  },
 
-appButtonContainer: {
-width: 200,
-alignSelf: "center",
-marginTop: 10,
-elevation: 8,
-backgroundColor: "#1c2e4a",
-borderWidth: 1,
-borderColor: '#fff',
-borderRadius: 10,
-paddingVertical: 10,
-paddingHorizontal: 12
-},
+  appButtonContainer: {
+    width: 200,
+    alignSelf: "center",
+    marginTop: 10,
+    elevation: 8,
+    backgroundColor: "#1c2e4a",
+    borderWidth: 1,
+    borderColor: "#fff",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
 
-appButtonText: {
-fontSize: 18,
-color: "#fff",
-alignSelf: "center",
-},
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    alignSelf: "center",
+  },
 
-appButtonTextHeader: {
-fontSize: 30,
-color: "#bae6fd",
-alignSelf: "center",
-}
+  appButtonTextHeader: {
+    fontSize: 30,
+    color: "#bae6fd",
+    alignSelf: "center",
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
