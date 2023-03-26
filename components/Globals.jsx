@@ -127,28 +127,39 @@ export const moleculeDict = {
     "Water",
     "Water is an inorganic, transparent, tasteless, odourless, and nearly colourless chemical substance.",
     "Bent",
-    "Polar"
+    "Polar",
+    "104.5°",
+    "2 bonding orbitals\n2 antibonding orbitals",
+    "sp3"
   ],
   H2: [
     "Hydrogen Gas",
     "Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.",
     "Linear",
-    "Nonpolar"
+    "Nonpolar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "s"
   ],
   Cl2: [
     "Chlorine Gas",
     "Chlorine is a yellow-green gas at room temperature. Chlorine has a pungent, irritating odor similar to bleach that is detectable at low concentrations.",
     "Linear",
-    "Nonpolar"
+    "Nonpolar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "s"
   ],
   HCl: [
     "Hydrochloric Acid",
     "Hydrochloric acid is the water-based, or aqueous, solution of hydrogen chloride gas.",
     "Linear",
-    "Polar"
+    "Polar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "sp"
   ],
 };
-
 
 export const bondShapeDict = {
   H2O: [

@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
 import { connect } from "react-redux";
 
 import Hypher from "hypher";
 import english from "hyphenation.en-us";
+import AnimatedLoader from "react-native-animated-loader";
 
 const h = new Hypher(english);
 
@@ -22,6 +17,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     margin: 10,
+  },
+  lottie: {
+    width: 100,
+    height: 100,
   },
   cell: {
     display: "flex",
@@ -423,24 +422,28 @@ function PeriodicTable(props) {
 
   return (
     <>
-      {!isLoading ? (
-        <>
-          <Legend />
-          <View style={styles.container}>
-            <View>{renderRow(0, 1)}</View>
-            <View>{renderRow(2, 9)}</View>
-            <View>{renderRow(10, 17)}</View>
-            <View>{renderRow(18, 35)}</View>
-            <View>{renderRow(36, 53)}</View>
-            <View>{renderRow(54, 71)}</View>
-            <View>{renderRow(72, 89)}</View>
-            <View>{renderRow(90, 103)}</View>
-            <View>{renderRow(104, 117)}</View>
-          </View>
-        </>
-      ) : (
-        <ActivityIndicator style={{ margin: 10 }} size="large" color="#fff" />
-      )}
+      <Legend />
+      <View style={styles.container}>
+        <View>{renderRow(0, 1)}</View>
+        <View>{renderRow(2, 9)}</View>
+        <View>{renderRow(10, 17)}</View>
+        <View>{renderRow(18, 35)}</View>
+        <View>{renderRow(36, 53)}</View>
+        <View>{renderRow(54, 71)}</View>
+        <View>{renderRow(72, 89)}</View>
+        <View>{renderRow(90, 103)}</View>
+        <View>{renderRow(104, 117)}</View>
+      </View>
+      <AnimatedLoader
+        style={{ margin: 10 }}
+        visible={isLoading}
+        source={require("../assets/animations/loader.json")}
+        overlayColor="rgba(0,0,0,1)"
+        animationStyle={styles.lottie}
+        speed={1}
+      >
+        <Text style={{ fontFamily: "Outfit_600SemiBold", color: "white", margin: 5, fontSize: 20 }}>Processing the data...</Text>
+      </AnimatedLoader>
     </>
   );
 }

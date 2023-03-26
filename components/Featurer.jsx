@@ -33,6 +33,75 @@ Developed and Designed by John Seong
 BELOW IS THE MAIN RENDERER FOR THE THREE.JS SCENE
 */
 
+const HSLColorBarLegend = () => {
+  return (
+    <View style={[styles.barContainer, { fontFamily: "Outfit_600SemiBold"}]}>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "#7fffd4", // Dark Green
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>0</Text>
+      </View>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "#87CEEB", // Green-Yellow
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>0.2</Text>
+      </View>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "#3895D3", // Yellow-Green
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>0.4</Text>
+      </View>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "#C3B1E1", // Yellow
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>0.6</Text>
+      </View>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "hsl(0, 50%, 75%)", // Red
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>0.8</Text>
+      </View>
+      <View
+        style={[
+          styles.colorBar,
+          {
+            backgroundColor: "hsl(60, 50%, 75%)", // Yellow-Orange
+          },
+        ]}
+      >
+        <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>1</Text>
+      </View>
+    </View>
+  );
+};
+
+
+
 const setUpScene = (sceneColor) => {
   const scene = new Scene();
 
@@ -107,7 +176,7 @@ function Featurer(props) {
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = '#394d6d';
+    const sceneColor = '#1c2e4a';
 
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
@@ -151,7 +220,13 @@ function Featurer(props) {
           </OrbitControlsView>
 
           <View style={styles.secondaryContainerAlternative}>
-            <Text style={styles.description}>{props.element + " | " + moleculeDict[props.element][2] + " | " + moleculeDict[props.element][3]}</Text>
+            <Text style={styles.description}>Electron Density</Text>
+          </View>
+
+          <HSLColorBarLegend />
+
+          <View style={styles.container2}>
+            <Text style={styles.description}>{ moleculeDict[props.element][2] + " | " + moleculeDict[props.element][4] + " | " +  moleculeDict[props.element][6]}</Text>
           </View>
 
           <View style={styles.secondaryContainer}>
@@ -189,6 +264,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
+  container2: {
+    backgroundColor: "black",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+
   secondaryContainer: {
     backgroundColor: "#1c2e4a",
     width: "100%",
@@ -219,7 +302,20 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit_400Regular",
     color: "#fff",
     textAlign: "center",
-  }
+  },
+  barContainer: {
+    flexDirection: "row",
+    height: 20,
+    overflow: "hidden",
+  },
+  colorBar: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 5,
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Featurer);

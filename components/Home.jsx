@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -60,11 +66,31 @@ function Home(props) {
   const netInfo = useNetInfo();
   const circlesRef = useRef([]);
 
+  const [waveAnim] = useState(new Animated.Value(0));
   const [electronifyAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     startElectronifyAnimation();
   }, []);
+
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    waveAnim.setValue(offsetY);
+  };
+
+  const waveStyle = [
+    styles.wave,
+    {
+      transform: [
+        {
+          translateY: waveAnim.interpolate({
+            inputRange: [-1, 0, 1],
+            outputRange: [-1, 0, 1],
+          }),
+        },
+      ],
+    },
+  ];
 
   const startElectronifyAnimation = () => {
     Animated.timing(electronifyAnim, {
@@ -112,7 +138,7 @@ function Home(props) {
       ])
     ).start();
   };
-  
+
   const startCircleAnimation = () => {
     Animated.loop(
       Animated.sequence([
@@ -141,7 +167,7 @@ function Home(props) {
       });
     });
   };
-  
+
   const circles = Array.from({ length: 40 }).map(() => ({
     x: Math.floor(Math.random() * 300),
     y: Math.floor(Math.random() * 500),
@@ -150,7 +176,17 @@ function Home(props) {
   }));
 
   return (
-    <ScrollView style={styles.parentContainer}>
+    <ScrollView
+      style={styles.parentContainer}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 30 }}
+      onScroll={(event) => {
+        handleScroll(event);
+      }}
+      scrollEventThrottle={16}
+      nestedScrollEnabled={true}
+      {...waveStyle}
+    >
       <View style={styles.container}>
         <View
           style={{
@@ -265,7 +301,7 @@ function Home(props) {
           <Text
             style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}
           >
-            Orbitals.
+            Structures.
           </Text>
         </TouchableOpacity>
       </>

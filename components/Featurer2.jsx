@@ -99,7 +99,7 @@ function Featurer2(props) {
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = "#394d6d";
+    const sceneColor = "#1c2e4a";
     // Create a WebGLRenderer without a DOM element
     const renderer = new Renderer({ gl });
     renderer.setSize(width, height);
