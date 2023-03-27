@@ -18,7 +18,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { useFocusEffect } from '@react-navigation/native';
 import { getElementData } from "./utils/actions";
 import Animated, {
   useSharedValue,
