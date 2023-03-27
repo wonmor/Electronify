@@ -10,6 +10,8 @@ import Featurer from './components/Featurer';
 import Featurer2 from './components/Featurer2';
 import AtomSection from './components/AtomSection';
 import MoleculeSection from './components/MoleculeSection';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MolarMass from './components/MolarMass';
 
 import {
   useFonts,
@@ -19,24 +21,12 @@ import {
 
 const store = configureStore({ reducer: rootReducer, middleware: [thunk] });
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const App = () => {
-  const [fontsLoaded] = useFonts({
-    Outfit_400Regular,
-    Outfit_600SemiBold,
-  });
-
-  useEffect(() => {
-    // Any global initialization code can go here
-  }, []);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
+const MyStack = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer independent={true}>
         <Stack.Navigator
           screenOptions={{
             headerStyle: { elevation: 0, backgroundColor: '#1c2e4a' },
@@ -79,5 +69,37 @@ const App = () => {
     </Provider>
   );
 };
+
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    Outfit_400Regular,
+    Outfit_600SemiBold,
+  });
+
+  useEffect(() => {
+    // Any global initialization code can go here
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <NavigationContainer independent={true}>
+       <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarLabelStyle: {
+          fontFamily: 'Outfit_600SemiBold',
+          fontSize: 14 // or any other font size you want
+        }
+      }}
+    >
+      <Tab.Screen name="Orbitals" component={MyStack} />
+      <Tab.Screen name="Molar Mass" component={MolarMass} />
+    </Tab.Navigator>
+    </NavigationContainer>
+  )
+}
 
 export default App;

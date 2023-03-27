@@ -12,12 +12,21 @@ import {
   Image,
   View,
   ScrollView,
-  Animated,
+  Animated as RNAnimated,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
+import { useFocusEffect } from '@react-navigation/native';
 import { getElementData } from "./utils/actions";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSequence,
+  withTiming,
+  withRepeat,
+} from "react-native-reanimated";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -47,7 +56,7 @@ const Circle = forwardRef(({ x, y, size, opacity }, ref) => {
   }));
 
   return (
-    <Animated.View
+    <RNAnimated.View
       ref={circleRef}
       style={[
         styles.circle,
@@ -58,20 +67,41 @@ const Circle = forwardRef(({ x, y, size, opacity }, ref) => {
 });
 
 function Home(props) {
-  useEffect(() => {
-    startArrowAnimation();
-    startCircleAnimation();
-  }, []);
+  const ANGLE = 10;
+  const rotation = useSharedValue(0);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotateZ: `${rotation.value}deg` }],
+    };
+  });
 
   const netInfo = useNetInfo();
+  const isFocused = useIsFocused();
   const circlesRef = useRef([]);
 
-  const [waveAnim] = useState(new Animated.Value(0));
-  const [electronifyAnim] = useState(new Animated.Value(0));
+  const [waveAnim] = useState(new RNAnimated.Value(0));
+  const [electronifyAnim] = useState(new RNAnimated.Value(0));
 
   useEffect(() => {
     startElectronifyAnimation();
-  }, []);
+  });
+
+  useEffect(() => {
+    if (isFocused) {
+      rotation.value = withRepeat(withTiming(10), 6, true);
+      startArrowAnimation();
+      startCircleAnimation();
+    }
+  }, [isFocused]);
+
+  const clearCircles = () => {
+    circlesRef.current.forEach((circle) => {
+      if (circle.viewRef.setNativeProps !== undefined) {
+        circle.viewRef.setNativeProps({ style: { opacity: 0 }});
+      }
+    });
+  };
 
   const handleScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -93,7 +123,7 @@ function Home(props) {
   ];
 
   const startElectronifyAnimation = () => {
-    Animated.timing(electronifyAnim, {
+    RNAnimated.timing(electronifyAnim, {
       toValue: 1,
       duration: 1000,
       useNativeDriver: true,
@@ -119,18 +149,18 @@ function Home(props) {
     },
   ];
 
-  const arrowAnim = useRef(new Animated.Value(0)).current;
-  const circleAnim = useRef(new Animated.Value(0)).current;
+  const arrowAnim = useRef(new RNAnimated.Value(0)).current;
+  const circleAnim = useRef(new RNAnimated.Value(0)).current;
 
   const startArrowAnimation = () => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(arrowAnim, {
+    RNAnimated.loop(
+      RNAnimated.sequence([
+        RNAnimated.timing(arrowAnim, {
           toValue: 1,
           duration: 2000,
           useNativeDriver: true,
         }),
-        Animated.timing(arrowAnim, {
+        RNAnimated.timing(arrowAnim, {
           toValue: 0,
           duration: 2000,
           useNativeDriver: true,
@@ -140,14 +170,14 @@ function Home(props) {
   };
 
   const startCircleAnimation = () => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(circleAnim, {
+    RNAnimated.loop(
+      RNAnimated.sequence([
+        RNAnimated.timing(circleAnim, {
           toValue: 1,
           duration: 2000,
           useNativeDriver: true,
         }),
-        Animated.timing(circleAnim, {
+        RNAnimated.timing(circleAnim, {
           toValue: 0,
           duration: 2000,
           useNativeDriver: true,
@@ -155,15 +185,17 @@ function Home(props) {
       ])
     ).start(() => {
       circlesRef.current.forEach((circle) => {
-        circle.viewRef.setNativeProps({
-          style: {
-            left: Math.floor(Math.random() * 300),
-            top: Math.floor(Math.random() * 500),
-            width: Math.floor(Math.random() * 50) + 25,
-            height: Math.floor(Math.random() * 50) + 25,
-            opacity: circleAnim,
-          },
-        });
+        if (circle.viewRef.setNativeProps !== undefined) {
+          circle.viewRef.setNativeProps({
+            style: {
+              left: Math.floor(Math.random() * 300),
+              top: Math.floor(Math.random() * 500),
+              width: Math.floor(Math.random() * 50) + 25,
+              height: Math.floor(Math.random() * 50) + 25,
+              opacity: circleAnim,
+            },
+          });
+        }
       });
     });
   };
@@ -207,8 +239,10 @@ function Home(props) {
             />
           ))}
         </View>
-        <Image source={require("../assets/icon.png")} style={styles.icon} />
-        <Animated.Text style={electronifyStyle}>
+        <Animated.View style={[styles.box, animatedStyle]}>
+          <Image source={require("../assets/icon.png")} style={styles.icon} />
+        </Animated.View>
+        <RNAnimated.Text style={electronifyStyle}>
           <Text
             style={[
               { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
@@ -217,7 +251,7 @@ function Home(props) {
           >
             <Text style={{ color: "#fecaca" }}>Electronify</Text>.
           </Text>
-        </Animated.Text>
+        </RNAnimated.Text>
 
         <Text
           style={[
@@ -228,7 +262,7 @@ function Home(props) {
           Visualizing Quantum Mechanics. Reimagined.
         </Text>
 
-        <Animated.View
+        <RNAnimated.View
           style={[
             styles.arrowContainer,
             {
@@ -244,17 +278,28 @@ function Home(props) {
           ]}
         >
           <Ionicons name="chevron-down" size={28} color="#fff" />
-        </Animated.View>
+        </RNAnimated.View>
       </View>
 
       <>
         <TouchableOpacity
           onPress={() => {
             if (netInfo.isConnected) {
+              circlesRef.current.forEach((circle) => {
+                if (circle.viewRef.setNativeProps !== undefined) {
+                  circle.viewRef.setNativeProps({ style: { opacity: 0 }});
+                }
+              });
+              
               props.navigation.navigate("AtomSection");
             } else {
               alert("Please connect to the internet to use this feature.");
             }
+            rotation.value = withSequence(
+              withTiming(-10, { duration: 50 }),
+              withRepeat(withTiming(ANGLE, { duration: 100 }), 6, true),
+              withTiming(0, { duration: 50 })
+            );
           }}
           style={[
             styles.appButtonContainer,
@@ -280,10 +325,21 @@ function Home(props) {
         <TouchableOpacity
           onPress={() => {
             if (netInfo.isConnected) {
+              circlesRef.current.forEach((circle) => {
+                if (circle.viewRef.setNativeProps !== undefined) {
+                  circle.viewRef.setNativeProps({ style: { opacity: 0 }});
+                }
+              });
+
               props.navigation.navigate("MoleculeSection");
             } else {
               alert("Please connect to the internet to use this feature.");
             }
+            rotation.value = withSequence(
+              withTiming(-10, { duration: 50 }),
+              withRepeat(withTiming(ANGLE, { duration: 100 }), 6, true),
+              withTiming(0, { duration: 50 })
+            );
           }}
           style={[
             styles.appButtonContainer,

@@ -4,6 +4,7 @@
     "@expo-google-fonts/outfit": "^0.2.2",
     "@react-native-community/blur": "^4.3.0",
     "@react-native-community/netinfo": "9.3.0",
+    "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.0.14",
     "@react-navigation/native-stack": "^6.9.2",
     "@reduxjs/toolkit": "^1.9.0",
