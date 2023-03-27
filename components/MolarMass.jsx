@@ -135,7 +135,7 @@ const Autocomplete = () => {
           <Text
             style={[
               styles.titleText,
-              { marginBottom: 5, fontFamily: "Outfit_600SemiBold" },
+              { marginBottom: 5, fontFamily: "Outfit_600SemiBold", color: "#fecaca"  },
             ]}
           >
             Selected Elements.
@@ -193,12 +193,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+padding: 10,
     alignItems: "center",
     backgroundColor: "#394d6d",
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 32,
     color: "#bae6fd",
     marginBottom: 20,
   },
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   calculatorButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#4caf50",
+    backgroundColor: "#2e7d32",
     padding: 10,
     borderRadius: 4,
     marginBottom: 20,
