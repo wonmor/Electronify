@@ -88,15 +88,21 @@ const App = () => {
     <NavigationContainer independent={true}>
        <Tab.Navigator
       screenOptions={{
-        headerShown: false,
+        headerStyle: { elevation: 0, backgroundColor: '#1c2e4a' },
+        headerTitleStyle: {
+          color: 'white',
+          fontFamily: 'Outfit_600SemiBold',
+          fontSize: 30,
+        },
         tabBarLabelStyle: {
           fontFamily: 'Outfit_600SemiBold',
           fontSize: 14 // or any other font size you want
-        }
+        },
+        contentStyle: { backgroundColor: '#394d6d' },
       }}
     >
-      <Tab.Screen name="Orbitals" component={MyStack} />
-      <Tab.Screen name="Molar Mass" component={MolarMass} />
+      <Tab.Screen name="Orbitals." options={{ headerShown: false }} component={MyStack} />
+      <Tab.Screen name="Molar Mass." options={{ headerShown: true }} component={MolarMass} />
     </Tab.Navigator>
     </NavigationContainer>
   )

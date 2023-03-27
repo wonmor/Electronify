@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    paddingBottom: 30,
   },
 
   secondaryContainerAlternative: {

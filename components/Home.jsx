@@ -259,7 +259,7 @@ function Home(props) {
             styles.appGenericText,
           ]}
         >
-          Visualizing Quantum Mechanics. Reimagined.
+          Bringing Quantum Mechanics to Everyday People.
         </Text>
 
         <RNAnimated.View
