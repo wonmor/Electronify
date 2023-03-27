@@ -27,7 +27,7 @@
     "ios": {
       "bundleIdentifier": "com.johnseong.electronify",
       "supportsTablet": true,
-      "buildNumber": 1
+      "buildNumber": "1"
     },
     "extra": {
       "eas": {
