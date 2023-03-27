@@ -99,14 +99,14 @@ const App = () => {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Orbitals') {
+            if (route.name === 'Orbitals.') {
               iconName = focused ? 'orbit' : 'orbit';
-            } else if (route.name === 'Molar Mass') {
+            } else if (route.name === 'Molar Mass.') {
               iconName = focused ? 'flask' : 'flask';
             }
 
             // You can return any component that you like here!
-            return route.name === 'Molar Mass' ? <Icon name={iconName} size={size} color={color} /> : <Icon2 name={iconName} size={size} color={color} />;
+            return route.name === 'Molar Mass.' ? <Icon name={iconName} size={size} color={color} /> : <Icon2 name={iconName} size={size} color={color} />;
           },
           tabBarLabelStyle: {
             fontFamily: 'Outfit_600SemiBold',
@@ -118,8 +118,8 @@ const App = () => {
           tabBarInactiveTintColor: 'black',
         })}
       >
-        <Tab.Screen name="Orbitals" options={{ headerShown: false }} component={MyStack} />
-        <Tab.Screen name="Molar Mass" options={{ headerShown: true }} component={MolarMass} />
+        <Tab.Screen name="Orbitals." options={{ headerShown: false }} component={MyStack} />
+        <Tab.Screen name="Molar Mass." options={{ headerShown: true }} component={MolarMass} />
       </Tab.Navigator>
     </NavigationContainer>
   )

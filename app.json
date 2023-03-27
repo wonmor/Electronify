@@ -2,7 +2,7 @@
   "expo": {
     "name": "Electronify",
     "slug": "electronify",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/ios/iTunesArtwork@3x.png",
     "sdkVersion": "46.0.0",
@@ -22,12 +22,12 @@
         "foregroundImage": "./assets/icons/ios/iTunesArtwork@3x.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": 5
+      "versionCode": 6
     },
     "ios": {
       "bundleIdentifier": "com.johnseong.electronify",
       "supportsTablet": true,
-      "buildNumber": 2
+      "buildNumber": 1
     },
     "extra": {
       "eas": {
