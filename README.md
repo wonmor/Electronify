@@ -4,7 +4,9 @@
 
 This is a version of [**ElectronVisualized**](https://github.com/wonmor/ElectronVisualized) ported onto **iOS** and **Android**. Built using **React Native**, **Expo**, and **Expo-Three**.
 
-[Google Play](https://play.google.com/store/apps/details?id=com.johnseong.electronify)
+### [App Store](https://apps.apple.com/us/app/electronify/id6446613861)
+
+### [Google Play](https://play.google.com/store/apps/details?id=com.johnseong.electronify)
 
 <table><tr>
 
