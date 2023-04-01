@@ -38,6 +38,7 @@ const MyStack = () => {
             },
             headerTintColor: 'white',
             contentStyle: { backgroundColor: '#394d6d' },
+            headerBackTitle: '',
           }}>
           <Stack.Screen
             name="Home"

@@ -226,7 +226,6 @@ padding: 10,
   },
   itemText: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#fff",
   },
   calculatorButton: {
@@ -266,7 +265,6 @@ padding: 10,
   resultText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
   },
   selectedElementsContainer: {
     width: "100%",
@@ -283,7 +281,6 @@ padding: 10,
   selectedElementSymbol: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
   },
   selectedElementName: {
     color: "#fff",
@@ -293,7 +290,6 @@ padding: 10,
   selectedElementMolarMass: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
     marginRight: 10,
   },
 });
