@@ -47,10 +47,6 @@ function MoleculeSection(props) {
       setIsLoading(true);
       await props.getElementData(item, type);
 
-      // Wait until data is not undefined
-      while (props.atoms_x == undefined || props.element == undefined) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
       props.navigation.navigate("Featurer");
       setIsLoading(false);
     };

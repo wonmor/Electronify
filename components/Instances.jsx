@@ -12,11 +12,15 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
     const colors = [];
 
     for (const [key, value] of Object.entries(density_data)) {
+        if (density_data2 && key in density_data2) {
+            colors.push(...convertHSLStringToArray(getMoleculeColour(element, volume, true)));
+            
+        } else {
+            colors.push(...convertHSLStringToArray(getMoleculeColour(element, volume)));
+        }
+
         const coords = key.split(", ");
-
         const volume = normalizeData(value, vmax, vmin);
-
-        colors.push(...convertHSLStringToArray(getMoleculeColour(element, volume)));
 
         const x = coords[0] / 5 - 10.7;
         const y = coords[1] / 5 - 10.7;
