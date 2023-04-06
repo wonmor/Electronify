@@ -34,7 +34,7 @@ const setUpScene = (sceneColor) => {
   const scene = new Scene();
 
   scene.fog = new Fog(sceneColor, 1, 10000);
-  scene.add(new GridHelper(10, 10, "#fff", "#fff"));
+  scene.add(new GridHelper(10, 9, "#fff", "#fff"));
 
   const ambientLight = new AmbientLight(0x101010);
   scene.add(ambientLight);

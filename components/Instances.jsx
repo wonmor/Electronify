@@ -77,6 +77,7 @@ const addAtomParticles = (scene, element, x_coords, y_coords, z_coords) => {
     const pointCloud = new THREE.Points(geometry, material);
 
     scene.add(pointCloud);
+    scene.add(new THREE.AxesHelper(5));
 
     return scene;
 };
