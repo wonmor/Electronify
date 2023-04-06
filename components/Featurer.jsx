@@ -230,7 +230,7 @@ function Featurer(props) {
           </View>
 
           <View style={styles.secondaryContainer}>
-            <Text style={styles.description}>Drag or zoom using your finger...</Text>
+            <Text style={styles.description}>Drag or zoom using your finger.</Text>
           </View>
         </>
       )}

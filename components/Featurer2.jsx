@@ -18,10 +18,10 @@ import {
 } from "three";
 
 import { addAtomParticles } from "./Instances";
-import { atomDict } from "./Globals";
+import { atomDict, getAtomColour } from "./Globals";
 import { resetState } from "./utils/actions";
 
-import quantumNums from '../assets/quantum_num.json';
+import quantumNums from "../assets/quantum_num.json";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -135,14 +135,37 @@ function Featurer2(props) {
               <Text style={styles.description}>
                 {atomDict[props.element][3]}
               </Text>
+              <View
+                style={{
+                  borderRadius: 5,
+                  backgroundColor: "white",
+                  marginTop: 20,
+                  borderColor: "white",
+                  borderWidth: 4,
+                  overflow: "hidden",
+                }}
+              >
+                <Text
+                  style={[
+                    styles.electronConfigText,
+                    { fontSize: 24, color: "black", padding: 5 },
+                  ]}
+                >
+                  N = {quantumNums[props.element]["n"]}
+                  {"   "}L = {quantumNums[props.element]["l"]}
+                  {"   "}M<Text style={{ fontSize: 18 }}>L</Text> ={" "}
+                  {quantumNums[props.element]["m"]}
+                </Text>
+              </View>
             </View>
+            
             <OrbitControlsView style={{ flex: 1 }} camera={camera}>
               <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
             </OrbitControlsView>
 
             <View style={styles.secondaryContainerAlternative}>
               <Text
-                style={[styles.description, { color: "black", fontSize: 32 }]}
+                style={[styles.description, { color: "white", fontSize: 32 }]}
               >
                 {shortenedElementName + " "}
                 {electronConfig.map((word, index) =>
@@ -154,7 +177,7 @@ function Featurer2(props) {
                       style={[styles.electronConfigItem, { fontSize: 32 }]}
                     >
                       <Text
-                        style={[styles.electronConfigText, { fontSize: 32 }]}
+                        style={[styles.electronConfigText, { fontSize: 32, color: getAtomColour(props.element) }]}
                       >
                         {word}
                       </Text>
@@ -163,16 +186,8 @@ function Featurer2(props) {
                 )}
               </Text>
 
-              <Text
-                style={[styles.electronConfigText, { fontSize: 24, color: "black" }]}
-              >
-                N = {quantumNums[props.element]["n"]}{"   "}L = {quantumNums[props.element]["l"]}{"   "}M<Text style={{fontSize: 18}}>L</Text> = {quantumNums[props.element]["m"]}
-              </Text>
-            </View>
-
-            <View style={styles.secondaryContainer}>
-              <Text style={styles.description}>
-                Drag or zoom using your finger...
+              <Text style={styles.bottomText}>
+                Drag or zoom using your finger.
               </Text>
             </View>
           </>
@@ -201,7 +216,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainer: {
-    backgroundColor: "#1c2e4a",
+    backgroundColor: "black",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -209,11 +224,12 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainerAlternative: {
-    backgroundColor: "white",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
     padding: 10,
+    marginBottom: -10,
   },
 
   title: {
@@ -231,15 +247,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  bottomText: {
+    fontSize: 20,
+    fontFamily: "Outfit_400Regular",
+    color: "#fff",
+    textAlign: "center",
+    padding: 10
+  },
+
   electronConfigItem: {
-    backgroundColor: "black",
+    backgroundColor: "#1e293b",
     fontFamily: "Outfit_400Regular",
     borderRadius: 4,
     padding: 4,
   },
 
   electronConfigText: {
-    color: "white",
     fontFamily: "Outfit_400Regular",
   },
 });

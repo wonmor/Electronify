@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import rootReducer from './components/utils/reducers';
+
 import Home from './components/Home';
 import Featurer from './components/Featurer';
 import Featurer2 from './components/Featurer2';
 import AtomSection from './components/AtomSection';
 import MoleculeSection from './components/MoleculeSection';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Member from './components/Member';
 import MolarMass from './components/MolarMass';
+
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -67,6 +70,11 @@ const MyStack = () => {
             component={Featurer2}
             options={{ title: 'Spotlight.' }}
           />
+          <Stack.Screen
+            name="Member"
+            component={Member}
+            options={{ title: 'Member.' }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -104,6 +112,8 @@ const App = () => {
               iconName = focused ? 'orbit' : 'orbit';
             } else if (route.name === 'Molar Mass.') {
               iconName = focused ? 'flask' : 'flask';
+            } else if (route.name === 'Member.') {
+              iconName = focused ? 'wallet-membership' : 'wallet-membership';
             }
 
             // You can return any component that you like here!
@@ -118,7 +128,9 @@ const App = () => {
           tabBarActiveTintColor: '#2e7d32',
           tabBarInactiveTintColor: 'black',
         })}
+        initialRouteName="Orbitals."
       >
+        <Tab.Screen name="Member." options={{ headerShown: false }} component={Member} />
         <Tab.Screen name="Orbitals." options={{ headerShown: false }} component={MyStack} />
         <Tab.Screen name="Molar Mass." options={{ headerShown: true }} component={MolarMass} />
       </Tab.Navigator>

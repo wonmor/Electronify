@@ -12,6 +12,7 @@ import {
 import elements from "../assets/elements.json";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Icon2 from "react-native-vector-icons/Feather";
+import Icon3 from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Autocomplete = () => {
   const Calculator = ({ selectedElements }) => {
@@ -119,6 +120,25 @@ const Autocomplete = () => {
         data={filteredElements}
         renderItem={renderElement}
         keyExtractor={(item) => item.symbol}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Icon3
+              name="weight-lifter"
+              size={100}
+              color="#fff"
+              style={{ margin: 20, opacity: 0.5 }}
+            />
+
+            <Text
+              style={[
+                styles.emptyText,
+                { fontFamily: "Outfit_400Regular", opacity: 0.5 },
+              ]}
+            >
+              “The real reason to exercise is to change your body's chemistry, not to burn a lot of calories.”
+            </Text>
+          </View>
+        }
       />
       <TouchableOpacity
         style={[styles.button, styles.calculatorButton]}
@@ -135,7 +155,11 @@ const Autocomplete = () => {
           <Text
             style={[
               styles.titleText,
-              { marginBottom: 5, fontFamily: "Outfit_600SemiBold", color: "#fecaca"  },
+              {
+                marginBottom: 5,
+                fontFamily: "Outfit_600SemiBold",
+                color: "#fecaca",
+              },
             ]}
           >
             Selected Elements.
@@ -187,13 +211,24 @@ const MolarMass = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    margin: 10,
+    color: "#fff",
+    textAlign: "center",
+  },
   parent: {
     flex: 1,
     backgroundColor: "#fff",
   },
   container: {
     flex: 1,
-padding: 10,
+    padding: 10,
     alignItems: "center",
     backgroundColor: "#394d6d",
   },
