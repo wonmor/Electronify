@@ -64,3 +64,5 @@ buck-out/
 .expo/*
 web-build/
 keys/
+
+.env
