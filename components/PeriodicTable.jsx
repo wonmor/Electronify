@@ -4,6 +4,8 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
 import { connect } from "react-redux";
 
+import * as Haptics from "expo-haptics";
+
 import Hypher from "hypher";
 import english from "hyphenation.en-us";
 import AnimatedLoader from "react-native-animated-loader";
@@ -392,6 +394,8 @@ function PeriodicTable(props) {
         key={element.symbol}
         style={[styles.cell, styles[element.type]]}
         onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          
           if (netInfo.isConnected) {
             fetchElementData(element.symbol, "atom");
           } else {

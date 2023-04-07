@@ -14,6 +14,8 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import Icon2 from "react-native-vector-icons/Feather";
 import Icon3 from "react-native-vector-icons/MaterialCommunityIcons";
 
+import * as Haptics from "expo-haptics";
+
 const Autocomplete = () => {
   const Calculator = ({ selectedElements }) => {
     const [result, setResult] = useState(null);
@@ -36,12 +38,21 @@ const Autocomplete = () => {
     return (
       <>
         <View style={styles.calculator}>
-          <TouchableOpacity style={styles.button} onPress={handleAdd}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handleAdd();
+            }}
+          >
             <Icon name="plus" size={20} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.equalsButton]}
-            onPress={handleClear}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handleClear();
+            }}
           >
             <Icon2 name="delete" size={20} color="#fff" />
           </TouchableOpacity>
@@ -88,7 +99,10 @@ const Autocomplete = () => {
     <TouchableWithoutFeedback accessible={false}>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handleSelectElement(item)}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          handleSelectElement(item);
+        }}
       >
         <Text style={[styles.itemText, { fontFamily: "Outfit_400Regular" }]}>
           {item.symbol}
@@ -135,7 +149,8 @@ const Autocomplete = () => {
                 { fontFamily: "Outfit_400Regular", opacity: 0.5 },
               ]}
             >
-              “The real reason to exercise is to change your body's chemistry, not to burn a lot of calories.”
+              “The real reason to exercise is to change your body's chemistry,
+              not to burn a lot of calories.”
             </Text>
           </View>
         }

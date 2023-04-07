@@ -28,7 +28,9 @@ const initialState = {
     l_value: 0,
     m_value: 0,
 
-    element: ''
+    element: '',
+    
+    userInfo: undefined
 };
 
 const reducers = (state = initialState, action) => {

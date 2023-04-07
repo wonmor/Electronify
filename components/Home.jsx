@@ -27,6 +27,8 @@ import Animated, {
   withRepeat,
 } from "react-native-reanimated";
 
+import * as Haptics from "expo-haptics";
+
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
 Developed and Designed by John Seong
@@ -283,6 +285,8 @@ function Home(props) {
       <>
         <TouchableOpacity
           onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
             if (netInfo.isConnected) {
               circlesRef.current.forEach((circle) => {
                 if (circle.viewRef.setNativeProps !== undefined) {
@@ -323,6 +327,8 @@ function Home(props) {
 
         <TouchableOpacity
           onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
             if (netInfo.isConnected) {
               circlesRef.current.forEach((circle) => {
                 if (circle.viewRef.setNativeProps !== undefined) {

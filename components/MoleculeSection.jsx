@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+
 import AnimatedLoader from "react-native-animated-loader";
+import * as Haptics from "expo-haptics";
+
 import { moleculeDict } from "./Globals";
 
 function MoleculeSection(props) {
@@ -79,6 +82,8 @@ function MoleculeSection(props) {
     return (
       <TouchableOpacity
         onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          
           if (netInfo.isConnected) {
             fetchElementData(nestedProps.formula, nestedProps.type);
           } else {
