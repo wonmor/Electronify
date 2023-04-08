@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -8,47 +8,28 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert
+  Alert,
 } from "react-native";
 import { appendToRecord } from "./utils/actions";
+import { connect } from "react-redux";
 
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 
-import {
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_APP_ID,
-  IOS_GUID,
-  ANDROID_GUID
-} from "@env";
-
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  projectId: FIREBASE_PROJECT_ID,
-  appId: FIREBASE_APP_ID,
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
+import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
 
-// https://docs.expo.dev/guides/google-authentication/
-
 const Member = () => {
-  const dispatch = useDispatch();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [token, setToken] = useState("");
   const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: `${EXPO_GUID}.apps.googleusercontent.com`,
     androidClientId: `${ANDROID_GUID}.apps.googleusercontent.com`,
     iosClientId: `${IOS_GUID}.apps.googleusercontent.com`,
   });
@@ -61,10 +42,10 @@ const Member = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       const user = await response.json();
+      setName(user.name);
+      setIsLoggedIn(true);
       appendToRecord(user);
-
     } catch (error) {
       // Add your own error handler here
     }
@@ -77,78 +58,117 @@ const Member = () => {
     }
   }, [response, token]);
 
-  const handleEmailSignIn = async () => {
-    // Validate email format
-    const isValidEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
-    if (!isValidEmail) {
-      Alert.alert("Invalid email format");
-      return;
-    }
+  const handleSignIn = async () => {
+    // Add your sign in logic here
+  };
 
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      console.log("User signed in successfully.");
-    } catch (error) {
-        Alert.alert("Invalid email or password");
-    }
+  const handleSignUp = async () => {
+    // Add your sign up logic here
+  };
+
+  const handleLogOut = () => {
+    // Add your log out logic here
+    setIsLoggedIn(false);
+    setName("");
   };
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
-
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
-        <Text
-          style={[
-            styles.text,
-            styles.heading,
-            { fontFamily: "Outfit_600SemiBold" },
-          ]}
-        >
-          You are currently on a <Text style={[styles.highlight]}>Free</Text>{" "}
-          Tier.
-        </Text>
-        <View style={styles.form}>
-          <TextInput
-            style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-            placeholder="Email"
-            placeholderTextColor={"grey"}
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-            placeholder="Password"
-            placeholderTextColor={"grey"}
-            autoCapitalize="none"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-          />
-          <TouchableOpacity style={styles.button} onPress={handleEmailSignIn}>
+        {isLoggedIn ? (
+          <>
             <Text
-              style={[styles.buttonText, { fontFamily: "Outfit_600SemiBold" }]}
+              style={[
+                styles.text,
+                styles.heading,
+                { fontFamily: "Outfit_600SemiBold" },
+              ]}
             >
-              Sign in with email
+              Welcome, {name}
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#c23b22" }]}
-            disabled={!request}
-            onPress={() => {
-                promptAsync();
-            }}
-          >
+            <TouchableOpacity style={styles.button} onPress={handleLogOut}>
+              <Text
+                style={[
+                  styles.buttonText,
+                  { fontFamily: "Outfit_600SemiBold" },
+                ]}
+              >
+                Log out
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
             <Text
-              style={[styles.buttonText, { fontFamily: "Outfit_600SemiBold" }]}
+              style={[
+                styles.text,
+                styles.heading,
+                { fontFamily: "Outfit_600SemiBold" },
+              ]}
             >
-              Sign in with Google
+              You are currently on a{" "}
+              <Text style={[styles.highlight]}>Free</Text> Tier.
             </Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.form}>
+              <TextInput
+                style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
+                placeholder="Email"
+                placeholderTextColor={"grey"}
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+              />
+              <TextInput
+                style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
+                placeholder="Password"
+                placeholderTextColor={"grey"}
+                autoCapitalize="none"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
+              />
+              <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    { fontFamily: "Outfit_600SemiBold" },
+                  ]}
+                >
+                  Sign in
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#c23b22" }]}
+                disabled={!request}
+                onPress={() => {
+                  promptAsync();
+                }}
+              >
+                <Text
+                  style={[
+                    styles.buttonText,
+                    { fontFamily: "Outfit_600SemiBold" },
+                  ]}
+                >
+                  Sign in with Google
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    { fontFamily: "Outfit_600SemiBold" },
+                  ]}
+                >
+                  Sign up
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -214,11 +234,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    return state;
+  return state;
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    appendToRecord: (payload) => dispatch(appendToRecord(payload)),
+  appendToRecord: (payload) => dispatch(appendToRecord(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Member);
