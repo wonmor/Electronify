@@ -1,244 +1,389 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-} from "react-native";
-import { appendToRecord } from "./utils/actions";
-import { connect } from "react-redux";
-
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from "expo-auth-session";
-
-import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
-
-WebBrowser.maybeCompleteAuthSession();
-
-const Member = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const [token, setToken] = useState("");
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: `${EXPO_GUID}.apps.googleusercontent.com`,
-    androidClientId: `${ANDROID_GUID}.apps.googleusercontent.com`,
-    iosClientId: `${IOS_GUID}.apps.googleusercontent.com`,
+import React, {
+    useState,
+    useRef,
+    useEffect,
+    forwardRef,
+    useImperativeHandle,
+  } from "react";
+  import {
+    TouchableOpacity,
+    StyleSheet,
+    Text,
+    Image,
+    View,
+    ScrollView,
+    Animated as RNAnimated,
+  } from "react-native";
+  import { useIsFocused } from "@react-navigation/native";
+  import { Ionicons } from "@expo/vector-icons";
+  import { connect } from "react-redux";
+  import { useNetInfo } from "@react-native-community/netinfo";
+  import { getElementData } from "./utils/actions";
+  import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withSequence,
+    withTiming,
+    withRepeat,
+  } from "react-native-reanimated";
+  
+  import * as Haptics from "expo-haptics";
+  
+  /*
+  ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
+  Developed and Designed by John Seong
+  --------------------------------------------------------------------
+  1. To download the dependencies, run npm install --force...
+  2. Run npx expo start --tunnel to start the app on public Wi-Fi...
+  
+  TO-DO:
+  - Add an internet connection check [DONE]
+  - Add a loading screen [DONE]
+  - Add a "no internet connection" screen [DONE]
+  - Add Instances Support on ThreeJS (WebGL) [DONE]
+  - Add a time limit for the free trial
+  - Add a subscription screen
+  - Add a subscription payment screen
+  - Add a subscription confirmation screen
+  - Add a subscription cancellation screen
+  - Add a time detection ting for the "good afternoon" greeting
+  */
+  
+  const Circle = forwardRef(({ x, y, size, opacity }, ref) => {
+    const circleRef = useRef(null);
+  
+    useImperativeHandle(ref, () => ({
+      getNode: () => circleRef.current,
+    }));
+  
+    return (
+      <RNAnimated.View
+        ref={circleRef}
+        style={[
+          styles.circle,
+          { left: x, top: y, width: size, height: size, opacity },
+        ]}
+      />
+    );
   });
-
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
+  
+  function Member(props) {
+    const ANGLE = 10;
+    const rotation = useSharedValue(0);
+  
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ rotateZ: `${rotation.value}deg` }],
+      };
+    });
+  
+    const netInfo = useNetInfo();
+    const isFocused = useIsFocused();
+    const circlesRef = useRef([]);
+  
+    useEffect(() => {
+      if (isFocused) {
+        rotation.value = withRepeat(withTiming(10), 6, true);
+        startCircleAnimation();
+      }
+    }, [isFocused]);
+  
+    const clearCircles = () => {
+      circlesRef.current.forEach((circle) => {
+        if (circle.viewRef.setNativeProps !== undefined) {
+          circle.viewRef.setNativeProps({ style: { opacity: 0 }});
         }
-      );
-      const user = await response.json();
-      setName(user.name);
-      setIsLoggedIn(true);
-      appendToRecord(user);
-    } catch (error) {
-      // Add your own error handler here
-    }
-  };
+      });
+    };
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
-    }
-  }, [response, token]);
-
-  const handleSignIn = async () => {
-    // Add your sign in logic here
-  };
-
-  const handleSignUp = async () => {
-    // Add your sign up logic here
-  };
-
-  const handleLogOut = () => {
-    // Add your log out logic here
-    setIsLoggedIn(false);
-    setName("");
-  };
-
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
-  return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <View style={styles.container}>
-        {isLoggedIn ? (
-          <>
-            <Text
-              style={[
-                styles.text,
-                styles.heading,
-                { fontFamily: "Outfit_600SemiBold" },
-              ]}
-            >
-              Welcome, {name}
-            </Text>
-            <TouchableOpacity style={styles.button} onPress={handleLogOut}>
-              <Text
-                style={[
-                  styles.buttonText,
-                  { fontFamily: "Outfit_600SemiBold" },
-                ]}
-              >
-                Log out
-              </Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            <Text
-              style={[
-                styles.text,
-                styles.heading,
-                { fontFamily: "Outfit_600SemiBold" },
-              ]}
-            >
-              You are currently on a{" "}
-              <Text style={[styles.highlight]}>Free</Text> Tier.
-            </Text>
-            <View style={styles.form}>
-              <TextInput
-                style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-                placeholder="Email"
-                placeholderTextColor={"grey"}
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-              />
-              <TextInput
-                style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-                placeholder="Password"
-                placeholderTextColor={"grey"}
-                autoCapitalize="none"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-              />
-              <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-                <Text
-                  style={[
-                    styles.buttonText,
-                    { fontFamily: "Outfit_600SemiBold" },
-                  ]}
-                >
-                  Sign in
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: "#c23b22" }]}
-                disabled={!request}
-                onPress={() => {
-                  promptAsync();
+    const circleAnim = useRef(new RNAnimated.Value(0)).current;
+  
+    const startCircleAnimation = () => {
+      RNAnimated.loop(
+        RNAnimated.sequence([
+          RNAnimated.timing(circleAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          RNAnimated.timing(circleAnim, {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start(() => {
+        circlesRef.current.forEach((circle) => {
+          if (circle.viewRef.setNativeProps !== undefined) {
+            circle.viewRef.setNativeProps({
+              style: {
+                left: Math.floor(Math.random() * 300),
+                top: Math.floor(Math.random() * 500),
+                width: Math.floor(Math.random() * 50) + 25,
+                height: Math.floor(Math.random() * 50) + 25,
+                opacity: circleAnim,
+              },
+            });
+          }
+        });
+      });
+    };
+  
+    const circles = Array.from({ length: 40 }).map(() => ({
+      x: Math.floor(Math.random() * 300),
+      y: Math.floor(Math.random() * 500),
+      size: Math.floor(Math.random() * 50) + 25,
+      opacity: circleAnim,
+    }));
+  
+    return (
+      <ScrollView
+        style={styles.parentContainer}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      >
+        <View style={styles.container}>
+          <View
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: [{ translateX: -150 }],
+              zIndex: -10,
+            }}
+          >
+            {circles.map((circle, index) => (
+              <Circle
+                key={index}
+                {...circle}
+                ref={(viewRef) => {
+                  circlesRef.current[index] = { ...circle, viewRef };
                 }}
-              >
-                <Text
-                  style={[
-                    styles.buttonText,
-                    { fontFamily: "Outfit_600SemiBold" },
-                  ]}
-                >
-                  Sign in with Google
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                <Text
-                  style={[
-                    styles.buttonText,
-                    { fontFamily: "Outfit_600SemiBold" },
-                  ]}
-                >
-                  Sign up
-                </Text>
-              </TouchableOpacity>
-            </View>
+              />
+            ))}
+          </View>
+          <>
+            <Text
+              style={[
+                { fontFamily: "DMSerifDisplay_400Regular", fontSize: 40 },
+                styles.appGenericText,
+              ]}
+            >
+              Introducing Electronify Tenure.
+            </Text>
           </>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
-  );
-};
+  
+          <Text
+            style={[
+              { fontFamily: "Outfit_400Regular", fontSize: 20 },
+              styles.appGenericText,
+            ]}
+          >
+            A new way to learn quantum mechanics.
+          </Text>
+        </View>
+  
+        <>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  
+              if (netInfo.isConnected) {
+                circlesRef.current.forEach((circle) => {
+                  if (circle.viewRef.setNativeProps !== undefined) {
+                    circle.viewRef.setNativeProps({ style: { opacity: 0 }});
+                  }
+                });
+                
+                props.navigation.navigate("Member2");
+              } else {
+                alert("Please connect to the internet to use this feature.");
+              }
+              rotation.value = withSequence(
+                withTiming(-10, { duration: 50 }),
+                withRepeat(withTiming(ANGLE, { duration: 100 }), 6, true),
+                withTiming(0, { duration: 50 })
+              );
+            }}
+            style={[
+              styles.appButtonContainer,
+              { marginLeft: 20, marginRight: 20 },
+            ]}
+          >
+            <Text
+              style={[
+                { fontFamily: "Outfit_400Regular" },
+                styles.appButtonTextHeader,
+              ]}
+            >
+              {`\u2022 Limit-free Access to All Content.`}
+            </Text>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-  },
-  heading: {
-    fontSize: 40,
-  },
-  highlight: {
-    color: "#2e7d32",
-  },
-  form: {
-    width: "100%",
-    marginTop: 30,
-    alignItems: "center",
-  },
-  input: {
-    width: "80%",
-    height: 50,
-    fontSize: 16,
-    backgroundColor: "#fff",
-    marginBottom: 10,
-    paddingLeft: 10,
-    borderRadius: 10,
-  },
-  button: {
-    width: "80%",
-    height: 50,
-    backgroundColor: "#2e7d32",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: "#fff",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  link: {
-    marginLeft: 5,
-    color: "#2e7d32",
-    textDecorationLine: "underline",
-  },
-});
+            <Text
+              style={[
+                { fontFamily: "Outfit_400Regular", marginTop: 10 },
+                styles.appButtonTextHeader,
+              ]}
+            >
+              {`\u2022 Exclusively, Molecular Orbitals. Like LUMO and HOMO.`}
+            </Text>
 
-const mapStateToProps = (state) => {
-  return state;
-};
+            <Text
+              style={[
+                { fontFamily: "Outfit_400Regular", marginTop: 10 },
+                styles.appButtonTextHeader,
+              ]}
+            >
+              {`\u2022 Shared Across All Devices.`}
+            </Text>
 
-const mapDispatchToProps = (dispatch) => ({
-  appendToRecord: (payload) => dispatch(appendToRecord(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Member);
+            <Text
+              style={[{ fontFamily: "DMSerifDisplay_400Regular", marginTop: 10 }, styles.appButtonText]}
+            >
+              Sign up.
+            </Text>
+          </TouchableOpacity>
+  
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  
+              if (netInfo.isConnected) {
+                circlesRef.current.forEach((circle) => {
+                  if (circle.viewRef.setNativeProps !== undefined) {
+                    circle.viewRef.setNativeProps({ style: { opacity: 0 }});
+                  }
+                });
+  
+                props.navigation.navigate("Member2");
+              } else {
+                alert("Please connect to the internet to use this feature.");
+              }
+              rotation.value = withSequence(
+                withTiming(-10, { duration: 50 }),
+                withRepeat(withTiming(ANGLE, { duration: 100 }), 6, true),
+                withTiming(0, { duration: 50 })
+              );
+            }}
+            style={[
+              styles.appButtonContainer,
+              { marginLeft: 20, marginRight: 20 },
+            ]}
+          >
+            <Text
+              style={[styles.appButtonText, { fontFamily: "DMSerifDisplay_400Regular", fontSize: 20 }]}
+            >
+              or Sign in.
+            </Text>
+          </TouchableOpacity>
+        </>
+      </ScrollView>
+    );
+  }
+  
+  const mapStateToProps = (state) => {
+    return state;
+  };
+  
+  const mapDispatchToProps = (dispatch) => ({
+    getElementData: (item, type) => dispatch(getElementData(item, type)),
+  });
+  
+  const styles = StyleSheet.create({
+    parentContainer: {
+      backgroundColor: 'white',
+      paddingBottom: 30,
+      zIndex: -1,
+    },
+  
+    container: {
+      margin: 20,
+      padding: 15,
+      borderWidth: 1,
+      borderColor: "#334155",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      borderRadius: 10,
+    },
+  
+    icon: {
+      width: 100,
+      height: 100,
+      margin: 5,
+    },
+  
+    circle: {
+      position: "absolute",
+      backgroundColor: "rgba(28, 46, 74, 0.05)",
+      borderRadius: 50,
+    },
+  
+    borderlessContainer: {
+      margin: 20,
+      padding: 15,
+      backgroundColor: "rgba(28, 46, 74, 0.4)",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      borderRadius: 10,
+      borderWidth: 5,
+      borderColor: "#1c2e4a",
+    },
+  
+    borderlessContainerAlternative: {
+      margin: 20,
+      padding: 15,
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      borderRadius: 10,
+      borderWidth: 5,
+      borderColor: "#1c2e4a",
+      backgroundColor: "rgba(28, 46, 74, 0.4)",
+    },
+  
+    arrowContainer: {
+      margin: 10,
+      bottom: 0,
+      alignSelf: "center",
+    },
+  
+    scrollTextContainer: {
+      bottom: 0,
+      alignSelf: "center",
+    },
+  
+    appGenericText: {
+      textAlign: "center",
+      color: "#334155",
+      margin: 5,
+    },
+  
+    appButtonContainer: {
+      width: 200,
+      alignSelf: "center",
+      marginTop: 10,
+      elevation: 8,
+      borderWidth: 1,
+      borderColor: "#334155",
+      borderRadius: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+    },
+  
+    appButtonText: {
+      fontSize: 32,
+      color: "#334155",
+      alignSelf: "center",
+    },
+  
+    appButtonTextHeader: {
+      fontSize: 18,
+      color: "#334155",
+      alignSelf: "center",
+    },
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Member);
+  

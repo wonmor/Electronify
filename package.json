@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "@expo-google-fonts/dm-serif-display": "^0.2.3",
     "@expo-google-fonts/outfit": "^0.2.2",
+    "@expo-google-fonts/playfair-display": "^0.2.3",
     "@react-native-community/blur": "^4.3.0",
     "@react-native-community/netinfo": "9.3.0",
     "@react-navigation/bottom-tabs": "^6.5.7",

@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
+import { BackHandler } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
+
 import thunk from "redux-thunk";
 import rootReducer from "./components/utils/reducers";
 
@@ -13,6 +15,7 @@ import Featurer2 from "./components/Featurer2";
 import AtomSection from "./components/AtomSection";
 import MoleculeSection from "./components/MoleculeSection";
 import Member from "./components/Member";
+import Member2 from "./components/Member2";
 import MolarMass from "./components/MolarMass";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -23,6 +26,16 @@ import {
   Outfit_400Regular,
   Outfit_600SemiBold,
 } from "@expo-google-fonts/outfit";
+
+import {
+  PlayfairDisplay_400Regular,
+  PlayfairDisplay_600SemiBold,
+} from "@expo-google-fonts/playfair-display";
+
+import {
+  DMSerifDisplay_400Regular,
+  DMSerifDisplay_400Regular_Italic,
+} from "@expo-google-fonts/dm-serif-display";
 
 const store = configureStore({ reducer: rootReducer, middleware: [thunk] });
 const Stack = createNativeStackNavigator();
@@ -41,6 +54,8 @@ const MyStack = () => {
           headerTintColor: "white",
           contentStyle: { backgroundColor: "#394d6d" },
           headerBackTitle: "",
+          // Add this option to disable the default back button
+          headerLeft: () => null,
         }}
       >
         <Stack.Screen
@@ -82,14 +97,60 @@ const MyStack = () => {
   );
 };
 
+const MemberStack = () => {
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { elevation: 0, backgroundColor: "black" },
+          headerTitleStyle: {
+            fontFamily: "Outfit_600SemiBold",
+            fontSize: 30,
+          },
+          headerTintColor: "white",
+          contentStyle: { backgroundColor: "#394d6d" },
+          headerBackTitle: "",
+          // Add this option to disable the default back button
+          headerLeft: () => null,
+        }}
+      >
+        <Stack.Screen
+          name="Member"
+          component={Member}
+          options={{ title: "Member." }}
+        />
+        <Stack.Screen
+          name="Member2"
+          component={Member2}
+          options={{ title: "Account." }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
 const App = () => {
   const [fontsLoaded] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_600SemiBold,
+    DMSerifDisplay_400Regular,
+    DMSerifDisplay_400Regular_Italic,
   });
 
   useEffect(() => {
-    // Any global initialization code can go here
+    const backAction = () => {
+      BackHandler.exitApp();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   if (!fontsLoaded) {
@@ -139,7 +200,7 @@ const App = () => {
           <Tab.Screen
             name="Member."
             options={{ headerShown: false }}
-            component={Member}
+            component={MemberStack}
           />
           <Tab.Screen
             name="Orbitals."

@@ -1070,10 +1070,20 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@expo-google-fonts/dm-serif-display@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/dm-serif-display/-/dm-serif-display-0.2.3.tgz#aee6a1e6b858852deb361a7185f226c7da0b9ed5"
+  integrity sha512-RdhKvpjCFg05q9S1z4S2+mdxr3QPjNjsgFT8pUVF8w2iP+l4HYkywxLC2gGH35LxL0jncdGhCAM1eTpK5qaP7A==
+
 "@expo-google-fonts/outfit@^0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@expo-google-fonts/outfit/-/outfit-0.2.2.tgz"
   integrity sha512-0M27jjGxc5dKmw7SC9opSWY3E2LvbYf13ZD7mU1DdfmUlB6SOP9+DIyzN24RVx2WpEkEPAN4iweUoy8xu00A4Q==
+
+"@expo-google-fonts/playfair-display@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/playfair-display/-/playfair-display-0.2.3.tgz#892805793743fc5d110a39d31442ae269d43de47"
+  integrity sha512-J4H/k29XpbM7WDfC/rsJk9qOt/mmKDLFi4UFWxZxmleQoMp8KYRJhAFlESxRQeecYdp0QNcYpDlTzjs8tHddvg==
 
 "@expo/browser-polyfill@^1.0.0":
   version "1.0.0"
