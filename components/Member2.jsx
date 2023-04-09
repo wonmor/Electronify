@@ -24,7 +24,9 @@ import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const Member2 = () => {
+const Member2 = ({ route }) => {
+  const { isSigningUp } = route.params;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -79,129 +81,134 @@ const Member2 = () => {
     Keyboard.dismiss();
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#292524" }}>
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <ScrollView
-        style={styles.parentContainer}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 30 }}
-      >
-        <View style={styles.container}>
-          {isLoggedIn ? (
-            <>
-              <Text
-                style={[
-                  styles.text,
-                  styles.heading,
-                  { fontFamily: "Outfit_600SemiBold" },
-                ]}
-              >
-                Welcome, {name}
-              </Text>
-              <TouchableOpacity style={styles.button} onPress={handleLogOut}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <ScrollView
+          style={styles.parentContainer}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 30 }}
+        >
+          <View style={styles.container}>
+            {isLoggedIn ? (
+              <>
                 <Text
                   style={[
-                    styles.buttonText,
+                    styles.text,
+                    styles.heading,
                     { fontFamily: "Outfit_600SemiBold" },
                   ]}
                 >
-                  Log out
+                  Welcome, {name}
                 </Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-            <Icon name="nature-people" size={100} color="#78716c" />
-              <Text
-                style={[
-                  styles.text,
-                  styles.heading,
-                  { fontFamily: "Outfit_600SemiBold" },
-                ]}
-              >
-                You are currently on a{" "}
-                <Text style={[styles.highlight]}>Free</Text> Tier.
-              </Text>
-              <View style={styles.form}>
-                <TextInput
-                  style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-                  placeholder="Email"
-                  placeholderTextColor={"grey"}
-                  autoCapitalize="none"
-                  value={email}
-                  onChangeText={setEmail}
-                />
-                <TextInput
-                  style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
-                  placeholder="Password"
-                  placeholderTextColor={"grey"}
-                  autoCapitalize="none"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={true}
-                />
-                <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                <TouchableOpacity style={styles.button} onPress={handleLogOut}>
                   <Text
                     style={[
                       styles.buttonText,
                       { fontFamily: "Outfit_600SemiBold" },
                     ]}
                   >
-                    Sign in
+                    Log out
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: "#7c2d12" }]}
-                  disabled={!request}
-                  onPress={() => {
-                    promptAsync();
-                  }}
+              </>
+            ) : (
+              <>
+                <Icon name="emoji-people" size={100} color="black" />
+                <Text
+                  style={[
+                    styles.text,
+                    styles.heading,
+                    { fontFamily: "Outfit_600SemiBold" },
+                  ]}
                 >
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      { fontFamily: "Outfit_600SemiBold" },
-                    ]}
-                  >
-                    Sign in with Google
-                  </Text>
-                </TouchableOpacity>
+                  {isSigningUp ? "Register." : "Login."}
+                </Text>
+                <View style={styles.form}>
+                  <TextInput
+                    style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
+                    placeholder="Email"
+                    placeholderTextColor={"grey"}
+                    autoCapitalize="none"
+                    value={email}
+                    onChangeText={setEmail}
+                  />
 
-                <View
-                  style={{
-                    flexDirection: "column",
-                    marginTop: 20,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={[styles.text, { fontFamily: "Outfit_400Regular" }]}
-                  >
-                    Don't have an account?{" "}
-                  </Text>
-
+                  {!isSigningUp ? (
+                    <TextInput
+                      style={[
+                        styles.input,
+                        { fontFamily: "Outfit_400Regular" },
+                      ]}
+                      placeholder="Password"
+                      placeholderTextColor={"grey"}
+                      autoCapitalize="none"
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry={true}
+                    />
+                  ) : (
+                    <>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          { fontFamily: "Outfit_400Regular" },
+                        ]}
+                        placeholder="Enter Password"
+                        placeholderTextColor={"grey"}
+                        autoCapitalize="none"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={true}
+                      />
+                      <TextInput
+                        style={[
+                          styles.input,
+                          { fontFamily: "Outfit_400Regular" },
+                        ]}
+                        placeholder="Confirm Password"
+                        placeholderTextColor={"grey"}
+                        autoCapitalize="none"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={true}
+                      />
+                    </>
+                  )}
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={handleSignUp}
+                    onPress={handleSignIn}
                   >
                     <Text
                       style={[
                         styles.buttonText,
-                        { fontFamily: "Outfit_600SemiBold" },
+                        { fontFamily: "Outfit_400Regular" },
                       ]}
                     >
-                      Sign up
+                      {!isSigningUp ? "Sign in." : "Sign up."}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.button, { borderColor: "#7c2d12" }]}
+                    disabled={!request}
+                    onPress={() => {
+                      promptAsync();
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        { fontFamily: "Outfit_400Regular", color: "#7c2d12" },
+                      ]}
+                    >
+                      {!isSigningUp ? "Sign in" : "Sign up"} with Google.
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-            </>
-          )}
-        </View>
-      </ScrollView>
-    </TouchableWithoutFeedback>
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
@@ -209,7 +216,6 @@ const Member2 = () => {
 const styles = StyleSheet.create({
   parentContainer: {
     zIndex: -1,
-    backgroundColor: "#292524",
     marginBottom: 20,
   },
 
@@ -223,13 +229,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     margin: 10,
-    color: "#78716c",
+    color: "black",
   },
   heading: {
     fontSize: 40,
-  },
-  highlight: {
-    color: "#fff",
   },
   form: {
     width: "100%",
@@ -240,8 +243,9 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 50,
     fontSize: 16,
-    color: "#fff",
-    backgroundColor: "#57534e",
+    color: "black",
+    borderWidth: 1,
+    borderColor: "#1c1917",
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 10,
@@ -249,9 +253,8 @@ const styles = StyleSheet.create({
   button: {
     width: 200,
     height: 50,
+    borderColor: "black",
     borderWidth: 1,
-    borderColor: "#fff",
-    backgroundColor: "#1c1917",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -259,7 +262,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: "#fff",
+    color: "black",
   },
   footer: {
     flexDirection: "row",

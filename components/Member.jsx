@@ -179,7 +179,7 @@ import React, {
               styles.appGenericText,
             ]}
           >
-            A new way to learn quantum mechanics.
+            A New Way to Learn Quantum Mechanics.
           </Text>
         </View>
   
@@ -195,7 +195,7 @@ import React, {
                   }
                 });
                 
-                props.navigation.navigate("Member2");
+                props.navigation.navigate("Member2", { isSigningUp: true });
               } else {
                 alert("Please connect to the internet to use this feature.");
               }
@@ -255,7 +255,7 @@ import React, {
                   }
                 });
   
-                props.navigation.navigate("Member2");
+                props.navigation.navigate("Member2", { isSigningUp: false });
               } else {
                 alert("Please connect to the internet to use this feature.");
               }
@@ -271,7 +271,7 @@ import React, {
             ]}
           >
             <Text
-              style={[styles.appButtonText, { fontFamily: "DMSerifDisplay_400Regular", fontSize: 20 }]}
+              style={[styles.appButtonText, { fontFamily: "Outfit_400Regular", fontSize: 20 }]}
             >
               or Sign in.
             </Text>
@@ -356,7 +356,7 @@ import React, {
   
     appGenericText: {
       textAlign: "center",
-      color: "#334155",
+      color: "black",
       margin: 5,
     },
   
@@ -366,7 +366,7 @@ import React, {
       marginTop: 10,
       elevation: 8,
       borderWidth: 1,
-      borderColor: "#334155",
+      borderColor: "black",
       borderRadius: 10,
       paddingVertical: 10,
       paddingHorizontal: 12,
@@ -374,13 +374,13 @@ import React, {
   
     appButtonText: {
       fontSize: 32,
-      color: "#334155",
+      color: "black",
       alignSelf: "center",
     },
   
     appButtonTextHeader: {
       fontSize: 18,
-      color: "#334155",
+      color: "black",
       alignSelf: "center",
     },
   });
