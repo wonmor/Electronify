@@ -2,6 +2,8 @@
 
 # Electronify
 
+**Designed and Developed by John Seong.**
+
 This is a version of [**ElectronVisualized**](https://github.com/wonmor/ElectronVisualized) rewritten in **React Native**, **Expo**, and **Expo-Three**.
 
 | Android | iOS |
