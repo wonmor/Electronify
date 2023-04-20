@@ -2,7 +2,7 @@
 
 # Electronify
 
-This is a version of [**ElectronVisualized**](https://github.com/wonmor/ElectronVisualized) ported onto **iOS** and **Android**. Built using **React Native**, **Expo**, and **Expo-Three**.
+This is a version of [**ElectronVisualized**](https://github.com/wonmor/ElectronVisualized) rewritten in **React Native**, **Expo**, and **Expo-Three**.
 
 | Android | iOS |
 |:-:|:-:|
