@@ -426,6 +426,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     margin: 5,
+    borderRadius: 30,
+    borderColor: "#fff",
+    borderWidth: 1,
   },
 
   circle: {
