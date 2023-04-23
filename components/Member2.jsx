@@ -25,21 +25,6 @@ import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBA
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
-WebBrowser.maybeCompleteAuthSession();
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: "electronvisualized.firebaseapp.com",
-  projectId: "electronvisualized",
-  storageBucket: "electronvisualized.appspot.com",
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID,
-};
-
-getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-
 const auth = getAuth();
 
 const Member2 = ({ route }) => {
@@ -140,9 +125,15 @@ const Member2 = ({ route }) => {
   
 
   const handleLogOut = () => {
-    firebase.auth().signOut();
-    setIsLoggedIn(false);
-    setName("");
+    auth.signOut()
+      .then(() => {
+        setIsLoggedIn(false);
+        setName("");
+      })
+      .catch((error) => {
+        console.error(error);
+        Alert.alert("Error", "Failed to log out.");
+      });
   };
 
   const dismissKeyboard = () => {
