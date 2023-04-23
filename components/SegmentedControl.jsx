@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     margin: 10,
+    maxWidth: 300,
   },
   headerText: {
     padding: 8,
