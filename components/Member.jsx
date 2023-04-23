@@ -107,19 +107,12 @@ function Member(props) {
     }
   }, [isFocused]);
 
-  const clearCircles = () => {
-    circlesRef.current.forEach((circle) => {
-      if (circle.viewRef.setNativeProps !== undefined) {
-        circle.viewRef.setNativeProps({ style: { opacity: 0 } });
-      }
-    });
-  };
-
   const handleLogOut = async () => {
     try {
       // delete email and password from SecureStore
       await SecureStore.deleteItemAsync("email");
       await SecureStore.deleteItemAsync("password");
+      await SecureStore.deleteItemAsync("name");
   
       // sign out the user
       await auth.signOut();
@@ -147,19 +140,6 @@ function Member(props) {
         }),
       ])
     ).start(() => {
-      circlesRef.current.forEach((circle) => {
-        if (circle.viewRef.setNativeProps !== undefined) {
-          circle.viewRef.setNativeProps({
-            style: {
-              left: Math.floor(Math.random() * 300),
-              top: Math.floor(Math.random() * 500),
-              width: Math.floor(Math.random() * 50) + 25,
-              height: Math.floor(Math.random() * 50) + 25,
-              opacity: circleAnim,
-            },
-          });
-        }
-      });
     });
   };
 
@@ -254,12 +234,6 @@ function Member(props) {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
                 if (netInfo.isConnected) {
-                  circlesRef.current.forEach((circle) => {
-                    if (circle.viewRef.setNativeProps !== undefined) {
-                      circle.viewRef.setNativeProps({ style: { opacity: 0 } });
-                    }
-                  });
-
                   props.navigation.navigate("Member2", { isSigningUp: true });
                 } else {
                   alert("Please connect to the internet to use this feature.");
@@ -308,12 +282,6 @@ function Member(props) {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
                 if (netInfo.isConnected) {
-                  circlesRef.current.forEach((circle) => {
-                    if (circle.viewRef.setNativeProps !== undefined) {
-                      circle.viewRef.setNativeProps({ style: { opacity: 0 } });
-                    }
-                  });
-
                   props.navigation.navigate("Member2", { isSigningUp: false });
                 } else {
                   alert("Please connect to the internet to use this feature.");

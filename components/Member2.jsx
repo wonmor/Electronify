@@ -21,13 +21,14 @@ import * as Haptics from "expo-haptics";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
-import { getAuth, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, fetchSignInMethodsForEmail, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth();
 
 const Member2 = ({ route, navigation }) => {
   const { isSigningUp } = route.params;
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -75,6 +76,7 @@ const Member2 = ({ route, navigation }) => {
       Alert.alert('Error', 'Invalid email format.');
       return;
     }
+
   
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -85,6 +87,8 @@ const Member2 = ({ route, navigation }) => {
       const user = userCredential.user;
       await SecureStore.setItemAsync('email', email);
       await SecureStore.setItemAsync('password', password);
+      await SecureStore.setItemAsync('name', name);
+
       setIsLoggedIn(true);
       appendToRecord(user);
     } catch (error) {
@@ -102,7 +106,7 @@ const Member2 = ({ route, navigation }) => {
     }
   
     // Check if email is in the correct format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       Alert.alert('Error', 'Invalid email format.');
       return;
     }
@@ -137,9 +141,11 @@ const Member2 = ({ route, navigation }) => {
         password
       );
       const user = userCredential.user;
+      updateProfile(auth.currentUser, { displayName: name }); // Add this line
       await SecureStore.setItemAsync('email', email);
       await SecureStore.setItemAsync('password', password);
-      setName(user.displayName);
+      await SecureStore.setItemAsync('name', name);
+
       setIsLoggedIn(true);
       appendToRecord(user);
     } catch (error) {
@@ -172,6 +178,16 @@ const Member2 = ({ route, navigation }) => {
                   {isSigningUp ? "Register." : "Login."}
                 </Text>
                 <View style={styles.form}>
+                  {isSigningUp && (
+                    <TextInput
+                    style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
+                    placeholder="Name"
+                    placeholderTextColor={"grey"}
+                    autoCapitalize="words"
+                    value={name}
+                    onChangeText={setName}
+                  />   
+                )}
                   <TextInput
                     style={[styles.input, { fontFamily: "Outfit_400Regular" }]}
                     placeholder="Email"

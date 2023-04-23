@@ -126,61 +126,12 @@ export const moleculesWithLonePairs = {
 };
 
 export const moleculeDict = {
-  C2H4: [
-    "Ethene",
-    "Ethene is an organic compound having the formula C2H4. It is a colorless, flammable gas with a faint 'sweet and musky' odor.",
-    "Trigonal Planar",
-    "Nonpolar",
-    "120°",
-    "3 bonding orbitals\n1 antibonding orbital",
-    "sp2",
-    "AX2E",
-    "1 sigma bond\n1 pi bond"
-  ],
-  H2O: [
-    "Water",
-    "Water is an inorganic, transparent, tasteless, odourless, and nearly colourless chemical substance.",
-    "Bent",
-    "Polar",
-    "104.5°",
-    "2 bonding orbitals\n2 antibonding orbitals",
-    "sp3",
-    "AX2E2",
-    "2 sigma bonds\n2 lone pairs"
-  ],
-  H2: [
-    "Hydrogen Gas",
-    "Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.",
-    "Linear",
-    "Nonpolar",
-    "180°",
-    "1 bonding orbital\n1 antibonding orbital",
-    "No",
-    "AX2",
-    "1 sigma bond"
-  ],
-  Cl2: [
-    "Chlorine Gas",
-    "Chlorine is a yellow-green gas at room temperature. Chlorine has a pungent, irritating odor similar to bleach that is detectable at low concentrations.",
-    "Linear",
-    "Nonpolar",
-    "180°",
-    "1 bonding orbital\n1 antibonding orbital",
-    "No",
-    "AX2",
-    "1 sigma bond\n1 pi bond"
-  ],
-  HCl: [
-    "Hydrochloric Acid",
-    "Hydrochloric acid is the water-based, or aqueous, solution of hydrogen chloride gas.",
-    "Linear",
-    "Polar",
-    "180°",
-    "1 bonding orbital\n1 antibonding orbital",
-    "sp",
-    "AX2E",
-    "1 sigma bond\n1 lone pair"
-  ],
+  C2H4: ["Ethene", "Colorless, flammable gas with a faint odor.", "Trigonal Planar", "Nonpolar", "120°", "3 bonding orbitals, 1 antibonding orbital", "sp2", "AX2E", "1 sigma bond, 1 pi bond"],
+  H2O: ["Water", "Transparent, tasteless, and odorless chemical substance.", "Bent", "Polar", "104.5°", "2 bonding orbitals, 2 antibonding orbitals", "sp3", "AX2E2", "2 sigma bonds, 2 lone pairs"],
+  H2: ["Hydrogen Gas", "Lightest element, gas of diatomic molecules.", "Linear", "Nonpolar", "180°", "1 bonding orbital, 1 antibonding orbital", "No", "AX2", "1 sigma bond"],
+  Cl2: ["Chlorine Gas", "Yellow-green gas with a pungent, irritating odor.", "Linear", "Nonpolar", "180°", "1 bonding orbital, 1 antibonding orbital", "No", "AX2", "1 sigma bond, 1 pi bond"],
+  HCl: ["Hydrochloric Acid", "Aqueous solution of hydrogen chloride gas.", "Linear", "Polar", "180°", "1 bonding orbital, 1 antibonding orbital", "sp", "AX2E", "1 sigma bond, 1 lone pair"]
+  
 };
 
 export const getCameraPosition = (element) => {

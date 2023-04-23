@@ -204,7 +204,7 @@ const App = () => {
           />
           <Tab.Screen
             name="Orbitals."
-            options={{ headerShown: false }}
+            options={{ headerShown: false, unmountOnBlur: true }}
             component={MyStack}
           />
           <Tab.Screen

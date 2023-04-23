@@ -105,6 +105,7 @@ function Home(props) {
 
   const auth = getAuth();
 
+  const [name, setName] = useState("");
   const [waveAnim] = useState(new RNAnimated.Value(0));
   const [electronifyAnim] = useState(new RNAnimated.Value(0));
 
@@ -113,25 +114,41 @@ function Home(props) {
   });
 
   useEffect(() => {
-    const checkUserCredentials = async () => {
-      const email = await SecureStore.getItemAsync('email');
-      const password = await SecureStore.getItemAsync('password');
-      if (email && password) {
-        try {
-          const userCredential = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-          // User is successfully logged in
-        } catch (error) {
-          // Handle error
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
+  useEffect(() => {
+      // User is signed out
+      const checkUserCredentials = async () => {
+        const email = await SecureStore.getItemAsync('email');
+        const password = await SecureStore.getItemAsync('password');
+        const name = await SecureStore.getItemAsync('name');
+
+        setName(name);
+
+        if (email && password) {
+          try {
+            const userCredential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+            const user = userCredential.user;
+            setName(user.displayName);
+            // User is successfully logged in
+          } catch (error) {
+            // Handle error
+          }
+        } else {
+          // email and/or password do not exist in SecureStore
         }
-      } else {
-        // email and/or password do not exist in SecureStore
       }
-    }
-    checkUserCredentials();
+      checkUserCredentials();
   }, []);
 
   useEffect(() => {
@@ -141,14 +158,6 @@ function Home(props) {
       startCircleAnimation();
     }
   }, [isFocused]);
-
-  const clearCircles = () => {
-    circlesRef.current.forEach((circle) => {
-      if (circle.viewRef.setNativeProps !== undefined) {
-        circle.viewRef.setNativeProps({ style: { opacity: 0 }});
-      }
-    });
-  };
 
   const handleScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -231,19 +240,6 @@ function Home(props) {
         }),
       ])
     ).start(() => {
-      circlesRef.current.forEach((circle) => {
-        if (circle.viewRef.setNativeProps !== undefined) {
-          circle.viewRef.setNativeProps({
-            style: {
-              left: Math.floor(Math.random() * 300),
-              top: Math.floor(Math.random() * 500),
-              width: Math.floor(Math.random() * 50) + 25,
-              height: Math.floor(Math.random() * 50) + 25,
-              opacity: circleAnim,
-            },
-          });
-        }
-      });
     });
   };
 
@@ -306,7 +302,9 @@ function Home(props) {
             styles.appGenericText,
           ]}
         >
-          Bringing Quantum Mechanics to Everyday People.
+          {name === null ? 
+          "Bringing Quantum Mechanics to Everyday People."
+          : `Welcome back, ${name}!`}
         </Text>
 
         <RNAnimated.View
@@ -334,12 +332,6 @@ function Home(props) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
             if (netInfo.isConnected) {
-              circlesRef.current.forEach((circle) => {
-                if (circle.viewRef.setNativeProps !== undefined) {
-                  circle.viewRef.setNativeProps({ style: { opacity: 0 }});
-                }
-              });
-              
               props.navigation.navigate("AtomSection");
             } else {
               alert("Please connect to the internet to use this feature.");
@@ -376,12 +368,6 @@ function Home(props) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
             if (netInfo.isConnected) {
-              circlesRef.current.forEach((circle) => {
-                if (circle.viewRef.setNativeProps !== undefined) {
-                  circle.viewRef.setNativeProps({ style: { opacity: 0 }});
-                }
-              });
-
               props.navigation.navigate("MoleculeSection");
             } else {
               alert("Please connect to the internet to use this feature.");
