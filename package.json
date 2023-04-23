@@ -29,6 +29,7 @@
     "expo-modules-core": "~0.11.10",
     "expo-random": "~12.3.0",
     "expo-screen-orientation": "~4.3.0",
+    "expo-secure-store": "~11.3.0",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-three": "^6.1.0",

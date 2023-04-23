@@ -31,6 +31,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import * as Haptics from "expo-haptics";
+import * as SecureStore from "expo-secure-store";
 
 /*
   ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -51,21 +52,6 @@ import * as Haptics from "expo-haptics";
   - Add a subscription cancellation screen
   - Add a time detection ting for the "good afternoon" greeting
   */
-
-  WebBrowser.maybeCompleteAuthSession();
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: "electronvisualized.firebaseapp.com",
-  projectId: "electronvisualized",
-  storageBucket: "electronvisualized.appspot.com",
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID,
-};
-
-getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 const auth = getAuth();
 
@@ -129,15 +115,19 @@ function Member(props) {
     });
   };
 
-  const handleLogOut = () => {
-    auth.signOut()
-      .then(() => {
-        setLoggedIn(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        Alert.alert("Error", "Failed to log out.");
-      });
+  const handleLogOut = async () => {
+    try {
+      // delete email and password from SecureStore
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("password");
+  
+      // sign out the user
+      await auth.signOut();
+      setLoggedIn(false);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to log out.");
+    }
   };
 
   const circleAnim = useRef(new RNAnimated.Value(0)).current;
@@ -231,6 +221,7 @@ function Member(props) {
         {loggedIn ? (
           <TouchableOpacity
             onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               handleLogOut();
             }}
             style={[

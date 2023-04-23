@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -15,14 +14,13 @@ import {
 import { appendToRecord } from "./utils/actions";
 import { connect } from "react-redux";
 
-import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import * as SecureStore from 'expo-secure-store';
+import * as Haptics from "expo-haptics";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_MEASUREMENT_ID, IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
-
-import { initializeApp, getApps, getApp } from "firebase/app";
+import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
 import { getAuth, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth();
@@ -33,10 +31,7 @@ const Member2 = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [name, setName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const [token, setToken] = useState("");
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: `${EXPO_GUID}.apps.googleusercontent.com`,
     androidClientId: `${ANDROID_GUID}.apps.googleusercontent.com`,
@@ -52,7 +47,6 @@ const Member2 = ({ route, navigation }) => {
       signInWithCredential(auth, credential)
         .then((userCredential) => {
           const user = userCredential.user;
-          setName(user.displayName);
           setIsLoggedIn(true);
           appendToRecord(user);
         })
@@ -69,50 +63,62 @@ const Member2 = ({ route, navigation }) => {
   }, [isLoggedIn]);
 
   const handleSignIn = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-
+  
     // Check if email is in the correct format
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert("Error", "Invalid email format.");
+      Alert.alert('Error', 'Invalid email format.');
       return;
     }
-
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-      setName(user.displayName);
+      await SecureStore.setItemAsync('email', email);
+      await SecureStore.setItemAsync('password', password);
       setIsLoggedIn(true);
       appendToRecord(user);
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Invalid email or password.");
+      Alert.alert('Error', 'Invalid email or password.');
     }
   };
   
   const handleSignUp = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (!email || !password || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-
+  
     // Check if email is in the correct format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert("Error", "Invalid email format.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+\.[^\s@]+$/.test(email)) {
+      Alert.alert('Error', 'Invalid email format.');
       return;
     }
-
+  
     // Check if password meets strength requirements
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+~`=[\]{}|;':",./<>?])(?=.*[^\d\w\s]).{8,}$/;
     if (!passwordRegex.test(password)) {
-      Alert.alert("Error", "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
+      Alert.alert(
+        'Error',
+        'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.'
+      );
       return;
     }
   
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match.");
+      Alert.alert('Error', 'Passwords do not match.');
       return;
     }
   
@@ -121,32 +127,25 @@ const Member2 = ({ route, navigation }) => {
       // Check if email already exists
       const methods = await fetchSignInMethodsForEmail(auth, email);
       if (methods.length > 0) {
-        Alert.alert("Error", "This email is already in use.");
+        Alert.alert('Error', 'This email is already in use.');
         return;
       }
       // Sign up the user
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
+      await SecureStore.setItemAsync('email', email);
+      await SecureStore.setItemAsync('password', password);
       setName(user.displayName);
       setIsLoggedIn(true);
       appendToRecord(user);
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to create account.");
+      Alert.alert('Error', 'Failed to create account.');
     }
-  };
-  
-
-  const handleLogOut = () => {
-    auth.signOut()
-      .then(() => {
-        setIsLoggedIn(false);
-        setName("");
-      })
-      .catch((error) => {
-        console.error(error);
-        Alert.alert("Error", "Failed to log out.");
-      });
   };
 
   const dismissKeyboard = () => {
@@ -240,6 +239,7 @@ const Member2 = ({ route, navigation }) => {
                     style={[styles.button, { borderColor: "#7c2d12" }]}
                     disabled={!request}
                     onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       promptAsync();
                     }}
                   >
