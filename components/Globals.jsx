@@ -77,20 +77,20 @@ export const getMoleculeColour = (
   lonePairHighlight = false
 ) => {
   /*
-      Getting the molecule colour based upon the element name and the volume information
-    
-      Parameters
-      ----------
-      element: String
-          Name of the element
-      volume: Float
-          Volume that correspond with each coordinate of the Canvas
-    
-      Returns
-      -------
-      String
-          Contains the RGB information of the generated colour
-      */
+    Getting the molecule colour based upon the element name and the volume information
+  
+    Parameters
+    ----------
+    element: String
+        Name of the element
+    volume: Float
+        Volume that correspond with each coordinate of the Canvas
+  
+    Returns
+    -------
+    String
+        Contains the RGB information of the generated colour
+    */
   switch (element) {
     case "H":
       return `hsl(${volume * 100.0 + 800.0}, 100%, 60%)`;
@@ -102,7 +102,7 @@ export const getMoleculeColour = (
       return `hsl(${volume * 100.0 + 800.0}, 100%, 60%)`;
 
     case "Cl2":
-      return `hsl(${volume * 2000.0 + 200.0}, 100%, 60%)`;
+      return `hsl(${volume * 204000.0 + 200.0}, 100%, 60%)`;
 
     case "H2O":
       return lonePairHighlight
@@ -110,7 +110,10 @@ export const getMoleculeColour = (
         : `hsl(${volume * 5000.0 + 180.0}, 100%, 60%)`;
 
     case "HCl":
-      return `hsl(${volume * 24000.0 + 200.0}, 100%, 60%)`;
+      return `hsl(${volume * 204000.0 + 200.0}, 100%, 60%)`;
+
+    case "C2H4":
+      return `hsl(${volume * 5000.0 + 180.0}, 100%, 60%)`;
 
     default:
       return `hsl(${volume * 100.0 + 800.0}, 100%, 60%)`;
@@ -123,6 +126,17 @@ export const moleculesWithLonePairs = {
 };
 
 export const moleculeDict = {
+  C2H4: [
+    "Ethene",
+    "Ethene is an organic compound having the formula C2H4. It is a colorless, flammable gas with a faint 'sweet and musky' odor.",
+    "Trigonal Planar",
+    "Nonpolar",
+    "120°",
+    "3 bonding orbitals\n1 antibonding orbital",
+    "sp2",
+    "AX2E",
+    "1 sigma bond\n1 pi bond"
+  ],
   H2O: [
     "Water",
     "Water is an inorganic, transparent, tasteless, odourless, and nearly colourless chemical substance.",
@@ -130,7 +144,9 @@ export const moleculeDict = {
     "Polar",
     "104.5°",
     "2 bonding orbitals\n2 antibonding orbitals",
-    "sp3"
+    "sp3",
+    "AX2E2",
+    "2 sigma bonds\n2 lone pairs"
   ],
   H2: [
     "Hydrogen Gas",
@@ -139,7 +155,9 @@ export const moleculeDict = {
     "Nonpolar",
     "180°",
     "1 bonding orbital\n1 antibonding orbital",
-    "s"
+    "No",
+    "AX2",
+    "1 sigma bond"
   ],
   Cl2: [
     "Chlorine Gas",
@@ -148,7 +166,9 @@ export const moleculeDict = {
     "Nonpolar",
     "180°",
     "1 bonding orbital\n1 antibonding orbital",
-    "s"
+    "No",
+    "AX2",
+    "1 sigma bond\n1 pi bond"
   ],
   HCl: [
     "Hydrochloric Acid",
@@ -157,7 +177,9 @@ export const moleculeDict = {
     "Polar",
     "180°",
     "1 bonding orbital\n1 antibonding orbital",
-    "sp"
+    "sp",
+    "AX2E",
+    "1 sigma bond\n1 lone pair"
   ],
 };
 

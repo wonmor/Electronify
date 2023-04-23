@@ -5,7 +5,7 @@
     "scheme": "electronify",
     "version": "6.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/ios/iTunesArtwork@3x.png",
+    "icon": "./assets/icon.png",
     "sdkVersion": "46.0.0",
     "platforms": [
       "ios",
@@ -20,7 +20,7 @@
     "android": {
       "package": "com.johnseong.electronify",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/ios/iTunesArtwork@3x.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 7

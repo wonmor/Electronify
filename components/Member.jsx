@@ -218,16 +218,7 @@ import React, {
             >
               {`\u2022 Limit-free Access to All Content.`}
             </Text>
-
-            <Text
-              style={[
-                { fontFamily: "Outfit_400Regular", marginTop: 10 },
-                styles.appButtonTextHeader,
-              ]}
-            >
-              {`\u2022 Exclusively, Molecular Orbitals. Like LUMO and HOMO.`}
-            </Text>
-
+            
             <Text
               style={[
                 { fontFamily: "Outfit_400Regular", marginTop: 10 },
@@ -367,6 +358,7 @@ import React, {
       elevation: 8,
       borderWidth: 1,
       borderColor: "black",
+      backgroundColor: "white",
       borderRadius: 10,
       paddingVertical: 10,
       paddingHorizontal: 12,

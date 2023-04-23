@@ -185,10 +185,6 @@ function Featurer2(props) {
                   )
                 )}
               </Text>
-
-              <Text style={styles.bottomText}>
-                Drag or zoom using your finger.
-              </Text>
             </View>
           </>
         )}
@@ -229,7 +225,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     padding: 10,
-    marginBottom: -10,
   },
 
   title: {

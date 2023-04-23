@@ -4,8 +4,6 @@ import { Renderer } from "expo-three";
 import { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
-
-import { Line2, LineGeometry, LineMaterial } from 'three-fatline';
 import { resetState } from "./utils/actions";
 
 import OrbitControlsView from "./controls/OrbitControlsView";
@@ -24,7 +22,7 @@ import {
 } from "three";
 
 import { addParticles } from "./Instances";
-import { moleculeDict, bondShapeDict, dipoleMomentDict } from "./Globals";
+import { moleculeDict, bondShapeDict } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -35,7 +33,7 @@ BELOW IS THE MAIN RENDERER FOR THE THREE.JS SCENE
 
 const HSLColorBarLegend = () => {
   return (
-    <View style={[styles.barContainer, { fontFamily: "Outfit_600SemiBold"}]}>
+    <View style={[styles.barContainer, { fontFamily: "Outfit_600SemiBold", backgroundColor: 'white' }]}>
       <View
         style={[
           styles.colorBar,
@@ -96,11 +94,10 @@ const HSLColorBarLegend = () => {
       >
         <Text style={[styles.label, { fontFamily: "Outfit_600SemiBold"}]}>1</Text>
       </View>
+      <Text style={[styles.label, { color: "black", fontFamily: "Outfit_600SemiBold", margin: 5 }]}>ELECTRON DENSITY</Text>
     </View>
   );
 };
-
-
 
 const setUpScene = (sceneColor) => {
   const scene = new Scene();
@@ -137,43 +134,6 @@ function Featurer(props) {
     };
   }, []);
 
-  const addBallAndStick = (scene) => {
-    const ball = new BallMesh(0.25);
-
-    props.atoms_x.forEach((x_coord, index) => {
-      const atom = ball.clone();
-
-      atom.position.set(x_coord, props.atoms_y[index], props.atoms_z[index]);
-      scene.add(atom);
-    });
-
-    {Object.values(
-      bondShapeDict[props.element]
-    ).map((value) => {
-      const geometry = new LineGeometry();
-      
-      geometry.setPositions([props.atoms_x[value[0]], props.atoms_y[value[0]], props.atoms_z[value[0]], props.atoms_x[value[1]], props.atoms_y[value[1]], props.atoms_z[value[1]]]);
-      
-      const material = new LineMaterial({
-        color: 'pink',
-        transparent: true,
-        opacity: 0.5,
-        linewidth: 10, // px
-        resolution: new THREE.Vector2(640, 480) // resolution of the viewport
-        // dashed, dashScale, dashSize, gapSize
-      });
-  
-      const stick = new Line2(geometry, material);
-  
-      stick.computeLineDistances();
-  
-      scene.add(stick);
-  
-    })}
-    
-    return scene;
-  };
-
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
     const sceneColor = '#1c2e4a';
@@ -190,7 +150,6 @@ function Featurer(props) {
 
     let scene = setUpScene(sceneColor);
 
-    scene = addBallAndStick(scene);
     scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
 
     function update() {}
@@ -219,18 +178,10 @@ function Featurer(props) {
             <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
           </OrbitControlsView>
 
-          <View style={styles.secondaryContainerAlternative}>
-            <Text style={styles.description}>Electron Density</Text>
-          </View>
-
           <HSLColorBarLegend />
 
           <View style={styles.container2}>
-            <Text style={styles.description}>{ moleculeDict[props.element][2] + " | " + moleculeDict[props.element][4] + " | " +  moleculeDict[props.element][6]}</Text>
-          </View>
-
-          <View style={styles.secondaryContainer}>
-            <Text style={styles.description}>Drag or zoom using your finger.</Text>
+            <Text style={styles.description}>{ moleculeDict[props.element][2] + " | " + moleculeDict[props.element][4] + " | " +  moleculeDict[props.element][6] + " hybrid"}</Text>
           </View>
         </>
       )}
@@ -273,7 +224,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainer: {
-    backgroundColor: "#1c2e4a",
+    backgroundColor: "black",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -281,7 +232,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryContainerAlternative: {
-    backgroundColor: '#4f617d',
+    backgroundColor: 'black',
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
@@ -304,7 +255,7 @@ const styles = StyleSheet.create({
   },
   barContainer: {
     flexDirection: "row",
-    height: 20,
+    height: 25,
     overflow: "hidden",
   },
   colorBar: {

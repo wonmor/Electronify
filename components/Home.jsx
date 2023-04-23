@@ -362,7 +362,7 @@ function Home(props) {
           <Text
             style={[{ fontFamily: "Outfit_400Regular" }, styles.appButtonText]}
           >
-            Structures.
+            Orbitals.
           </Text>
         </TouchableOpacity>
       </>

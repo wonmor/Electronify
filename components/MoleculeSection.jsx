@@ -2,7 +2,7 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import AnimatedLoader from "react-native-animated-loader";
 import * as Haptics from "expo-haptics";
@@ -13,6 +13,13 @@ function MoleculeSection(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const molecules = [
+    {
+      name: "Ethene",
+      formula: "C2H4",
+      type: "molecule",
+      structure: "C2H4",
+      color: "#ffd6e5",
+      },
     {
       name: "Hydrogen Gas",
       formula: "H2",
@@ -121,38 +128,40 @@ function MoleculeSection(props) {
   };
 
   return (
-    <View style={styles.borderlessContainer}>
-      {molecules.map((molecule) => (
-        <ElementButton
-          elementName={molecule.name}
-          formula={molecule.formula}
-          type={molecule.type}
-          key={molecule.name}
-          color={molecule.color}
-          structure={molecule.structure + " | " + moleculeDict[molecule.formula][2]}
-        />
-      ))}
+    <ScrollView>
+      <View style={styles.borderlessContainer}>
+        {molecules.map((molecule) => (
+          <ElementButton
+            elementName={molecule.name}
+            formula={molecule.formula}
+            type={molecule.type}
+            key={molecule.name}
+            color={molecule.color}
+            structure={molecule.structure + " | " + moleculeDict[molecule.formula][2]}
+          />
+        ))}
 
-      <AnimatedLoader
-        style={{ margin: 10 }}
-        visible={isLoading}
-        source={require("../assets/animations/loader.json")}
-        overlayColor="rgba(0,0,0,1)"
-        animationStyle={styles.lottie}
-        speed={1}
-      >
-        <Text
-          style={{
-            fontFamily: "Outfit_600SemiBold",
-            color: "white",
-            margin: 5,
-            fontSize: 20,
-          }}
+        <AnimatedLoader
+          style={{ margin: 10 }}
+          visible={isLoading}
+          source={require("../assets/animations/loader.json")}
+          overlayColor="rgba(0,0,0,1)"
+          animationStyle={styles.lottie}
+          speed={1}
         >
-          Processing the data...
-        </Text>
-      </AnimatedLoader>
-    </View>
+          <Text
+            style={{
+              fontFamily: "Outfit_600SemiBold",
+              color: "white",
+              margin: 5,
+              fontSize: 20,
+            }}
+          >
+            Processing the data...
+          </Text>
+        </AnimatedLoader>
+      </View>
+    </ScrollView>
   );
 }
 

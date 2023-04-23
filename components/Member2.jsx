@@ -20,15 +20,34 @@ import * as Google from "expo-auth-session/providers/google";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import { IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
+import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_MEASUREMENT_ID, IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
+
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 WebBrowser.maybeCompleteAuthSession();
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: "electronvisualized.firebaseapp.com",
+  projectId: "electronvisualized",
+  storageBucket: "electronvisualized.appspot.com",
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
+};
+
+getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+const auth = getAuth();
 
 const Member2 = ({ route }) => {
   const { isSigningUp } = route.params;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -39,40 +58,89 @@ const Member2 = ({ route }) => {
     iosClientId: `${IOS_GUID}.apps.googleusercontent.com`,
   });
 
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+  useEffect(() => {
+    if (response?.type === "success") {
+      const credential = GoogleAuthProvider.credential(
+        null,
+        response.authentication.accessToken
       );
-      const user = await response.json();
-      setName(user.name);
+      signInWithCredential(auth, credential)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          setName(user.displayName);
+          setIsLoggedIn(true);
+          appendToRecord(user);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [response]);
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
+
+    // Check if email is in the correct format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      Alert.alert("Error", "Invalid email format.");
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      setName(user.displayName);
       setIsLoggedIn(true);
       appendToRecord(user);
     } catch (error) {
-      // Add your own error handler here
+      console.error(error);
+      Alert.alert("Error", "Invalid email or password.");
     }
   };
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
-    }
-  }, [response, token]);
-
-  const handleSignIn = async () => {
-    // Add your sign in logic here
-  };
-
+  
   const handleSignUp = async () => {
-    // Add your sign up logic here
+    if (!email || !password || !confirmPassword) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
+
+    // Check if email is in the correct format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      Alert.alert("Error", "Invalid email format.");
+      return;
+    }
+  
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+  
+    try {
+      const auth = getAuth();
+      // Check if email already exists
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.length > 0) {
+        Alert.alert("Error", "This email is already in use.");
+        return;
+      }
+      // Sign up the user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      setName(user.displayName);
+      setIsLoggedIn(true);
+      appendToRecord(user);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to create account.");
+    }
   };
+  
 
   const handleLogOut = () => {
-    // Add your log out logic here
+    firebase.auth().signOut();
     setIsLoggedIn(false);
     setName("");
   };
@@ -168,15 +236,15 @@ const Member2 = ({ route }) => {
                         placeholder="Confirm Password"
                         placeholderTextColor={"grey"}
                         autoCapitalize="none"
-                        value={password}
-                        onChangeText={setPassword}
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
                         secureTextEntry={true}
                       />
                     </>
                   )}
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={handleSignIn}
+                    onPress={!isSigningUp ? handleSignIn : handleSignUp}
                   >
                     <Text
                       style={[
