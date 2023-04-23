@@ -17,7 +17,7 @@ function MoleculeSection(props) {
       name: "Ethene",
       formula: "C2H4",
       type: "molecule",
-      structure: "C2H4",
+      structure: "AX2E",
       color: "#ffd6e5",
       },
     {

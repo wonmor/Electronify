@@ -97,6 +97,13 @@ const Member2 = ({ route }) => {
       Alert.alert("Error", "Invalid email format.");
       return;
     }
+
+    // Check if password meets strength requirements
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+~`=[\]{}|;':",./<>?])(?=.*[^\d\w\s]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      Alert.alert("Error", "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
+      return;
+    }
   
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match.");
