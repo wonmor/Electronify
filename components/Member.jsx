@@ -133,7 +133,6 @@ function Member(props) {
     auth.signOut()
       .then(() => {
         setLoggedIn(false);
-        setName("");
       })
       .catch((error) => {
         console.error(error);
@@ -240,12 +239,21 @@ function Member(props) {
             ]}
           >
             <Text
-              style={[
-                styles.appButtonText,
-                { fontFamily: "Outfit_400Regular" },
-              ]}
-            >
-              Log Out
+                style={[
+                  { fontFamily: "Outfit_400Regular" },
+                  styles.appButtonTextHeader,
+                ]}
+              >
+                Thanks for visiting.
+              </Text>
+
+            <Text
+                style={[
+                  { fontFamily: "DMSerifDisplay_400Regular", marginTop: 10 },
+                  styles.appButtonText,
+                ]}
+              >
+              Log out.
             </Text>
           </TouchableOpacity>
         ) : (

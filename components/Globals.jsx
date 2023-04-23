@@ -183,6 +183,50 @@ export const moleculeDict = {
   ],
 };
 
+export const getCameraPosition = (element) => {
+  /*
+    Updating the camera position according to the element name
+  
+    Parameters
+    ----------
+    element: String
+        Name of the element
+  
+    Returns
+    -------
+    Dictionary
+        Contains the position values and the FOV of the camera
+    */
+  switch (element) {
+    case "H":
+      return { fov: 15, position: [-5, 8, 8] };
+
+    case "Na":
+      return { fov: 55, position: [-5, 8, 8] };
+
+    case "K":
+      return { fov: 65, position: [-5, 8, 8] };
+
+    case "H2":
+      return { fov: 20, position: [-5, 8, 8] };
+
+    case "H2O":
+      return { fov: 55, position: [-5, 8, 8] };
+
+    case "HCl":
+      return { fov: 55, position: [-5, 8, 8] };
+
+    case "C2H4":
+      return { fov: 75, position: [-5, 8, 8] };
+
+    case "Cl2":
+      return { fov: 75, position: [-5, 8, 8] };
+
+    default:
+      return { fov: 35, position: [-5, 8, 8] };
+  }
+};
+
 export const bondShapeDict = {
   H2O: [
     [0, 1],

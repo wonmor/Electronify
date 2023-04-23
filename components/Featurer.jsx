@@ -22,7 +22,7 @@ import {
 } from "three";
 
 import { addParticles } from "./Instances";
-import { moleculeDict, bondShapeDict } from "./Globals";
+import { moleculeDict, getCameraPosition } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -143,8 +143,8 @@ function Featurer(props) {
     renderer.setSize(width, height);
     renderer.setClearColor(sceneColor);
 
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    camera.position.set(2, 5, 5);
+    const camera = new PerspectiveCamera(getCameraPosition(props.element).fov, width / height, 0.01, 1000);
+    camera.position.set(...getCameraPosition(props.element).position);
 
     setCamera(camera);
 

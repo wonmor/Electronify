@@ -27,7 +27,7 @@ import { getAuth, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, si
 
 const auth = getAuth();
 
-const Member2 = ({ route }) => {
+const Member2 = ({ route, navigation }) => {
   const { isSigningUp } = route.params;
 
   const [email, setEmail] = useState("");
@@ -61,6 +61,12 @@ const Member2 = ({ route }) => {
         });
     }
   }, [response]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate("Member");
+    }
+  }, [isLoggedIn]);
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -155,29 +161,6 @@ const Member2 = ({ route }) => {
           contentContainerStyle={{ paddingBottom: 30 }}
         >
           <View style={styles.container}>
-            {isLoggedIn ? (
-              <>
-                <Text
-                  style={[
-                    styles.text,
-                    styles.heading,
-                    { fontFamily: "Outfit_600SemiBold" },
-                  ]}
-                >
-                  Welcome, {name}
-                </Text>
-                <TouchableOpacity style={styles.button} onPress={handleLogOut}>
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      { fontFamily: "Outfit_600SemiBold" },
-                    ]}
-                  >
-                    Log out
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
               <>
                 <Icon name="emoji-people" size={100} color="black" />
                 <Text
@@ -271,7 +254,6 @@ const Member2 = ({ route }) => {
                   </TouchableOpacity>
                 </View>
               </>
-            )}
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
