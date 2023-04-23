@@ -23,7 +23,7 @@ import {
 } from "three";
 
 import { addParticles } from "./Instances";
-import { moleculeDict, getCameraPosition } from "./Globals";
+import { moleculeDict, getCameraPosition, getMolecularOrbitals } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -152,6 +152,7 @@ function Featurer(props) {
     let scene = setUpScene(sceneColor);
 
     scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
+    // scene.add(getMolecularOrbitals(`${props.element}_HOMO_GLTF`, true));
 
     function update() {}
 
