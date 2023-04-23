@@ -9,20 +9,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Image,
   View,
   ScrollView,
   Animated as RNAnimated,
 } from "react-native";
-import * as WebBrowser from "expo-web-browser";
 import { useIsFocused } from "@react-navigation/native";
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_MEASUREMENT_ID, IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
-import Animated, {
+import {
   useSharedValue,
   useAnimatedStyle,
   withSequence,
@@ -224,7 +220,7 @@ function Member(props) {
                   styles.appButtonText,
                 ]}
               >
-              Log out.
+              Sign out.
             </Text>
           </TouchableOpacity>
         ) : (
@@ -255,7 +251,7 @@ function Member(props) {
                   styles.appButtonTextHeader,
                 ]}
               >
-                {`\u2022 Limit-free Access to All Content.`}
+                {`\u2022 Unlimited Access to All Content.`}
               </Text>
 
               <Text

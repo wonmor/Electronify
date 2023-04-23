@@ -6,6 +6,7 @@ import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { resetState } from "./utils/actions";
 
+import SegmentedControl from "./SegmentedControl";
 import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
@@ -172,6 +173,7 @@ function Featurer(props) {
           <View style={styles.container}>
             <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>
             <Text style={styles.description}>{moleculeDict[props.element][1]}</Text>
+            <SegmentedControl />
           </View>
 
           <OrbitControlsView style={{ flex: 1 }} camera={camera}>

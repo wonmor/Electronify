@@ -352,3 +352,82 @@ export const atomDict = {
     "[Ar] 4s^1",
   ],
 };
+
+export function getMolecularOrbitals(props) {
+  const url = 'https://electronvisual.org' + `/api/downloadGLB/${props.name}`;
+
+  const [gltf, setGltf] = useState(null);
+
+  const [rotation, setRotation] = useState({x: 0, y: 1.25, z: 0.15});
+  const [scale, setScale] = useState(6);
+  const [offset, setOffset] = useState([0, 0, 0]);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    const loader = new GLTFLoader();
+    loader.load(
+      url,
+      (data) => setGltf(data),
+      null,
+      (error) => console.error(error)
+    );
+  }, [url]);
+
+  useEffect(() => {
+    if (gltf) {
+      gltf.scene.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.material = new THREE.MeshBasicMaterial({
+            wireframe: true,
+            color: 0xffffff,
+            transparent: true,
+            opacity: props.isExportReady ? 1.0 : 0.1,
+          });
+        }
+      });
+    }
+  }, [gltf, props.isExportReady]);
+
+  useEffect(() => {
+    console.log(props.name);
+
+    if (props.name.includes("C2H4")) {
+      setRotation({x: 0, y: 1.25, z: 0.15});
+      setScale(6);
+      
+    } else if (props.name.includes("H2O")) {
+      setRotation({x: 0, y: Math.PI / 2, z: Math.PI / 2});
+      setScale(4);
+      
+    } else if (props.name.includes("H2")) {
+      setRotation({x: 0, y: Math.PI / 2, z: 0});
+      setScale(3);
+      setOffset([0.4, 0.4, 0.4])
+
+    } else if (props.name.includes("Cl2")) {
+      setRotation({x: 0, y: Math.PI / 2, z: 0});
+      setScale(4.5);
+      setOffset([0.0, 0.4, 0.0])
+
+    } else if (props.name.includes("HCl")) {
+      setRotation({x: 0, y: -Math.PI / 2, z: 0});
+      setScale(4.5);
+      setOffset([0.0, 0.4, props.isHomo ? 2.8 : 0.8])
+    }
+  }, [props.isHomo, props.name]);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.rotation.x = rotation.x;
+      ref.current.rotation.y = rotation.y;
+      ref.current.rotation.z = rotation.z;
+      ref.current.scale.set(scale, scale, scale);
+      ref.current.position.set(...offset)
+    }
+  }, [offset, rotation, scale])
+
+  return gltf.scene;
+}

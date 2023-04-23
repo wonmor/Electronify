@@ -77,7 +77,6 @@ const Member2 = ({ route, navigation }) => {
       return;
     }
 
-  
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
