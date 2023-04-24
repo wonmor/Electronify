@@ -6,6 +6,7 @@ import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { resetState } from "./utils/actions";
 import { GLTFLoader } from "three-stdlib";
+import { decode } from "base64-arraybuffer";
 
 import * as FileSystem from 'expo-file-system';
 import * as THREE from "three";
@@ -17,13 +18,10 @@ import {
   AmbientLight,
   Fog,
   GridHelper,
-  Mesh,
-  MeshBasicMaterial,
   PerspectiveCamera,
   PointLight,
   Scene,
   SpotLight,
-  SphereGeometry,
 } from "three";
 
 import { addParticles } from "./Instances";
@@ -153,11 +151,14 @@ function Featurer(props) {
     if (scene !== null && fileName !== "") {
       (async () => {
         const loader = new GLTFLoader();
-    
+  
         try {
           const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + "/" + fileName);
-          loader.load(
-            uri,
+          const fileBase64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+          const fileArrayBuffer = decode(fileBase64);
+          loader.parse(
+            fileArrayBuffer,
+            "",
             (data) => {
               setGltf(data.scene);
               scene.add(data.scene);
@@ -283,15 +284,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
-
-class BallMesh extends Mesh {
-  constructor(radius = 0.5) {
-    super(
-      new SphereGeometry(radius, 32, 32),
-      new MeshBasicMaterial( { color: "#fff", transparent: true, opacity: 0.5 } )
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   container: {

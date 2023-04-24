@@ -1,8 +1,3 @@
-import { useState, useRef, useEffect } from "react";
-import { GLTFLoader } from "three-stdlib";
-import * as FileSystem from 'expo-file-system';
-import * as THREE from "three";
-
 export const normalizeData = (val, max, min) => {
   /*
         This function normalizes a given dataset within a certain range that is defined
