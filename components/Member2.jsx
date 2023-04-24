@@ -70,21 +70,23 @@ const Member2 = ({ route, navigation }) => {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
+
+    const trimmedEmail = email.toLowerCase().trim();
   
-    // Check if email is in the correct format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert('Error', 'Invalid email format.');
-      return;
-    }
+   // Check if email is in the correct format
+   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+    Alert.alert('Error', 'Invalid email format.');
+    return;
+  }
 
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        email,
+        trimmedEmail,
         password
       );
       const user = userCredential.user;
-      await SecureStore.setItemAsync('email', email);
+      await SecureStore.setItemAsync('email', trimmedEmail);
       await SecureStore.setItemAsync('password', password);
       await SecureStore.setItemAsync('name', name);
 
@@ -103,9 +105,11 @@ const Member2 = ({ route, navigation }) => {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
+
+    const trimmedEmail = email.toLowerCase().trim();
   
     // Check if email is in the correct format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       Alert.alert('Error', 'Invalid email format.');
       return;
     }
@@ -128,7 +132,7 @@ const Member2 = ({ route, navigation }) => {
     try {
       const auth = getAuth();
       // Check if email already exists
-      const methods = await fetchSignInMethodsForEmail(auth, email);
+      const methods = await fetchSignInMethodsForEmail(auth, trimmedEmail);
       if (methods.length > 0) {
         Alert.alert('Error', 'This email is already in use.');
         return;
@@ -136,12 +140,12 @@ const Member2 = ({ route, navigation }) => {
       // Sign up the user
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
+        trimmedEmail,
         password
       );
       const user = userCredential.user;
       updateProfile(auth.currentUser, { displayName: name }); // Add this line
-      await SecureStore.setItemAsync('email', email);
+      await SecureStore.setItemAsync('email', trimmedEmail);
       await SecureStore.setItemAsync('password', password);
       await SecureStore.setItemAsync('name', name);
 
