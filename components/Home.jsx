@@ -302,7 +302,7 @@ function Home(props) {
             styles.appGenericText,
           ]}
         >
-          {name === null ? 
+          {name === null || name === "" ? 
           "Bringing Quantum Mechanics to Everyday People."
           : `Welcome back, ${name}!`}
         </Text>
