@@ -1,24 +1,7 @@
-import { GLTFLoader as ThreeGLTFLoader } from "three-stdlib";
-import base64js from 'base64-js';
-
-import * as FileSystem from 'expo-file-system';
 import * as THREE from "three";
 import axios from "axios";
 
-class GLTFLoader extends ThreeGLTFLoader {
-  load(arrayBufferData, onLoad, onProgress, onError) {
-    try {
-      this.parse(arrayBufferData, '', onLoad);
-    } catch (error) {
-      if (onError) {
-        onError(error);
-      } else {
-        console.error(error);
-      }
-    }
-  }
-}
-
+import { GLTFLoader } from "three-stdlib";
 
 export const normalizeData = (val, max, min) => {
   /*
