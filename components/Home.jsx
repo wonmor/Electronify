@@ -110,10 +110,6 @@ function Home(props) {
   const [electronifyAnim] = useState(new RNAnimated.Value(0));
 
   useEffect(() => {
-    startElectronifyAnimation();
-  });
-
-  useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
@@ -178,31 +174,9 @@ function Home(props) {
     },
   ];
 
-  const startElectronifyAnimation = () => {
-    RNAnimated.timing(electronifyAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  };
-
   const electronifyStyle = [
     { fontFamily: "Outfit_600SemiBold", fontSize: 40 },
-    styles.appGenericText,
-    {
-      opacity: electronifyAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 1],
-      }),
-      transform: [
-        {
-          translateY: electronifyAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [-30, 0],
-          }),
-        },
-      ],
-    },
+    styles.appGenericText
   ];
 
   const arrowAnim = useRef(new RNAnimated.Value(0)).current;
@@ -298,13 +272,11 @@ function Home(props) {
 
         <Text
           style={[
-            { fontFamily: "Outfit_400Regular", fontSize: 20 },
+            { fontFamily: "Outfit_400Regular", fontSize: 20, opacity: name === null || name === "" ? 0 : 1 },
             styles.appGenericText,
           ]}
         >
-          {name === null || name === "" ? 
-          "Bringing Quantum Mechanics to Everyday People."
-          : `Welcome back, ${name}!`}
+          {`Welcome back, ${name}.`}
         </Text>
 
         <RNAnimated.View
@@ -405,7 +377,7 @@ function Home(props) {
             fontFamily: "Outfit_400Regular",
             fontSize: 32,
             margin: 10,
-            marginTop: 20,
+            marginTop: 30,
           },
           styles.appGenericText,
         ]}
