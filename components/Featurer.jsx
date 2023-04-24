@@ -127,6 +127,7 @@ function Featurer(props) {
   const [camera, setCamera] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0); 
   const [isHomo, setIsHomo] = useState(true);
+  const [glViewKey, setGlViewKey] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -140,31 +141,13 @@ function Featurer(props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (selectedIndex == 0) {
-      setIsHomo(true);
-      
-    } else {
-      setIsHomo(false);
-    }
-  }, [selectedIndex]);
-
-  useEffect(() => {
-    if (scene) {
-      // Remove the old glbViewer
-      scene.remove(scene.children.find(child => child instanceof GLBViewer));
-  
-      const prompt = isHomo ? "_HOMO" : "_LUMO";
-      const glbViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
-  
-      // Add the new glbViewer
-      scene.add(glbViewer);
-    }
-  }, [isHomo]);
-  
   const handleSingleIndexSelect = (index) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedIndex(index);
+    setIsHomo(index === 0);
+
+    // Change the glViewKey to force a re-render of GLView component
+    setGlViewKey(glViewKey => !glViewKey);
   };
 
   const onContextCreate = async (gl) => {
@@ -182,11 +165,11 @@ function Featurer(props) {
     setCamera(camera);
 
     scene = setUpScene(sceneColor);
+    scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
 
     const prompt = isHomo ? "_HOMO" : "_LUMO";
     const glbViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
 
-    scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
     scene.add(glbViewer);
 
     function update() {}
@@ -222,7 +205,7 @@ function Featurer(props) {
           </View>
 
           <OrbitControlsView style={{ flex: 1 }} camera={camera}>
-            <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />
+            <GLView key={glViewKey} style={{ flex: 1 }} onContextCreate={onContextCreate} />
           </OrbitControlsView>
 
           <HSLColorBarLegend />
