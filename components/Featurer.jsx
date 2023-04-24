@@ -1,12 +1,12 @@
 import { GLView } from "expo-gl";
 import { Renderer } from "expo-three";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { resetState } from "./utils/actions";
 
-import SegmentedControl from "./SegmentedControl";
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 import OrbitControlsView from "./controls/OrbitControlsView";
 
 import {
@@ -21,6 +21,8 @@ import {
   SpotLight,
   SphereGeometry,
 } from "three";
+
+import * as Haptics from 'expo-haptics';
 
 import { addParticles } from "./Instances";
 import { moleculeDict, getCameraPosition, GLBViewer } from "./Globals";
@@ -123,6 +125,9 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(0); 
+  const [isHomo, setIsHomo] = useState(true);
+
   const dispatch = useDispatch();
 
   let timeout;
@@ -134,6 +139,20 @@ function Featurer(props) {
       clearTimeout(timeout);
     };
   }, []);
+
+  useEffect(() => {
+    if (selectedIndex == 0) {
+      setIsHomo(true);
+      
+    } else {
+      setIsHomo(false);
+    }
+  }, [selectedIndex]);
+
+  const handleSingleIndexSelect = (index) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedIndex(index);
+  };
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
@@ -151,7 +170,8 @@ function Featurer(props) {
 
     let scene = setUpScene(sceneColor);
 
-    const glbViewer = new GLBViewer({ name: props.element + "_HOMO", isHomo: true });
+    const prompt = isHomo ? "_HOMO" : "_LUMO";
+    const glbViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
 
     scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
     scene.add(glbViewer);
@@ -176,7 +196,16 @@ function Featurer(props) {
           <View style={styles.container}>
             <Text style={styles.title}>{moleculeDict[props.element][0] + "."}</Text>
             <Text style={styles.description}>{moleculeDict[props.element][1]}</Text>
-            <SegmentedControl />
+            <View style={styles.segmentedControlContainer}>
+              <SegmentedControlTab
+                values={['HOMO', 'LUMO']}
+                selectedIndex={selectedIndex}
+                tabStyle={styles.tabStyle}
+                tabTextStyle={{ fontFamily: "Outfit_600SemiBold", color: "#0073B2" }}
+                activeTabStyle={styles.activeTabStyle}
+                onTabPress={handleSingleIndexSelect}
+              />
+            </View>
           </View>
 
           <OrbitControlsView style={{ flex: 1 }} camera={camera}>
@@ -242,6 +271,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     padding: 10,
+  },
+
+  segmentedControlContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F0f0f0',
+    minHeight: 50,
+    padding: 10,
+    borderRadius: 10,
+    margin: 10,
+    maxWidth: 300,
+  },
+  tabStyle: {
+    borderColor: '#0073B2',
+  },
+  activeTabStyle: {
+    backgroundColor: '#0073B2',
   },
 
   title: {
