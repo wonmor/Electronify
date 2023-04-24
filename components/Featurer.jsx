@@ -5,11 +5,6 @@ import { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { resetState } from "./utils/actions";
-import { GLTFLoader } from "three-stdlib";
-import { decode } from "base64-arraybuffer";
-
-import * as FileSystem from 'expo-file-system';
-import * as THREE from "three";
 
 import SegmentedControl from "./SegmentedControl";
 import OrbitControlsView from "./controls/OrbitControlsView";
@@ -18,14 +13,17 @@ import {
   AmbientLight,
   Fog,
   GridHelper,
+  Mesh,
+  MeshBasicMaterial,
   PerspectiveCamera,
   PointLight,
   Scene,
   SpotLight,
+  SphereGeometry,
 } from "three";
 
 import { addParticles } from "./Instances";
-import { moleculeDict, getCameraPosition } from "./Globals";
+import { moleculeDict, getCameraPosition, GLBViewer } from "./Globals";
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
@@ -125,10 +123,9 @@ const setUpScene = (sceneColor) => {
 
 function Featurer(props) {
   const [camera, setCamera] = useState(null);
-
   const dispatch = useDispatch();
 
-  let timeout, scene;
+  let timeout;
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
@@ -137,83 +134,6 @@ function Featurer(props) {
       clearTimeout(timeout);
     };
   }, []);
-
-  const url = 'https://electronvisual.org' + `/api/downloadGLB/C2H4_HOMO_GLTF`;
-
-  const [gltf, setGltf] = useState(null);
-  const [fileName, setFileName] = useState("");
-  const [isHomo, setIsHomo] = useState(true);
-  const [rotation, setRotation] = useState({ x: 0, y: 1.25, z: 0.15 });
-  const [scale, setScale] = useState(6);
-  const [offset, setOffset] = useState([0, 0, 0]);
-
-  useEffect(() => {
-    if (scene !== null && fileName !== "") {
-      (async () => {
-        const loader = new GLTFLoader();
-  
-        try {
-          const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + fileName);
-          const fileText = await FileSystem.readAsStringAsync(uri);
-          const data = JSON.parse(fileText);
-          const object = loader.parse(fileText);
-          setGltf(object);
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }
-  }, [url, scene, fileName]);
-
-  useEffect(() => {
-    if (fileName.includes("C2H4")) {
-      setRotation({x: 0, y: 1.25, z: 0.15});
-      setScale(6);
-      
-    } else if (fileName.includes("H2O")) {
-      setRotation({x: 0, y: Math.PI / 2, z: Math.PI / 2});
-      setScale(4);
-      
-    } else if (fileName.includes("H2")) {
-      setRotation({x: 0, y: Math.PI / 2, z: 0});
-      setScale(3);
-      setOffset([0.4, 0.4, 0.4])
-
-    } else if (fileName.includes("Cl2")) {
-      setRotation({x: 0, y: Math.PI / 2, z: 0});
-      setScale(4.5);
-      setOffset([0.0, 0.4, 0.0])
-
-    } else if (fileName.includes("HCl")) {
-      setRotation({x: 0, y: -Math.PI / 2, z: 0});
-      setScale(4.5);
-      setOffset([0.0, 0.4, isHomo ? 2.8 : 0.8]);
-    }
-  }, [isHomo, fileName]);
-
-  useEffect(() => {
-    if (gltf) {
-      scene.add(gltf);
-      
-      gltf.traverse((child) => { // traverse the loaded scene object
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-          child.material = new THREE.MeshBasicMaterial({
-            wireframe: true,
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.1
-          });
-        }
-      })
-
-      // Apply transformations
-      gltf.rotation.set(rotation.x, rotation.y, rotation.z);
-      gltf.scale.set(scale, scale, scale);
-      gltf.position.set(offset[0], offset[1], offset[2]);
-    }
-  }, [gltf, rotation, scale, offset]);
 
   const onContextCreate = async (gl) => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
@@ -229,9 +149,12 @@ function Featurer(props) {
 
     setCamera(camera);
 
-    scene = setUpScene(sceneColor);
+    let scene = setUpScene(sceneColor);
+
+    const glbViewer = new GLBViewer({ name: props.element + "_HOMO", isHomo: true });
+
     scene = addParticles(scene, props.element, props.density_data, props.density_data2, props.vmax, props.vmin);
-    setFileName(`${props.element}_HOMO_GLTF`);
+    scene.add(glbViewer);
 
     function update() {}
 
@@ -278,6 +201,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getElementData: (item, type) => dispatch(getElementData(item, type)),
 });
+
+class BallMesh extends Mesh {
+  constructor(radius = 0.5) {
+    super(
+      new SphereGeometry(radius, 32, 32),
+      new MeshBasicMaterial( { color: "#fff", transparent: true, opacity: 0.5 } )
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

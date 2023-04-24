@@ -1,3 +1,25 @@
+import { GLTFLoader as ThreeGLTFLoader } from "three-stdlib";
+import base64js from 'base64-js';
+
+import * as FileSystem from 'expo-file-system';
+import * as THREE from "three";
+import axios from "axios";
+
+class GLTFLoader extends ThreeGLTFLoader {
+  load(arrayBufferData, onLoad, onProgress, onError) {
+    try {
+      this.parse(arrayBufferData, '', onLoad);
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      } else {
+        console.error(error);
+      }
+    }
+  }
+}
+
+
 export const normalizeData = (val, max, min) => {
   /*
         This function normalizes a given dataset within a certain range that is defined
@@ -352,3 +374,67 @@ export const atomDict = {
     "[Ar] 4s^1",
   ],
 };
+
+class GLBViewer extends THREE.Group {
+  constructor(props) {
+    super();
+
+    this.url = `https://electronvisual.org/api/downloadGLB/${props.name}`;
+    this.props = props;
+
+    this.loadGLTFModel();
+  }
+
+  async loadGLTFModel() {
+    try {
+      const response = await axios.get(this.url, { responseType: 'arraybuffer' });
+      const glbData = response.data;
+      const loader = new GLTFLoader();
+
+      loader.parse(
+        glbData,
+        '',
+        (data) => {
+          this.gltf = data;
+          this.gltf.scene.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              child.material = new THREE.MeshBasicMaterial({
+                wireframe: true,
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.1,
+              });
+            }
+          });
+
+          this.mesh = this.gltf.scene;
+          this.add(this.mesh);
+
+          this.applyTransformations();
+        },
+        (error) => console.error(error)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  applyTransformations() {
+    const rotation = { x: 0, y: 1.25, z: 0.15 };
+    const scale = 6;
+    const offset = [0, 0, 0];
+
+    // Add your conditions for setting rotation, scale, and offset here
+    // ...
+
+    this.mesh.rotation.x = rotation.x;
+    this.mesh.rotation.y = rotation.y;
+    this.mesh.rotation.z = rotation.z;
+    this.mesh.scale.set(scale, scale, scale);
+    this.mesh.position.set(...offset);
+  }
+}
+
+export { GLBViewer };
