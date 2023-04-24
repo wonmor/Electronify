@@ -405,12 +405,40 @@ class GLBViewer extends THREE.Group {
   }
 
   applyTransformations() {
-    const rotation = { x: 0, y: 1.25, z: 0.15 };
-    const scale = 6;
-    const offset = [0, 0, 0];
+    let rotation = { x: 0, y: 1.25, z: 0.15 };
+    let scale = 6;
+    let offset = [0, 0, 0];
 
-    // Add your conditions for setting rotation, scale, and offset here
-    // ...
+    if (this.props.name.includes("C2H4")) {
+      rotation = { x: 0, y: 1.25, z: 0.15 };
+      scale = 6;
+      offset = [0, 0, 0];
+
+    } else if (this.props.name.includes("H2O")) {
+      rotation = { x: 0, y: Math.PI / 2, z: Math.PI / 2 };
+      scale = 4;
+      offset = [0, 0, 0];
+
+    } else if (this.props.name.includes("H2")) {
+      rotation = { x: 0, y: Math.PI / 2, z: 0 };
+      scale = 3;
+      offset = [0.4, 0.4, 0.4];
+
+    } else if (this.props.name.includes("Cl2")) {
+      rotation = { x: 0, y: Math.PI / 2, z: 0 };
+      scale = 4.5;
+      offset = [0.0, 0.4, 0.0];
+
+    } else if (this.props.name.includes("HCl")) {
+      rotation = { x: 0, y: -Math.PI / 2, z: 0 };
+      scale = 4.5;
+      offset = [0.0, 0.4, this.props.isHomo ? 2.8 : 0.8];
+      
+    } else {
+      rotation = { x: 0, y: 1.25, z: 0.15 };
+      scale = 6;
+      offset = [0, 0, 0];
+    }
 
     this.mesh.rotation.x = rotation.x;
     this.mesh.rotation.y = rotation.y;
