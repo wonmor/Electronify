@@ -138,7 +138,7 @@ function Featurer(props) {
     };
   }, []);
 
-  const url = 'https://electronvisual.org' + `/api/downloadGLB/${fileName}`;
+  const url = 'https://electronvisual.org' + `/api/downloadGLB/C2H4_HOMO_GLTF`;
 
   const [gltf, setGltf] = useState(null);
   const [fileName, setFileName] = useState("");
@@ -153,19 +153,11 @@ function Featurer(props) {
         const loader = new GLTFLoader();
   
         try {
-          const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + "/" + fileName);
-          const fileBase64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-          const fileArrayBuffer = decode(fileBase64);
-          loader.parse(
-            fileArrayBuffer,
-            "",
-            (data) => {
-              setGltf(data.scene);
-              scene.add(data.scene);
-            },
-            null,
-            (error) => console.error(error)
-          );
+          const { uri } = await FileSystem.downloadAsync(url, FileSystem.cacheDirectory + fileName);
+          const fileText = await FileSystem.readAsStringAsync(uri);
+          const data = JSON.parse(fileText);
+          const object = loader.parse(fileText);
+          setGltf(object);
         } catch (error) {
           console.error(error);
         }
@@ -201,6 +193,8 @@ function Featurer(props) {
 
   useEffect(() => {
     if (gltf) {
+      scene.add(gltf);
+      
       gltf.traverse((child) => { // traverse the loaded scene object
         if (child.isMesh) {
           child.castShadow = true;
