@@ -155,33 +155,34 @@ export const getCameraPosition = (element) => {
     */
   switch (element) {
     case "H":
-      return { fov: 15, position: [-5, 8, 8] };
+      return { fov: 15, position: [-6.25, 10, 10] };
 
     case "Na":
-      return { fov: 55, position: [-5, 8, 8] };
+      return { fov: 55, position: [-6.25, 10, 10] };
 
     case "K":
-      return { fov: 65, position: [-5, 8, 8] };
+      return { fov: 65, position: [-6.25, 10, 10] };
 
     case "H2":
-      return { fov: 20, position: [-5, 8, 8] };
+      return { fov: 20, position: [-6.25, 10, 10] };
 
     case "H2O":
-      return { fov: 55, position: [-5, 8, 8] };
+      return { fov: 55, position: [-6.25, 10, 10] };
 
     case "HCl":
-      return { fov: 55, position: [-5, 8, 8] };
+      return { fov: 55, position: [-6.25, 10, 10] };
 
     case "C2H4":
-      return { fov: 75, position: [-5, 8, 8] };
+      return { fov: 75, position: [-6.25, 10, 10] };
 
     case "Cl2":
-      return { fov: 75, position: [-5, 8, 8] };
+      return { fov: 75, position: [-6.25, 10, 10] };
 
     default:
-      return { fov: 35, position: [-5, 8, 8] };
+      return { fov: 35, position: [-6.25, 10, 10] };
   }
 };
+
 
 export const bondShapeDict = {
   H2O: [
