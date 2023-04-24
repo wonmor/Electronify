@@ -150,7 +150,7 @@ function Member(props) {
     <ScrollView
       style={styles.parentContainer}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 30 }}
+      contentContainerStyle={{ flexGrow: 1 }}
     >
       <View style={styles.container}>
         <View
@@ -320,7 +320,6 @@ const mapDispatchToProps = (dispatch) => ({
 const styles = StyleSheet.create({
   parentContainer: {
     backgroundColor: "white",
-    paddingBottom: 30,
     zIndex: -1,
   },
 
