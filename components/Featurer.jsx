@@ -130,7 +130,7 @@ function Featurer(props) {
 
   const dispatch = useDispatch();
 
-  let timeout;
+  let timeout, scene;
 
   useEffect(() => {
     // Clear the animation loop when the component unmounts
@@ -148,6 +148,34 @@ function Featurer(props) {
       setIsHomo(false);
     }
   }, [selectedIndex]);
+
+  useEffect(() => {
+    if (scene) {
+      scene.remove(scene.children[scene.children.length - 1])
+
+      const prompt = isHomo ? "_HOMO" : "_LUMO";
+      const glbViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
+
+      scene.add(glbViewer)
+    }
+  }, [isHomo])
+
+  const updateGLBViewerAndScene = () => {
+    // Remove the old GLBViewer from the scene
+    const oldGLBViewer = scene.getObjectByName("GLBViewer");
+    if (oldGLBViewer) {
+      scene.remove(oldGLBViewer);
+    }
+  
+    // Create a new GLBViewer with the updated isHomo value
+    const prompt = isHomo ? "_HOMO" : "_LUMO";
+    const newGLBViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
+    newGLBViewer.name = "GLBViewer";
+  
+    // Add the new GLBViewer back to the scene
+    scene.add(newGLBViewer);
+  };
+  
 
   const handleSingleIndexSelect = (index) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -168,7 +196,7 @@ function Featurer(props) {
 
     setCamera(camera);
 
-    let scene = setUpScene(sceneColor);
+    scene = setUpScene(sceneColor);
 
     const prompt = isHomo ? "_HOMO" : "_LUMO";
     const glbViewer = new GLBViewer({ name: props.element + prompt, isHomo: isHomo });
