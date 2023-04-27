@@ -22,9 +22,9 @@ const addParticles = (scene, element, density_data, density_data2, vmax, vmin) =
         const coords = key.split(", ");
         const volume = normalizeData(value, vmax, vmin);
 
-        const x = coords[0] / 5 - 22.5;
-        const y = coords[1] / 5 - 22.5;
-        const z = coords[2] / 5 - 22.5;
+        const x = coords[0] / 5 - 22.0
+        const y = coords[1] / 5 - 22.0
+        const z = coords[2] / 5 - 22.0
 
         const matrix = new THREE.Vector3(x, y, z);
 
