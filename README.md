@@ -1,4 +1,4 @@
-<img width="100" alt="icon" src="https://user-images.githubusercontent.com/35755386/224520433-0d9d00f7-88d6-416e-a455-09d26341393a.png">
+<img width="100" alt="icon" src="https://user-images.githubusercontent.com/35755386/234764302-0180b0d4-2af7-45d2-b445-ea9bbe4f7ff5.png">
 
 # Electronify
 
@@ -14,13 +14,13 @@ This is a version of [**ElectronVisualized**](https://github.com/wonmor/Electron
 
 <table><tr>
 
-<td valign="center"><img width="300" alt="Screenshot-1" src="https://user-images.githubusercontent.com/35755386/233473936-766ef713-f3b6-4e13-9bad-10b4314a6776.png"></td>
+<td valign="center"><img width="300" alt="Screenshot-1" src="https://user-images.githubusercontent.com/35755386/234764090-640eb89f-6386-4a45-a590-31fa744ff06a.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/233473941-29db85b2-e9fb-4777-8e87-fedf73035407.png"></td>
+<td valign="center"><img width="300" alt="Screenshot-2" src="https://user-images.githubusercontent.com/35755386/234764108-44ff264b-fa2e-41e0-9e8b-a24fb19b947a.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-3" src="https://user-images.githubusercontent.com/35755386/233473944-d193b0df-8c62-4824-a8c6-ce0e862e23ad.png"></td>
+<td valign="center"><img width="300" alt="Screenshot-3" src="https://user-images.githubusercontent.com/35755386/234764111-fcf729dd-2073-4424-bc28-b1f5855032b2.png"></td>
 
-<td valign="center"><img width="300" alt="Screenshot-4" src="https://user-images.githubusercontent.com/35755386/233473956-f5e5b7a4-f743-4efd-82e1-351ef8b3fd3a.png"></td>
+<td valign="center"><img width="300" alt="Screenshot-4" src="https://user-images.githubusercontent.com/35755386/234764116-c12a18cb-f1bf-4dd2-9d0e-0976a46845c5.png"></td>
 
 </tr></table>
 
