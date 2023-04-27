@@ -12,7 +12,8 @@
       "android"
     ],
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/de3e487b-0791-41fc-a502-dc737806542c"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -28,15 +29,15 @@
     "ios": {
       "bundleIdentifier": "com.johnseong.electronify",
       "supportsTablet": true,
-      "buildNumber": "1",
-      "config": {
-        "usesNonExemptEncryption": false
-      }
+      "buildNumber": "1"
     },
     "extra": {
       "eas": {
         "projectId": "de3e487b-0791-41fc-a502-dc737806542c"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
