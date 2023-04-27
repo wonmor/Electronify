@@ -197,11 +197,11 @@ const App = () => {
           })}
           initialRouteName="Orbitals."
         >
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Member."
             options={{ headerShown: false }}
             component={MemberStack}
-          />
+          /> */}
           <Tab.Screen
             name="Orbitals."
             options={{ headerShown: false, unmountOnBlur: true }}

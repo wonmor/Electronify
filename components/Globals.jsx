@@ -117,6 +117,8 @@ export const getMoleculeColour = (
     case "HCl":
       return `hsl(${volume * 204000.0 + 200.0}, 100%, 60%)`;
 
+    case "CH3OH":
+    case "C6H6":
     case "C2H4":
       return `hsl(${volume * 5000.0 + 180.0}, 100%, 60%)`;
 
@@ -131,13 +133,85 @@ export const moleculesWithLonePairs = {
 };
 
 export const moleculeDict = {
-  C2H4: ["Ethene", "Colorless, flammable gas with a faint odor.", "Trigonal Planar", "Nonpolar", "120°", "3 bonding orbitals, 1 antibonding orbital", "sp2", "AX2E", "1 sigma bond, 1 pi bond"],
-  H2O: ["Water", "Transparent, tasteless, and odorless chemical substance.", "Bent", "Polar", "104.5°", "2 bonding orbitals, 2 antibonding orbitals", "sp3", "AX2E2", "2 sigma bonds, 2 lone pairs"],
-  H2: ["Hydrogen Gas", "Lightest element, gas of diatomic molecules.", "Linear", "Nonpolar", "180°", "1 bonding orbital, 1 antibonding orbital", "No", "AX2", "1 sigma bond"],
-  Cl2: ["Chlorine Gas", "Yellow-green gas with a pungent, irritating odor.", "Linear", "Nonpolar", "180°", "1 bonding orbital, 1 antibonding orbital", "No", "AX2", "1 sigma bond, 1 pi bond"],
-  HCl: ["Hydrochloric Acid", "Aqueous solution of hydrogen chloride gas.", "Linear", "Polar", "180°", "1 bonding orbital, 1 antibonding orbital", "sp", "AX2E", "1 sigma bond, 1 lone pair"]
-  
+  CH3OH: [
+    "Methanol",
+    "Methanol is the simplest alcohol and is used as an antifreeze, solvent, and fuel.",
+    "Tetrahedral",
+    "Polar",
+    "109.5°",
+    "4 bonding orbitals\n4 antibonding orbitals",
+    "sp3",
+    "AX4",
+    "4 sigma bonds"
+  ],
+  C6H6: [
+    "Benzene",
+    "Benzene is a cyclic hydrocarbon with a typical ring structure composed of six carbon atoms, each with one hydrogen atom attached.",
+    "Octahedral",
+    "Nonpolar",
+    "90°",
+    "6 bonding orbitals\n6 antibonding orbitals",
+    "sp3d2",
+    "AX6",
+    "6 sigma bonds"
+  ],
+  C2H4: [
+    "Ethene",
+    "Ethene is an organic compound having the formula C2H4. It is a colorless, flammable gas with a faint 'sweet and musky' odor.",
+    "Trigonal Planar",
+    "Nonpolar",
+    "120°",
+    "3 bonding orbitals\n1 antibonding orbital",
+    "sp2",
+    "AX2E",
+    "1 sigma bond\n1 pi bond"
+  ],
+  H2O: [
+    "Water",
+    "Water is an inorganic, transparent, tasteless, odourless, and nearly colourless chemical substance.",
+    "Bent",
+    "Polar",
+    "104.5°",
+    "2 bonding orbitals\n2 antibonding orbitals",
+    "sp3",
+    "AX2E2",
+    "2 sigma bonds\n2 lone pairs"
+  ],
+  H2: [
+    "Hydrogen Gas",
+    "Hydrogen is the lightest element. At standard conditions hydrogen is a gas of diatomic molecules having the formula H2.",
+    "Linear",
+    "Nonpolar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "No",
+    "AX2",
+    "1 sigma bond"
+  ],
+  Cl2: [
+    "Chlorine Gas",
+    "Chlorine is a yellow-green gas at room temperature. Chlorine has a pungent, irritating odor similar to bleach that is detectable at low concentrations.",
+    "Linear",
+    "Nonpolar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "No",
+    "AX2",
+    "1 sigma bond\n1 pi bond"
+  ],
+  HCl: [
+    "Hydrochloric Acid",
+    "Hydrochloric acid is the water-based, or aqueous, solution of hydrogen chloride gas.",
+    "Linear",
+    "Polar",
+    "180°",
+    "1 bonding orbital\n1 antibonding orbital",
+    "sp",
+    "AX2E",
+    "1 sigma bond\n1 lone pair"
+  ],
 };
+
 
 export const getCameraPosition = (element) => {
   /*
@@ -172,8 +246,13 @@ export const getCameraPosition = (element) => {
     case "HCl":
       return { fov: 55, position: [-6.25, 10, 10] };
 
-    case "C2H4":
-      return { fov: 75, position: [-6.25, 10, 10] };
+      case "CH3OH":
+      case "C2H4":
+      return { fov: 65, position: [-6.25, 10, 10] };
+
+      case "C6H6":
+        return { fov: 65, position: [-7.8125, 12.5, 12.5] };
+
 
     case "Cl2":
       return { fov: 75, position: [-6.25, 10, 10] };
@@ -410,7 +489,24 @@ class GLBViewer extends THREE.Group {
     let scale = 6;
     let offset = [0, 0, 0];
 
-    if (this.props.name.includes("C2H4")) {
+    if (this.props.name.includes("C6H6")) {
+      rotation = { x: 0, y: 0, z: Math.PI / 2 };
+      scale = 3.5;
+      offset = [0, -1.5, 0];
+
+    } else if (this.props.name.includes("CH3OH")) {
+      if (this.props.isHomo) {
+        rotation = { x: 0, y: 0.75, z: -1.05 };
+        scale = 3.5;
+        offset = [1.5, 1.25, 0];
+
+      } else {
+        rotation = { x: 0, y: 0.75, z: -1.15 };
+        scale = 3.75;
+        offset = [1.5, 0, -1.25];
+      }
+
+    } else if (this.props.name.includes("C2H4")) {
       rotation = { x: 0, y: 1.25, z: 0.15 };
       scale = 6;
       offset = [0, 0, 0];

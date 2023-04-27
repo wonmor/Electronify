@@ -14,12 +14,26 @@ function MoleculeSection(props) {
 
   const molecules = [
     {
+      name: "Methanol",
+      formula: "CH3OH",
+      type: "molecule",
+      structure: "AX3E",
+      color: "#00ffff",
+    },
+    {
+      name: "Benzene",
+      formula: "C6H6",
+      type: "molecule",
+      structure: "AX6",
+      color: "#ff7f50",
+    },
+    {
       name: "Ethene",
       formula: "C2H4",
       type: "molecule",
       structure: "AX2E",
       color: "#ffd6e5",
-      },
+    },
     {
       name: "Hydrogen Gas",
       formula: "H2",
@@ -49,6 +63,7 @@ function MoleculeSection(props) {
       color: "#7fffd4",
     },
   ];
+
 
   const ElementButton = (nestedProps) => {
     const netInfo = useNetInfo();
