@@ -6,7 +6,6 @@
     "version": "7.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "sdkVersion": "46.0.0",
     "platforms": [
       "ios",
       "android"
