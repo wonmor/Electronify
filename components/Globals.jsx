@@ -147,18 +147,18 @@ export const moleculeDict = {
   C6H6: [
     "Benzene",
     "Benzene is a cyclic hydrocarbon with a typical ring structure composed of six carbon atoms, each with one hydrogen atom attached.",
-    "Octahedral",
+    "Planar",
     "Nonpolar",
-    "90°",
+    "120°",
     "6 bonding orbitals\n6 antibonding orbitals",
-    "sp3d2",
-    "AX6",
+    "sp2",
+    "AX3",
     "6 sigma bonds"
   ],
   C2H4: [
     "Ethene",
     "Ethene is an organic compound having the formula C2H4. It is a colorless, flammable gas with a faint 'sweet and musky' odor.",
-    "Trigonal Planar",
+    "Planar",
     "Nonpolar",
     "120°",
     "3 bonding orbitals\n1 antibonding orbital",
