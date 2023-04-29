@@ -37,6 +37,9 @@ const Member2 = ({ route, navigation }) => {
     expoClientId: `${EXPO_GUID}.apps.googleusercontent.com`,
     androidClientId: `${ANDROID_GUID}.apps.googleusercontent.com`,
     iosClientId: `${IOS_GUID}.apps.googleusercontent.com`,
+  },
+  {
+    projectNameForProxy: "@wonmor/electronify",
   });
 
   useEffect(() => {
