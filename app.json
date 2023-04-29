@@ -6,13 +6,13 @@
     "version": "7.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "sdkVersion": "48.0.0",
     "platforms": [
       "ios",
       "android"
     ],
     "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/de3e487b-0791-41fc-a502-dc737806542c"
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
