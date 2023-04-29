@@ -14,8 +14,8 @@ import Featurer from "./components/Featurer";
 import Featurer2 from "./components/Featurer2";
 import AtomSection from "./components/AtomSection";
 import MoleculeSection from "./components/MoleculeSection";
-import Member from "./components/Member";
-import Member2 from "./components/Member2";
+// import Member from "./components/Member";
+// import Member2 from "./components/Member2";
 import MolarMass from "./components/MolarMass";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -87,11 +87,11 @@ const MyStack = () => {
           component={Featurer2}
           options={{ title: "Spotlight." }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Member"
           component={Member}
           options={{ title: "Member." }}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

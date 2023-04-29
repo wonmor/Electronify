@@ -22,9 +22,9 @@ import { getElementData } from "./utils/actions";
 
 import * as WebBrowser from "expo-web-browser";
 
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_MEASUREMENT_ID, IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
+// import { initializeApp, getApps, getApp } from "firebase/app";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import { FIREBASE_API_KEY, FIREBASE_APP_ID, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_MEASUREMENT_ID, IOS_GUID, ANDROID_GUID, EXPO_GUID } from "@env";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -56,20 +56,20 @@ TO-DO:
 - Add a time detection ting for the "good afternoon" greeting
 */
 
-WebBrowser.maybeCompleteAuthSession();
+// WebBrowser.maybeCompleteAuthSession();
 
 // Initialize Firebase
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: "electronvisualized.firebaseapp.com",
-  projectId: "electronvisualized",
-  storageBucket: "electronvisualized.appspot.com",
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID,
-};
+// const firebaseConfig = {
+//   apiKey: FIREBASE_API_KEY,
+//   authDomain: "electronvisualized.firebaseapp.com",
+//   projectId: "electronvisualized",
+//   storageBucket: "electronvisualized.appspot.com",
+//   messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+//   appId: FIREBASE_APP_ID,
+//   measurementId: FIREBASE_MEASUREMENT_ID,
+// };
 
-getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 const Circle = forwardRef(({ x, y, size, opacity }, ref) => {
   const circleRef = useRef(null);
@@ -103,7 +103,7 @@ function Home(props) {
   const isFocused = useIsFocused();
   const circlesRef = useRef([]);
 
-  const auth = getAuth();
+  // const auth = getAuth();
 
   const [name, setName] = useState("");
   const [waveAnim] = useState(new RNAnimated.Value(0));
@@ -117,35 +117,35 @@ function Home(props) {
     return unsubscribe;
   }, [props.navigation]);
 
-  useEffect(() => {
-      // User is signed out
-      const checkUserCredentials = async () => {
-        const email = await SecureStore.getItemAsync('email');
-        const password = await SecureStore.getItemAsync('password');
-        const name = await SecureStore.getItemAsync('name');
+  // useEffect(() => {
+  //     // User is signed out
+  //     const checkUserCredentials = async () => {
+  //       const email = await SecureStore.getItemAsync('email');
+  //       const password = await SecureStore.getItemAsync('password');
+  //       const name = await SecureStore.getItemAsync('name');
 
-        setName(name);
+  //       setName(name);
 
-        if (email && password) {
-          try {
-            const userCredential = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
+  //       if (email && password) {
+  //         try {
+  //           const userCredential = await signInWithEmailAndPassword(
+  //             auth,
+  //             email,
+  //             password
+  //           );
 
-            const user = userCredential.user;
-            setName(user.displayName);
-            // User is successfully logged in
-          } catch (error) {
-            // Handle error
-          }
-        } else {
-          // email and/or password do not exist in SecureStore
-        }
-      }
-      checkUserCredentials();
-  }, []);
+  //           const user = userCredential.user;
+  //           setName(user.displayName);
+  //           // User is successfully logged in
+  //         } catch (error) {
+  //           // Handle error
+  //         }
+  //       } else {
+  //         // email and/or password do not exist in SecureStore
+  //       }
+  //     }
+  //     checkUserCredentials();
+  // }, []);
 
   useEffect(() => {
     if (isFocused) {
