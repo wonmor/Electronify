@@ -24,7 +24,7 @@ function MoleculeSection(props) {
       name: "Benzene",
       formula: "C6H6",
       type: "molecule",
-      structure: "AX6",
+      structure: "AX3",
       color: "#ff7f50",
     },
     {
