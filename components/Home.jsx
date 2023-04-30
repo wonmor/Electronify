@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { getElementData } from "./utils/actions";
 
-import * as WebBrowser from "expo-web-browser";
+// import * as WebBrowser from "expo-web-browser";
 
 // import { initializeApp, getApps, getApp } from "firebase/app";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -34,7 +34,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import * as Haptics from "expo-haptics";
-import * as SecureStore from 'expo-secure-store';
+// import * as SecureStore from 'expo-secure-store';
 
 /*
 ELECTRONIFY: A React Native App for Visualizing Quantum Mechanics
