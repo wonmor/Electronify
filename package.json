@@ -29,7 +29,7 @@
     "expo-gl": "~12.4.0",
     "expo-haptics": "~12.2.1",
     "expo-modules-autolinking": "~1.1.0 || ~1.2.0",
-    "expo-modules-core": "~1.2.6",
+    "expo-modules-core": "~1.2.7",
     "expo-random": "~13.1.1",
     "expo-screen-orientation": "~5.1.1",
     "expo-secure-store": "~12.1.1",
